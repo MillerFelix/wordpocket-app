@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Upword Pocket',
+        name: 'WordPocket',
         short_name: 'WordPocket',
-        description: 'Guia de consulta rápida em inglês: verbos irregulares, vocabulário e tradutor.',
+        description: 'Guia de consulta rápida em inglês: verbos irregulares, dicionário contextual e tradutor.',
         theme_color: '#ffffff',
         background_color: '#f8fafc',
         display: 'standalone',

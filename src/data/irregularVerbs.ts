@@ -2,13 +2,52 @@ import { IrregularVerb } from '../types';
 
 export const irregularVerbs: IrregularVerb[] = [
   {
+    id: 'arise',
+    infinitive: 'arise',
+    pastSimple: 'arose',
+    pastParticiple: 'arisen',
+    translation: 'surgir, erguer-se',
+    example: 'A serious question arose during the meeting.',
+    group: 'en-ending'
+  },
+  {
+    id: 'awake',
+    infinitive: 'awake',
+    pastSimple: 'awoke / awaked',
+    pastParticiple: 'awoken / awaked',
+    variants: 'US/UK: awaked também é usado',
+    translation: 'despertar, acordar',
+    example: 'She awoke early to finish her study plan.',
+    group: 'en-ending'
+  },
+  {
     id: 'be',
     infinitive: 'be',
     pastSimple: 'was / were',
     pastParticiple: 'been',
     translation: 'ser, estar',
-    example: 'She was very happy with the final result.',
-    group: 'vowel-change'
+    example: 'They were excited about the launch.',
+    group: 'general'
+  },
+  {
+    id: 'bear',
+    infinitive: 'bear',
+    pastSimple: 'bore',
+    pastParticiple: 'borne / born',
+    variants: 'born: nascido | borne: suportado/carregado',
+    translation: 'suportar, dar à luz, carregar',
+    example: 'She has borne that responsibility for years.',
+    group: 'en-ending'
+  },
+  {
+    id: 'beat',
+    infinitive: 'beat',
+    pastSimple: 'beat',
+    pastParticiple: 'beaten / beat',
+    variants: 'beaten é a forma padrão do particípio',
+    translation: 'bater, derrotar, pulsar',
+    example: 'Our team beat the record yesterday.',
+    group: 'en-ending'
   },
   {
     id: 'become',
@@ -16,7 +55,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'became',
     pastParticiple: 'become',
     translation: 'tornar-se',
-    example: 'He became a skilled software engineer.',
+    example: 'He became an experienced engineer.',
     group: 'vowel-change'
   },
   {
@@ -25,8 +64,63 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'began',
     pastParticiple: 'begun',
     translation: 'começar, iniciar',
-    example: 'The meeting began ten minutes early.',
+    example: 'The session began exactly on time.',
     group: 'vowel-change'
+  },
+  {
+    id: 'bend',
+    infinitive: 'bend',
+    pastSimple: 'bent',
+    pastParticiple: 'bent',
+    translation: 'curvar, dobrar',
+    example: 'He bent down to pick up the fallen card.',
+    group: 'past-same'
+  },
+  {
+    id: 'bet',
+    infinitive: 'bet',
+    pastSimple: 'bet / betted',
+    pastParticiple: 'bet / betted',
+    variants: 'bet é a forma mais comum',
+    translation: 'apostar',
+    example: 'I bet you will master this list in a week.',
+    group: 'identical'
+  },
+  {
+    id: 'bind',
+    infinitive: 'bind',
+    pastSimple: 'bound',
+    pastParticiple: 'bound',
+    translation: 'atar, amarrar, unir',
+    example: 'Shared goals bound the team together.',
+    group: 'past-same'
+  },
+  {
+    id: 'bite',
+    infinitive: 'bite',
+    pastSimple: 'bit',
+    pastParticiple: 'bitten',
+    translation: 'morder, picar',
+    example: 'The cold wind bit into our faces.',
+    group: 'en-ending'
+  },
+  {
+    id: 'bleed',
+    infinitive: 'bleed',
+    pastSimple: 'bled',
+    pastParticiple: 'bled',
+    translation: 'sangrar',
+    example: 'His finger bled after the paper cut.',
+    group: 'past-same'
+  },
+  {
+    id: 'blow',
+    infinitive: 'blow',
+    pastSimple: 'blew',
+    pastParticiple: 'blown',
+    translation: 'soprar, ventar',
+    example: 'A strong gust blew the leaves across the patio.',
+    group: 'en-ending'
   },
   {
     id: 'break',
@@ -34,8 +128,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'broke',
     pastParticiple: 'broken',
     translation: 'quebrar, romper',
-    example: 'Be careful not to break the glass.',
+    example: 'He didn’t break any of the safety guidelines.',
     group: 'en-ending'
+  },
+  {
+    id: 'breed',
+    infinitive: 'breed',
+    pastSimple: 'bred',
+    pastParticiple: 'bred',
+    translation: 'criar, procriar, gerar',
+    example: 'Clear communication bred trust among everyone.',
+    group: 'past-same'
   },
   {
     id: 'bring',
@@ -43,8 +146,18 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'brought',
     pastParticiple: 'brought',
     translation: 'trazer',
-    example: 'She brought helpful notes to the class.',
-    group: 'general'
+    example: 'She brought practical ideas to the meeting.',
+    group: 'past-same'
+  },
+  {
+    id: 'broadcast',
+    infinitive: 'broadcast',
+    pastSimple: 'broadcast / broadcasted',
+    pastParticiple: 'broadcast / broadcasted',
+    variants: 'broadcast é a forma preferida tradicionalmente',
+    translation: 'transmitir, divulgar',
+    example: 'The interview was broadcast live nationwide.',
+    group: 'identical'
   },
   {
     id: 'build',
@@ -52,8 +165,27 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'built',
     pastParticiple: 'built',
     translation: 'construir',
-    example: 'They built a responsive and fast web application.',
-    group: 'general'
+    example: 'They built a fast and accessible web interface.',
+    group: 'past-same'
+  },
+  {
+    id: 'burn',
+    infinitive: 'burn',
+    pastSimple: 'burned / burnt',
+    pastParticiple: 'burned / burnt',
+    variants: 'US: preferencialmente burned | UK: comum burnt',
+    translation: 'queimar',
+    example: 'The candle burned steadily through the evening.',
+    group: 'past-same'
+  },
+  {
+    id: 'burst',
+    infinitive: 'burst',
+    pastSimple: 'burst',
+    pastParticiple: 'burst',
+    translation: 'estourar, irromper',
+    example: 'The balloon burst with a loud pop.',
+    group: 'identical'
   },
   {
     id: 'buy',
@@ -61,8 +193,26 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'bought',
     pastParticiple: 'bought',
     translation: 'comprar',
-    example: 'I bought a new book yesterday.',
-    group: 'general'
+    example: 'We bought tickets well in advance.',
+    group: 'past-same'
+  },
+  {
+    id: 'cast',
+    infinitive: 'cast',
+    pastSimple: 'cast',
+    pastParticiple: 'cast',
+    translation: 'lançar, escalar (elenco)',
+    example: 'The streetlight cast long shadows on the road.',
+    group: 'identical'
+  },
+  {
+    id: 'catch',
+    infinitive: 'catch',
+    pastSimple: 'caught',
+    pastParticiple: 'caught',
+    translation: 'pegar, capturar, apanhar',
+    example: 'She caught the morning train with minutes to spare.',
+    group: 'past-same'
   },
   {
     id: 'choose',
@@ -70,8 +220,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'chose',
     pastParticiple: 'chosen',
     translation: 'escolher',
-    example: 'We chose the most straightforward solution.',
+    example: 'They chose the simplest functional solution.',
     group: 'en-ending'
+  },
+  {
+    id: 'cling',
+    infinitive: 'cling',
+    pastSimple: 'clung',
+    pastParticiple: 'clung',
+    translation: 'agarrar-se, apegar-se',
+    example: 'The child clung to her mother in the crowd.',
+    group: 'past-same'
   },
   {
     id: 'come',
@@ -79,7 +238,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'came',
     pastParticiple: 'come',
     translation: 'vir, chegar',
-    example: 'They came here by train this morning.',
+    example: 'They came to our aid immediately.',
     group: 'vowel-change'
   },
   {
@@ -88,8 +247,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'cost',
     pastParticiple: 'cost',
     translation: 'custar',
-    example: 'The ticket cost less than expected.',
+    example: 'The upgrade cost less than expected.',
     group: 'identical'
+  },
+  {
+    id: 'creep',
+    infinitive: 'creep',
+    pastSimple: 'crept',
+    pastParticiple: 'crept',
+    translation: 'rastejar, mover-se furtivamente',
+    example: 'Fog crept across the harbor silently.',
+    group: 'past-same'
   },
   {
     id: 'cut',
@@ -97,8 +265,36 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'cut',
     pastParticiple: 'cut',
     translation: 'cortar',
-    example: 'He cut the paper into clean strips.',
+    example: 'He cut the paper with clean precision.',
     group: 'identical'
+  },
+  {
+    id: 'deal',
+    infinitive: 'deal',
+    pastSimple: 'dealt',
+    pastParticiple: 'dealt',
+    translation: 'lidar, negociar, distribuir',
+    example: 'She dealt with client questions professionally.',
+    group: 'past-same'
+  },
+  {
+    id: 'dig',
+    infinitive: 'dig',
+    pastSimple: 'dug',
+    pastParticiple: 'dug',
+    translation: 'cavar',
+    example: 'Workers dug a trench for the fiber-optic line.',
+    group: 'past-same'
+  },
+  {
+    id: 'dive',
+    infinitive: 'dive',
+    pastSimple: 'dived / dove',
+    pastParticiple: 'dived',
+    variants: 'US: dove é comum no passado | UK: dived',
+    translation: 'mergulhar',
+    example: 'He dived into the pool to refresh himself.',
+    group: 'general'
   },
   {
     id: 'do',
@@ -106,7 +302,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'did',
     pastParticiple: 'done',
     translation: 'fazer',
-    example: 'She did a fantastic job on the presentation.',
+    example: 'They did their best on the exam.',
     group: 'en-ending'
   },
   {
@@ -114,9 +310,19 @@ export const irregularVerbs: IrregularVerb[] = [
     infinitive: 'draw',
     pastSimple: 'drew',
     pastParticiple: 'drawn',
-    translation: 'desenhar, puxar',
-    example: 'He drew an intuitive diagram of the flow.',
+    translation: 'desenhar, puxar, extrair',
+    example: 'She drew a clear diagram of the application flow.',
     group: 'en-ending'
+  },
+  {
+    id: 'dream',
+    infinitive: 'dream',
+    pastSimple: 'dreamed / dreamt',
+    pastParticiple: 'dreamed / dreamt',
+    variants: 'US: dreamed | UK: dreamt / dreamed',
+    translation: 'sonhar',
+    example: 'He always dreamed of traveling the world.',
+    group: 'past-same'
   },
   {
     id: 'drink',
@@ -124,7 +330,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'drank',
     pastParticiple: 'drunk',
     translation: 'beber',
-    example: 'Always drink plenty of water during the day.',
+    example: 'We drank fresh water after the run.',
     group: 'vowel-change'
   },
   {
@@ -133,7 +339,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'drove',
     pastParticiple: 'driven',
     translation: 'dirigir, conduzir',
-    example: 'We drove across the coast at sunset.',
+    example: 'She drove safely across the foggy bridge.',
     group: 'en-ending'
   },
   {
@@ -142,7 +348,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'ate',
     pastParticiple: 'eaten',
     translation: 'comer',
-    example: 'They ate breakfast together before leaving.',
+    example: 'We ate lunch together near the central plaza.',
     group: 'en-ending'
   },
   {
@@ -151,8 +357,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'fell',
     pastParticiple: 'fallen',
     translation: 'cair',
-    example: 'Leaves fell gently from the trees.',
+    example: 'Leaves fell onto the pavement throughout October.',
     group: 'en-ending'
+  },
+  {
+    id: 'feed',
+    infinitive: 'feed',
+    pastSimple: 'fed',
+    pastParticiple: 'fed',
+    translation: 'alimentar',
+    example: 'He fed the birds in the park every morning.',
+    group: 'past-same'
   },
   {
     id: 'feel',
@@ -160,8 +375,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'felt',
     pastParticiple: 'felt',
     translation: 'sentir',
-    example: 'I felt confident after practicing daily.',
-    group: 'general'
+    example: 'I felt inspired after the presentation.',
+    group: 'past-same'
+  },
+  {
+    id: 'fight',
+    infinitive: 'fight',
+    pastSimple: 'fought',
+    pastParticiple: 'fought',
+    translation: 'lutar, combater',
+    example: 'They fought for equal rights and community spaces.',
+    group: 'past-same'
   },
   {
     id: 'find',
@@ -169,8 +393,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'found',
     pastParticiple: 'found',
     translation: 'encontrar, achar',
-    example: 'She found the right word in seconds.',
-    group: 'general'
+    example: 'We found the missing keys behind the bookshelf.',
+    group: 'past-same'
+  },
+  {
+    id: 'flee',
+    infinitive: 'flee',
+    pastSimple: 'fled',
+    pastParticiple: 'fled',
+    translation: 'fugir',
+    example: 'Citizens fled to safe shelters before the storm.',
+    group: 'past-same'
   },
   {
     id: 'fly',
@@ -178,7 +411,16 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'flew',
     pastParticiple: 'flown',
     translation: 'voar',
-    example: 'The plane flew over the mountains.',
+    example: 'The airplane flew above the cloud layer smoothly.',
+    group: 'en-ending'
+  },
+  {
+    id: 'forbid',
+    infinitive: 'forbid',
+    pastSimple: 'forbade / forbad',
+    pastParticiple: 'forbidden',
+    translation: 'proibir',
+    example: 'The library rules forbade loud talking.',
     group: 'en-ending'
   },
   {
@@ -186,9 +428,27 @@ export const irregularVerbs: IrregularVerb[] = [
     infinitive: 'forget',
     pastSimple: 'forgot',
     pastParticiple: 'forgotten',
-    variants: 'US: forgotten | UK: also forgot',
+    variants: 'US: forgotten | UK: também forgot como particípio informal',
     translation: 'esquecer',
-    example: 'Don’t forget to check your notes.',
+    example: 'Don’t forget your passport before heading out.',
+    group: 'en-ending'
+  },
+  {
+    id: 'forgive',
+    infinitive: 'forgive',
+    pastSimple: 'forgave',
+    pastParticiple: 'forgiven',
+    translation: 'perdoar',
+    example: 'She forgave his honest mistake quickly.',
+    group: 'en-ending'
+  },
+  {
+    id: 'freeze',
+    infinitive: 'freeze',
+    pastSimple: 'froze',
+    pastParticiple: 'frozen',
+    translation: 'congelar',
+    example: 'The lake froze completely by mid-December.',
     group: 'en-ending'
   },
   {
@@ -196,9 +456,9 @@ export const irregularVerbs: IrregularVerb[] = [
     infinitive: 'get',
     pastSimple: 'got',
     pastParticiple: 'got / gotten',
-    variants: 'US: gotten | UK: got',
+    variants: 'US: gotten (comum no particípio) | UK: got',
     translation: 'obter, conseguir, ficar',
-    example: 'He got the key information quickly.',
+    example: 'He got top marks on the technical assessment.',
     group: 'en-ending'
   },
   {
@@ -207,7 +467,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'gave',
     pastParticiple: 'given',
     translation: 'dar, fornecer',
-    example: 'She gave practical advice to the team.',
+    example: 'She gave helpful feedback on each section.',
     group: 'en-ending'
   },
   {
@@ -216,7 +476,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'went',
     pastParticiple: 'gone',
     translation: 'ir',
-    example: 'They went straight to the venue.',
+    example: 'We went to the exhibition together.',
     group: 'en-ending'
   },
   {
@@ -225,8 +485,18 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'grew',
     pastParticiple: 'grown',
     translation: 'crescer, cultivar',
-    example: 'His vocabulary grew noticeably in three weeks.',
+    example: 'The community grew steadily over the past year.',
     group: 'en-ending'
+  },
+  {
+    id: 'hang',
+    infinitive: 'hang',
+    pastSimple: 'hung / hanged',
+    pastParticiple: 'hung / hanged',
+    variants: 'hung: pendurar objetos | hanged: enforcar (execução)',
+    translation: 'pendurar, suspender',
+    example: 'They hung modern artwork in the lobby.',
+    group: 'past-same'
   },
   {
     id: 'have',
@@ -234,8 +504,8 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'had',
     pastParticiple: 'had',
     translation: 'ter, possuir',
-    example: 'We had an insightful conversation.',
-    group: 'general'
+    example: 'We had a fruitful discussion about the product.',
+    group: 'past-same'
   },
   {
     id: 'hear',
@@ -243,16 +513,25 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'heard',
     pastParticiple: 'heard',
     translation: 'ouvir',
-    example: 'I heard clear audio from the native speaker.',
-    group: 'general'
+    example: 'I heard the announcement clearly over the speaker.',
+    group: 'past-same'
+  },
+  {
+    id: 'hide',
+    infinitive: 'hide',
+    pastSimple: 'hid',
+    pastParticiple: 'hidden',
+    translation: 'esconder, ocultar',
+    example: 'He hid the gift until her birthday morning.',
+    group: 'en-ending'
   },
   {
     id: 'hit',
     infinitive: 'hit',
     pastSimple: 'hit',
     pastParticiple: 'hit',
-    translation: 'atingir, bater',
-    example: 'The team hit all milestones on time.',
+    translation: 'bater, atingir',
+    example: 'The team hit all performance goals comfortably.',
     group: 'identical'
   },
   {
@@ -260,18 +539,37 @@ export const irregularVerbs: IrregularVerb[] = [
     infinitive: 'hold',
     pastSimple: 'held',
     pastParticiple: 'held',
-    translation: 'segurar, manter',
-    example: 'She held the phone with one hand comfortably.',
-    group: 'general'
+    translation: 'segurar, manter, realizar',
+    example: 'She held the handle firmly.',
+    group: 'past-same'
+  },
+  {
+    id: 'hurt',
+    infinitive: 'hurt',
+    pastSimple: 'hurt',
+    pastParticiple: 'hurt',
+    translation: 'machucar, doer, ferir',
+    example: 'His ankle hurt after the vigorous run.',
+    group: 'identical'
   },
   {
     id: 'keep',
     infinitive: 'keep',
     pastSimple: 'kept',
     pastParticiple: 'kept',
-    translation: 'manter, guardar',
-    example: 'Keep your vocabulary list easily accessible.',
-    group: 'general'
+    translation: 'manter, guardar, continuar',
+    example: 'Keep your notes organized by category.',
+    group: 'past-same'
+  },
+  {
+    id: 'kneel',
+    infinitive: 'kneel',
+    pastSimple: 'knelt / kneeled',
+    pastParticiple: 'knelt / kneeled',
+    variants: 'knelt é a forma tradicional mais comum',
+    translation: 'ajoelhar-se',
+    example: 'The gardener knelt to plant the new seeds.',
+    group: 'past-same'
   },
   {
     id: 'know',
@@ -279,27 +577,75 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'knew',
     pastParticiple: 'known',
     translation: 'saber, conhecer',
-    example: 'He knew the exact definition immediately.',
+    example: 'She knew the correct answer right away.',
     group: 'en-ending'
+  },
+  {
+    id: 'lay',
+    infinitive: 'lay',
+    pastSimple: 'laid',
+    pastParticiple: 'laid',
+    variants: 'lay algo (transitivo: pôr/assentar) vs lie (intransitivo: deitar)',
+    translation: 'pôr, colocar horizontalmente, deitar algo',
+    example: 'He laid the blueprints flat on the table.',
+    group: 'past-same'
+  },
+  {
+    id: 'lead',
+    infinitive: 'lead',
+    pastSimple: 'led',
+    pastParticiple: 'led',
+    translation: 'liderar, conduzir, guiar',
+    example: 'She led the development of the client library.',
+    group: 'past-same'
+  },
+  {
+    id: 'lean',
+    infinitive: 'lean',
+    pastSimple: 'leaned / leant',
+    pastParticiple: 'leaned / leant',
+    variants: 'US: leaned | UK: leant / leaned',
+    translation: 'inclinar-se, apoiar-se',
+    example: 'He leaned against the railing to rest.',
+    group: 'past-same'
+  },
+  {
+    id: 'leap',
+    infinitive: 'leap',
+    pastSimple: 'leaped / leapt',
+    pastParticiple: 'leaped / leapt',
+    variants: 'US: leaped | UK: leapt / leaped',
+    translation: 'saltar, pular',
+    example: 'The athlete leapt over the hurdle gracefully.',
+    group: 'past-same'
   },
   {
     id: 'learn',
     infinitive: 'learn',
     pastSimple: 'learned / learnt',
     pastParticiple: 'learned / learnt',
-    variants: 'US: learned | UK: learnt/learned',
+    variants: 'US: learned | UK: learnt / learned',
     translation: 'aprender',
-    example: 'They learned five common idioms today.',
-    group: 'general'
+    example: 'They learned thirty new expressions this month.',
+    group: 'past-same'
   },
   {
     id: 'leave',
     infinitive: 'leave',
     pastSimple: 'left',
     pastParticiple: 'left',
-    translation: 'partir, deixar',
-    example: 'The train left right on schedule.',
-    group: 'general'
+    translation: 'partir, deixar, sair',
+    example: 'The train left punctually at nine.',
+    group: 'past-same'
+  },
+  {
+    id: 'lend',
+    infinitive: 'lend',
+    pastSimple: 'lent',
+    pastParticiple: 'lent',
+    translation: 'emprestar (dar emprestado)',
+    example: 'Could you lend me your dictionary for five minutes?',
+    group: 'past-same'
   },
   {
     id: 'let',
@@ -307,17 +653,111 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'let',
     pastParticiple: 'let',
     translation: 'deixar, permitir',
-    example: 'Let users search with instant feedback.',
+    example: 'Let the page load before scrolling.',
     group: 'identical'
+  },
+  {
+    id: 'lie',
+    infinitive: 'lie',
+    pastSimple: 'lay',
+    pastParticiple: 'lain',
+    variants: 'lie (deitar-se): lay, lain | lie (mentir) é regular: lied, lied',
+    translation: 'deitar-se, jazer',
+    example: 'The dog lay quietly by the fireplace.',
+    group: 'en-ending'
+  },
+  {
+    id: 'light',
+    infinitive: 'light',
+    pastSimple: 'lit / lighted',
+    pastParticiple: 'lit / lighted',
+    variants: 'lit é mais comum em ambos os dialetos',
+    translation: 'acender, iluminar',
+    example: 'A single lamp lit the entire workspace.',
+    group: 'past-same'
+  },
+  {
+    id: 'lose',
+    infinitive: 'lose',
+    pastSimple: 'lost',
+    pastParticiple: 'lost',
+    translation: 'perder',
+    example: 'Make sure you don’t lose your notes.',
+    group: 'past-same'
   },
   {
     id: 'make',
     infinitive: 'make',
     pastSimple: 'made',
     pastParticiple: 'made',
-    translation: 'fazer, criar',
-    example: 'She made great progress in English speaking.',
-    group: 'general'
+    translation: 'fazer, fabricar, produzir',
+    example: 'She made remarkable progress in reading fluency.',
+    group: 'past-same'
+  },
+  {
+    id: 'mean',
+    infinitive: 'mean',
+    pastSimple: 'meant',
+    pastParticiple: 'meant',
+    translation: 'significar, querer dizer',
+    example: 'What did you mean by that term?',
+    group: 'past-same'
+  },
+  {
+    id: 'meet',
+    infinitive: 'meet',
+    pastSimple: 'met',
+    pastParticiple: 'met',
+    translation: 'encontrar, conhecer',
+    example: 'We met our new collaborators on Monday.',
+    group: 'past-same'
+  },
+  {
+    id: 'misunderstand',
+    infinitive: 'misunderstand',
+    pastSimple: 'misunderstood',
+    pastParticiple: 'misunderstood',
+    translation: 'entender mal, interpretar incorretamente',
+    example: 'He misunderstood the project deadline.',
+    group: 'past-same'
+  },
+  {
+    id: 'mow',
+    infinitive: 'mow',
+    pastSimple: 'mowed',
+    pastParticiple: 'mown / mowed',
+    variants: 'mown é comum no particípio adjetival',
+    translation: 'cortar (grama/relva), ceifar',
+    example: 'He mowed the front lawn before noon.',
+    group: 'en-ending'
+  },
+  {
+    id: 'overcome',
+    infinitive: 'overcome',
+    pastSimple: 'overcame',
+    pastParticiple: 'overcome',
+    translation: 'superar, vencer',
+    example: 'They overcame every technical barrier easily.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'pay',
+    infinitive: 'pay',
+    pastSimple: 'paid',
+    pastParticiple: 'paid',
+    translation: 'pagar',
+    example: 'She paid for the course using a digital card.',
+    group: 'past-same'
+  },
+  {
+    id: 'prove',
+    infinitive: 'prove',
+    pastSimple: 'proved',
+    pastParticiple: 'proven / proved',
+    variants: 'US: proven é frequente | UK: proved é padrão',
+    translation: 'provar, comprovar',
+    example: 'The offline strategy proved very effective.',
+    group: 'en-ending'
   },
   {
     id: 'put',
@@ -325,7 +765,17 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'put',
     pastParticiple: 'put',
     translation: 'pôr, colocar',
-    example: 'Put new words into practical sentences.',
+    example: 'Put every learned word into a practical sentence.',
+    group: 'identical'
+  },
+  {
+    id: 'quit',
+    infinitive: 'quit',
+    pastSimple: 'quit / quitted',
+    pastParticiple: 'quit / quitted',
+    variants: 'quit é a forma predominante no inglês moderno',
+    translation: 'desistir, parar, largar',
+    example: 'She never quit studying despite the busy schedule.',
     group: 'identical'
   },
   {
@@ -333,10 +783,55 @@ export const irregularVerbs: IrregularVerb[] = [
     infinitive: 'read',
     pastSimple: 'read (/rɛd/)',
     pastParticiple: 'read (/rɛd/)',
-    variants: 'Grafia idêntica, pronúncia diferente no passado',
+    variants: 'Grafia idêntica, pronúncia fonética diferente no passado',
     translation: 'ler',
-    example: 'I read three articles on study habits.',
+    example: 'I read three short chapters this morning.',
     group: 'identical'
+  },
+  {
+    id: 'ride',
+    infinitive: 'ride',
+    pastSimple: 'rode',
+    pastParticiple: 'ridden',
+    translation: 'andar de (bicicleta, cavalo), cavalgar',
+    example: 'They rode bikes along the city river trail.',
+    group: 'en-ending'
+  },
+  {
+    id: 'ring',
+    infinitive: 'ring',
+    pastSimple: 'rang',
+    pastParticiple: 'rung',
+    translation: 'tocar (telefone, campainha), soar',
+    example: 'The bell rang to mark the end of class.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'rise',
+    infinitive: 'rise',
+    pastSimple: 'rose',
+    pastParticiple: 'risen',
+    translation: 'subir, erguer-se, nascer (sol)',
+    example: 'The sun rose behind the mountain peaks.',
+    group: 'en-ending'
+  },
+  {
+    id: 'run',
+    infinitive: 'run',
+    pastSimple: 'ran',
+    pastParticiple: 'run',
+    translation: 'correr, gerenciar, executar',
+    example: 'Tests ran smoothly on all platforms.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'say',
+    infinitive: 'say',
+    pastSimple: 'said',
+    pastParticiple: 'said',
+    translation: 'dizer',
+    example: 'He said everything in clear, natural English.',
+    group: 'past-same'
   },
   {
     id: 'see',
@@ -344,17 +839,164 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'saw',
     pastParticiple: 'seen',
     translation: 'ver, enxergar',
-    example: 'We saw immediate improvements in comprehension.',
+    example: 'We saw significant improvement in retention.',
     group: 'en-ending'
+  },
+  {
+    id: 'seek',
+    infinitive: 'seek',
+    pastSimple: 'sought',
+    pastParticiple: 'sought',
+    translation: 'buscar, procurar',
+    example: 'They sought guidance from senior instructors.',
+    group: 'past-same'
+  },
+  {
+    id: 'sell',
+    infinitive: 'sell',
+    pastSimple: 'sold',
+    pastParticiple: 'sold',
+    translation: 'vender',
+    example: 'The author sold over ten thousand copies.',
+    group: 'past-same'
+  },
+  {
+    id: 'send',
+    infinitive: 'send',
+    pastSimple: 'sent',
+    pastParticiple: 'sent',
+    translation: 'enviar, mandar',
+    example: 'She sent the summary right after our call.',
+    group: 'past-same'
   },
   {
     id: 'set',
     infinitive: 'set',
     pastSimple: 'set',
     pastParticiple: 'set',
-    translation: 'definir, ajustar',
-    example: 'Set realistic study goals every week.',
+    translation: 'definir, colocar, ajustar',
+    example: 'Set realistic study objectives every week.',
     group: 'identical'
+  },
+  {
+    id: 'sew',
+    infinitive: 'sew',
+    pastSimple: 'sewed',
+    pastParticiple: 'sewn / sewed',
+    translation: 'costurar',
+    example: 'She sewed a sturdy patch onto the bag.',
+    group: 'en-ending'
+  },
+  {
+    id: 'shake',
+    infinitive: 'shake',
+    pastSimple: 'shook',
+    pastParticiple: 'shaken',
+    translation: 'sacudir, tremer, apertar (mão)',
+    example: 'They shook hands warmly after the deal.',
+    group: 'en-ending'
+  },
+  {
+    id: 'shine',
+    infinitive: 'shine',
+    pastSimple: 'shone / shined',
+    pastParticiple: 'shone / shined',
+    variants: 'shone: brilhar | shined: lustrar/polir (sapatos)',
+    translation: 'brilhar, reluzir, lustrar',
+    example: 'The afternoon sun shone directly into the room.',
+    group: 'past-same'
+  },
+  {
+    id: 'shoot',
+    infinitive: 'shoot',
+    pastSimple: 'shot',
+    pastParticiple: 'shot',
+    translation: 'atirar, disparar, filmar',
+    example: 'The filmmaker shot stunning landscape scenes.',
+    group: 'past-same'
+  },
+  {
+    id: 'show',
+    infinitive: 'show',
+    pastSimple: 'showed',
+    pastParticiple: 'shown / showed',
+    variants: 'shown é a forma preferida no particípio',
+    translation: 'mostrar, exibir',
+    example: 'He showed great dedication to his progress.',
+    group: 'en-ending'
+  },
+  {
+    id: 'shrink',
+    infinitive: 'shrink',
+    pastSimple: 'shrank / shrunk',
+    pastParticiple: 'shrunk',
+    translation: 'encolher, diminuir',
+    example: 'The wool sweater shrank slightly in hot water.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'shut',
+    infinitive: 'shut',
+    pastSimple: 'shut',
+    pastParticiple: 'shut',
+    translation: 'fechar',
+    example: 'Shut the door gently behind you.',
+    group: 'identical'
+  },
+  {
+    id: 'sing',
+    infinitive: 'sing',
+    pastSimple: 'sang',
+    pastParticiple: 'sung',
+    translation: 'cantar',
+    example: 'The choir sang traditional melodies.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'sink',
+    infinitive: 'sink',
+    pastSimple: 'sank',
+    pastParticiple: 'sunk',
+    translation: 'afundar',
+    example: 'The small boat sank near the rocky shoreline.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'sit',
+    infinitive: 'sit',
+    pastSimple: 'sat',
+    pastParticiple: 'sat',
+    translation: 'sentar-se',
+    example: 'We sat near the front to hear every word.',
+    group: 'past-same'
+  },
+  {
+    id: 'sleep',
+    infinitive: 'sleep',
+    pastSimple: 'slept',
+    pastParticiple: 'slept',
+    translation: 'dormir',
+    example: 'She slept peacefully for eight uninterrupted hours.',
+    group: 'past-same'
+  },
+  {
+    id: 'slide',
+    infinitive: 'slide',
+    pastSimple: 'slid',
+    pastParticiple: 'slid',
+    translation: 'deslizar, escorregar',
+    example: 'He slid the drawer open without noise.',
+    group: 'past-same'
+  },
+  {
+    id: 'smell',
+    infinitive: 'smell',
+    pastSimple: 'smelled / smelt',
+    pastParticiple: 'smelled / smelt',
+    variants: 'US: smelled | UK: smelt / smelled',
+    translation: 'cheirar',
+    example: 'The kitchen smelled like freshly baked bread.',
+    group: 'past-same'
   },
   {
     id: 'speak',
@@ -362,8 +1004,184 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'spoke',
     pastParticiple: 'spoken',
     translation: 'falar',
-    example: 'He spoke clearly and calmly during the call.',
+    example: 'She spoke fluently during the live panel.',
     group: 'en-ending'
+  },
+  {
+    id: 'speed',
+    infinitive: 'speed',
+    pastSimple: 'sped / speeded',
+    pastParticiple: 'sped / speeded',
+    variants: 'sped é predominante para movimento rápido',
+    translation: 'acelerar, apressar-se',
+    example: 'The delivery van sped down the highway.',
+    group: 'past-same'
+  },
+  {
+    id: 'spell',
+    infinitive: 'spell',
+    pastSimple: 'spelled / spelt',
+    pastParticiple: 'spelled / spelt',
+    variants: 'US: spelled | UK: spelt / spelled',
+    translation: 'soletrar',
+    example: 'Could you spell your family name, please?',
+    group: 'past-same'
+  },
+  {
+    id: 'spend',
+    infinitive: 'spend',
+    pastSimple: 'spent',
+    pastParticiple: 'spent',
+    translation: 'gastar, passar (tempo)',
+    example: 'They spent twenty minutes reviewing flashcards daily.',
+    group: 'past-same'
+  },
+  {
+    id: 'spin',
+    infinitive: 'spin',
+    pastSimple: 'spun',
+    pastParticiple: 'spun',
+    translation: 'girar, rodopiar, fiar',
+    example: 'The dancer spun with effortless balance.',
+    group: 'past-same'
+  },
+  {
+    id: 'spit',
+    infinitive: 'spit',
+    pastSimple: 'spat / spit',
+    pastParticiple: 'spat / spit',
+    variants: 'UK: spat é usual | US: spit ou spat',
+    translation: 'cuspir',
+    example: 'The campfire spat glowing sparks into the night.',
+    group: 'past-same'
+  },
+  {
+    id: 'split',
+    infinitive: 'split',
+    pastSimple: 'split',
+    pastParticiple: 'split',
+    translation: 'dividir, rachar, separar',
+    example: 'We split the restaurant bill evenly.',
+    group: 'identical'
+  },
+  {
+    id: 'spoil',
+    infinitive: 'spoil',
+    pastSimple: 'spoiled / spoilt',
+    pastParticiple: 'spoiled / spoilt',
+    variants: 'US: spoiled | UK: spoilt / spoiled',
+    translation: 'estragar, mimar',
+    example: 'The unexpected downpour spoiled the outdoor picnic.',
+    group: 'past-same'
+  },
+  {
+    id: 'spread',
+    infinitive: 'spread',
+    pastSimple: 'spread',
+    pastParticiple: 'spread',
+    translation: 'espalhar, estender',
+    example: 'Good news spread fast throughout the office.',
+    group: 'identical'
+  },
+  {
+    id: 'spring',
+    infinitive: 'spring',
+    pastSimple: 'sprang / sprung',
+    pastParticiple: 'sprung',
+    translation: 'saltar, brotar, surgir repentinamente',
+    example: 'A wonderful idea sprang to mind during our talk.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'stand',
+    infinitive: 'stand',
+    pastSimple: 'stood',
+    pastParticiple: 'stood',
+    translation: 'ficar de pé, aguentar',
+    example: 'The old clock tower stood firm for centuries.',
+    group: 'past-same'
+  },
+  {
+    id: 'steal',
+    infinitive: 'steal',
+    pastSimple: 'stole',
+    pastParticiple: 'stolen',
+    translation: 'roubar',
+    example: 'Someone stole his bicycle from the racks.',
+    group: 'en-ending'
+  },
+  {
+    id: 'stick',
+    infinitive: 'stick',
+    pastSimple: 'stuck',
+    pastParticiple: 'stuck',
+    translation: 'colar, grudar, prender-se',
+    example: 'The stamp stuck securely onto the envelope.',
+    group: 'past-same'
+  },
+  {
+    id: 'sting',
+    infinitive: 'sting',
+    pastSimple: 'stung',
+    pastParticiple: 'stung',
+    translation: 'picar, ferroar',
+    example: 'A bee stung his wrist while gardening.',
+    group: 'past-same'
+  },
+  {
+    id: 'stink',
+    infinitive: 'stink',
+    pastSimple: 'stank / stunk',
+    pastParticiple: 'stunk',
+    translation: 'feder, cheirar mal',
+    example: 'The stagnant water stank in the afternoon heat.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'strike',
+    infinitive: 'strike',
+    pastSimple: 'struck',
+    pastParticiple: 'struck / stricken',
+    variants: 'stricken é usado principalmente como adjetivo',
+    translation: 'golpear, atingir, fazer greve',
+    example: 'Lightning struck the tall pine tree.',
+    group: 'past-same'
+  },
+  {
+    id: 'swear',
+    infinitive: 'swear',
+    pastSimple: 'swore',
+    pastParticiple: 'sworn',
+    translation: 'jurar, xingar',
+    example: 'The witness swore to speak absolute truth.',
+    group: 'en-ending'
+  },
+  {
+    id: 'sweep',
+    infinitive: 'sweep',
+    pastSimple: 'swept',
+    pastParticiple: 'swept',
+    translation: 'varrer',
+    example: 'She swept the kitchen floor clean before guest arrival.',
+    group: 'past-same'
+  },
+  {
+    id: 'swim',
+    infinitive: 'swim',
+    pastSimple: 'swam',
+    pastParticiple: 'swum',
+    translation: 'nadar',
+    example: 'We swam across the calm bay in the morning.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'swing',
+    infinitive: 'swing',
+    pastSimple: 'swung',
+    pastParticiple: 'swung',
+    translation: 'balançar, oscilar',
+    example: 'The heavy pendulum swung back and forth.',
+    group: 'past-same'
   },
   {
     id: 'take',
@@ -371,7 +1189,52 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'took',
     pastParticiple: 'taken',
     translation: 'tomar, pegar, levar',
-    example: 'Take quick notes whenever you hear an unknown term.',
+    example: 'Take quick notes of unfamiliar phrases.',
+    group: 'en-ending'
+  },
+  {
+    id: 'teach',
+    infinitive: 'teach',
+    pastSimple: 'taught',
+    pastParticiple: 'taught',
+    translation: 'ensinar',
+    example: 'She taught practical pronunciation techniques.',
+    group: 'past-same'
+  },
+  {
+    id: 'tear',
+    infinitive: 'tear',
+    pastSimple: 'tore',
+    pastParticiple: 'torn',
+    translation: 'rasgar, despedaçar',
+    example: 'He accidentally tore the corner of the ticket.',
+    group: 'en-ending'
+  },
+  {
+    id: 'tell',
+    infinitive: 'tell',
+    pastSimple: 'told',
+    pastParticiple: 'told',
+    translation: 'dizer, contar, relatar',
+    example: 'She told us an inspiring story about perseverance.',
+    group: 'past-same'
+  },
+  {
+    id: 'think',
+    infinitive: 'think',
+    pastSimple: 'thought',
+    pastParticiple: 'thought',
+    translation: 'pensar, achar',
+    example: 'We thought carefully before choosing this solution.',
+    group: 'past-same'
+  },
+  {
+    id: 'throw',
+    infinitive: 'throw',
+    pastSimple: 'threw',
+    pastParticiple: 'thrown',
+    translation: 'lançar, atirar, arremessar',
+    example: 'He threw the ball right into the catcher’s mitt.',
     group: 'en-ending'
   },
   {
@@ -380,8 +1243,54 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'understood',
     pastParticiple: 'understood',
     translation: 'entender, compreender',
-    example: 'Everyone understood the instructions without difficulty.',
-    group: 'general'
+    example: 'I understood every concept explained today.',
+    group: 'past-same'
+  },
+  {
+    id: 'undertake',
+    infinitive: 'undertake',
+    pastSimple: 'undertook',
+    pastParticiple: 'undertaken',
+    translation: 'empreender, encarar uma tarefa',
+    example: 'The team undertook a major redesign of the layout.',
+    group: 'en-ending'
+  },
+  {
+    id: 'wake',
+    infinitive: 'wake',
+    pastSimple: 'woke / waked',
+    pastParticiple: 'woken / waked',
+    variants: 'woke/woken é predominante',
+    translation: 'acordar, despertar',
+    example: 'The birds woke the whole neighborhood at sunrise.',
+    group: 'en-ending'
+  },
+  {
+    id: 'wear',
+    infinitive: 'wear',
+    pastSimple: 'wore',
+    pastParticiple: 'worn',
+    translation: 'vestir, usar (roupa/acessório), desgastar',
+    example: 'She wore comfortable shoes for the city walk.',
+    group: 'en-ending'
+  },
+  {
+    id: 'win',
+    infinitive: 'win',
+    pastSimple: 'won',
+    pastParticiple: 'won',
+    translation: 'vencer, ganhar',
+    example: 'Their collaborative spirit won the tournament.',
+    group: 'past-same'
+  },
+  {
+    id: 'withdraw',
+    infinitive: 'withdraw',
+    pastSimple: 'withdrew',
+    pastParticiple: 'withdrawn',
+    translation: 'retirar, sacar (dinheiro)',
+    example: 'She withdrew fifty dollars from the ATM.',
+    group: 'en-ending'
   },
   {
     id: 'write',
@@ -389,7 +1298,7 @@ export const irregularVerbs: IrregularVerb[] = [
     pastSimple: 'wrote',
     pastParticiple: 'written',
     translation: 'escrever',
-    example: 'She wrote concise summary notes in her pocket guide.',
+    example: 'He wrote clear, concise documentation for everyone.',
     group: 'en-ending'
   }
 ];
