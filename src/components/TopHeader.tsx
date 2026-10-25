@@ -19,10 +19,15 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     subtitle: 'Base completa com 200 verbos e três formas gramaticais',
     badge: '200 Verbos'
   },
+  practice: {
+    title: 'Praticar Inglês',
+    subtitle: 'Desenvolvimento das 4 habilidades: Escuta, Fala, Leitura e Escrita',
+    badge: '4 Habilidades'
+  },
   vocab: {
-    title: 'Dicionário de Vocabulário',
-    subtitle: 'Termos contextualizados, pronúncias fonéticas e exemplos',
-    badge: 'Vocabulário'
+    title: 'Praticar Inglês',
+    subtitle: 'Desenvolvimento das 4 habilidades: Escuta, Fala, Leitura e Escrita',
+    badge: '4 Habilidades'
   },
   translator: {
     title: 'Tradutor Rápido',
@@ -55,9 +60,13 @@ const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
     dot: 'bg-[#6545F5] ring-[#6545F5]/20',
     badge: 'bg-[#EDE8FD] text-[#6545F5] border-[#D9CEFC]'
   },
+  practice: {
+    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
+    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+  },
   vocab: {
-    dot: 'bg-[#0A9B80] ring-[#0A9B80]/20',
-    badge: 'bg-[#DCF8F1] text-[#0A9B80] border-[#B6F5E8]'
+    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
+    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
   },
   translator: {
     dot: 'bg-[#FF6534] ring-[#FF6534]/20',

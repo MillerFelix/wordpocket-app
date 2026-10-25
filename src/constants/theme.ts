@@ -21,7 +21,7 @@
  */
 
 export interface PillarTheme {
-  readonly id: 'verbs' | 'vocab' | 'translator';
+  readonly id: 'verbs' | 'practice' | 'translator' | 'vocab';
   readonly name: string;
   readonly primary: string;
   readonly dark: string;
@@ -45,7 +45,7 @@ export const THEME_TOKENS = {
     shadow: '0 8px 24px -4px rgba(23, 107, 255, 0.40)',
   },
 
-  // Three Pillars with Distinct, Recovered Identities
+  // Three Core Navigation Pillars
   pillars: {
     verbs: {
       id: 'verbs',
@@ -58,6 +58,18 @@ export const THEME_TOKENS = {
       badgeText: 'text-[#6545F5]',
       gradient: 'linear-gradient(135deg, #6545F5 0%, #7C4DF8 50%, #9D75FB 100%)',
       shadow: '0 8px 24px -4px rgba(101, 69, 245, 0.40)',
+    },
+    practice: {
+      id: 'practice',
+      name: 'Praticar Inglês',
+      primary: '#176BFF',
+      dark: '#2446C8',
+      subtle: '#E1ECFC',
+      border: '#BED7FA',
+      badgeBg: 'bg-[#E1ECFC]',
+      badgeText: 'text-[#176BFF]',
+      gradient: 'linear-gradient(135deg, #176BFF 0%, #20A4FF 50%, #26D9FF 100%)',
+      shadow: '0 8px 24px -4px rgba(23, 107, 255, 0.40)',
     },
     vocab: {
       id: 'vocab',
@@ -84,6 +96,54 @@ export const THEME_TOKENS = {
       shadow: '0 8px 24px -4px rgba(255, 91, 38, 0.40)',
     },
   } satisfies Record<string, PillarTheme>,
+
+  // Four English Skills Color Identity
+  skills: {
+    listening: {
+      id: 'listening',
+      nameEn: 'Listening',
+      namePt: 'Escuta',
+      primary: '#176BFF',
+      cyan: '#26D9FF',
+      subtle: '#E1ECFC',
+      border: '#BED7FA',
+      gradient: 'linear-gradient(135deg, #176BFF 0%, #20A4FF 50%, #26D9FF 100%)',
+      shadow: '0 8px 24px -4px rgba(23, 107, 255, 0.40)',
+    },
+    speaking: {
+      id: 'speaking',
+      nameEn: 'Speaking',
+      namePt: 'Fala',
+      primary: '#6545F5',
+      dark: '#5528DB',
+      subtle: '#EDE8FD',
+      border: '#D9CEFC',
+      gradient: 'linear-gradient(135deg, #6545F5 0%, #7C4DF8 50%, #9D75FB 100%)',
+      shadow: '0 8px 24px -4px rgba(101, 69, 245, 0.40)',
+    },
+    reading: {
+      id: 'reading',
+      nameEn: 'Reading',
+      namePt: 'Leitura',
+      primary: '#0BAE90',
+      dark: '#0A9B80',
+      subtle: '#DCF8F1',
+      border: '#B6F5E8',
+      gradient: 'linear-gradient(135deg, #0BAE90 0%, #15C7A5 45%, #22E1BC 100%)',
+      shadow: '0 8px 24px -4px rgba(11, 174, 144, 0.40)',
+    },
+    writing: {
+      id: 'writing',
+      nameEn: 'Writing',
+      namePt: 'Escrita',
+      primary: '#FF5B26',
+      dark: '#E04D1B',
+      subtle: '#FFEAE1',
+      border: '#FFD2C2',
+      gradient: 'linear-gradient(135deg, #FF5B26 0%, #FF6E38 45%, #FF8D54 100%)',
+      shadow: '0 8px 24px -4px rgba(255, 91, 38, 0.40)',
+    },
+  },
 
   // Neutral Reading Surfaces (High Contrast, Low Fatigue)
   surfaces: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Home, 
   BookOpen, 
-  BookA, 
+  GraduationCap, 
   Languages, 
   Wifi, 
   WifiOff, 
@@ -17,14 +17,16 @@ interface MobileNavProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   verbCount: number;
-  vocabCount: number;
+  vocabCount?: number;
+  practiceCount?: number;
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   activeTab,
   onTabChange,
   verbCount: _verbCount,
-  vocabCount: _vocabCount
+  vocabCount: _vocabCount,
+  practiceCount: _practiceCount
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
@@ -51,12 +53,12 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       activeDot: 'bg-[#6545F5]'
     },
     {
-      id: 'vocab' as TabType,
-      label: 'Vocabulário',
-      icon: BookA,
-      color: 'text-[#0A9B80]',
-      activeBg: 'bg-[#DCF8F1] text-[#0A9B80] border border-white/90 shadow-2xs',
-      activeDot: 'bg-[#19D9B4]'
+      id: 'practice' as TabType,
+      label: 'Praticar',
+      icon: GraduationCap,
+      color: 'text-[#176BFF]',
+      activeBg: 'bg-[#E1ECFC] text-[#176BFF] border border-white/90 shadow-2xs',
+      activeDot: 'bg-[#176BFF]'
     },
     {
       id: 'translator' as TabType,
@@ -139,7 +141,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         <div className="grid grid-cols-4 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
+            const isActive = activeTab === tab.id || (tab.id === 'practice' && activeTab === 'vocab');
             return (
               <button
                 key={tab.id}

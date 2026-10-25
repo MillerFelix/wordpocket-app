@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, BookA, Languages, ArrowRight } from 'lucide-react';
+import { BookOpen, GraduationCap, Languages, ArrowRight } from 'lucide-react';
 import { TabType } from '../../types';
 
 interface HomeQuickAccessProps {
@@ -37,13 +37,13 @@ export const HomeQuickAccess: React.FC<HomeQuickAccessProps> = ({ onNavigate }) 
 
         <button
           type="button"
-          onClick={() => onNavigate('vocab')}
-          className="flex items-center justify-center gap-2 py-3 px-3 rounded-2xl bg-[#DCF8F1] hover:bg-[#CBF6EC] text-[#0A9B80] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group"
+          onClick={() => onNavigate('practice')}
+          className="flex items-center justify-center gap-2 py-3 px-3 rounded-2xl bg-[#E1ECFC] hover:bg-[#D0E2FA] text-[#176BFF] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group"
         >
-          <div className="w-6 h-6 rounded-lg bg-white/90 text-[#0A9B80] flex items-center justify-center group-hover:bg-[#19D9B4] group-hover:text-white transition shadow-2xs">
-            <BookA className="w-3.5 h-3.5" />
+          <div className="w-6 h-6 rounded-lg bg-white/90 text-[#176BFF] flex items-center justify-center group-hover:bg-[#176BFF] group-hover:text-white transition shadow-2xs">
+            <GraduationCap className="w-3.5 h-3.5" />
           </div>
-          <span>Vocabulário</span>
+          <span>Praticar</span>
         </button>
 
         <button

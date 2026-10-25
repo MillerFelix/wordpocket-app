@@ -21,12 +21,12 @@ const RECENT_ITEMS: RecentItem[] = [
     itemBg: 'bg-[#EDE8FD]/80 hover:bg-[#E2D7F8] border-white/80'
   },
   {
-    term: 'beautiful',
-    type: 'Vocabulário',
-    sub: '/ˈbjuːtɪfəl/ • bonito(a)',
-    targetTab: 'vocab',
-    color: 'bg-[#19D9B4]',
-    itemBg: 'bg-[#DCF8F1]/80 hover:bg-[#CBF6EC] border-white/80'
+    term: 'Listening',
+    type: 'Praticar Inglês',
+    sub: 'Compreensão oral • Áudio',
+    targetTab: 'practice',
+    color: 'bg-[#176BFF]',
+    itemBg: 'bg-[#E1ECFC]/80 hover:bg-[#D4E5FA] border-white/80'
   },
   {
     term: 'good morning',

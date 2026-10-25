@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Home, 
   BookOpen, 
-  BookA, 
+  GraduationCap, 
   Languages, 
   Star, 
   Clock, 
@@ -22,14 +22,16 @@ interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   verbCount: number;
-  vocabCount: number;
+  vocabCount?: number;
+  practiceCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onTabChange,
   verbCount,
-  vocabCount
+  vocabCount: _vocabCount,
+  practiceCount: _practiceCount
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
@@ -57,15 +59,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       activeBar: 'bg-[#6545F5]'
     },
     {
-      id: 'vocab' as TabType,
-      label: 'Vocabulário',
-      subtitle: 'Dicionário e sentidos',
-      icon: BookA,
-      count: vocabCount,
-      color: 'text-[#0A9B80]',
-      activeBg: 'bg-[#DCF8F1] border border-white/90',
-      activeText: 'text-[#0A9B80]',
-      activeBar: 'bg-[#19D9B4]'
+      id: 'practice' as TabType,
+      label: 'Praticar Inglês',
+      subtitle: '4 Habilidades do idioma',
+      icon: GraduationCap,
+      count: '4 Áreas',
+      color: 'text-[#176BFF]',
+      activeBg: 'bg-[#E1ECFC] border border-white/90',
+      activeText: 'text-[#176BFF]',
+      activeBar: 'bg-[#176BFF]'
     },
     {
       id: 'translator' as TabType,
@@ -126,7 +128,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <nav className="space-y-1.5" aria-label="Navegação Principal Desktop">
           {mainNavItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = activeTab === item.id || (item.id === 'practice' && activeTab === 'vocab');
             return (
               <button
                 key={item.id}

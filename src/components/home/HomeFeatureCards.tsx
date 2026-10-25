@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, BookA, Languages, ArrowRight } from 'lucide-react';
+import { BookOpen, GraduationCap, Languages, ArrowRight } from 'lucide-react';
 import { TabType } from '../../types';
 
 interface HomeFeatureCardsProps {
@@ -62,13 +62,13 @@ export const HomeFeatureCards: React.FC<HomeFeatureCardsProps> = ({ onNavigate }
           </div>
         </div>
 
-        {/* Card 2: Vocabulário (Fresh Mint / Electric Blue Gradient) */}
+        {/* Card 2: Praticar Inglês (Blue Pulse / 4 Habilidades) */}
         <div
-          onClick={() => onNavigate('vocab')}
-          className="group relative overflow-hidden rounded-3xl p-6 bg-gradient-vocab text-white shadow-soft-card hover:shadow-colored-mint ring-1 ring-white/30 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[160px] active:scale-[0.99]"
+          onClick={() => onNavigate('practice')}
+          className="group relative overflow-hidden rounded-3xl p-6 bg-gradient-brand text-white shadow-soft-card hover:shadow-colored-blue ring-1 ring-white/30 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[160px] active:scale-[0.99]"
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && onNavigate('vocab')}
+          onKeyDown={(e) => e.key === 'Enter' && onNavigate('practice')}
         >
           {/* Ambient Background Wave SVG */}
           <div className="absolute -right-4 -bottom-6 w-32 h-32 opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-300">
@@ -81,25 +81,25 @@ export const HomeFeatureCards: React.FC<HomeFeatureCardsProps> = ({ onNavigate }
             {/* Icon Box & Module Tag */}
             <div className="flex items-center justify-between">
               <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white ring-1 ring-white/30 shadow-inner">
-                <BookA className="w-5 h-5 stroke-[2.3]" />
+                <GraduationCap className="w-5 h-5 stroke-[2.3]" />
               </div>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-white/20 text-white/95 backdrop-blur-sm">
-                Dicionário
+                4 Habilidades
               </span>
             </div>
             <div>
               <h3 className="text-lg font-extrabold tracking-tight text-white leading-tight">
-                Vocabulário
+                Praticar Inglês
               </h3>
-              <p className="text-xs text-white/85 mt-1 leading-relaxed font-medium">
-                Encontre o significado, pronúncia, exemplos e traduções de milhares de palavras.
+              <p className="text-xs text-white/90 mt-1 leading-relaxed font-medium">
+                Listening, Speaking, Reading e Writing para desenvolver sua fluência no seu próprio ritmo.
               </p>
             </div>
           </div>
 
           {/* Bottom Arrow Indicator */}
           <div className="flex justify-end pt-3 z-10">
-            <div className="w-9 h-9 rounded-full bg-white text-[#0A9B80] flex items-center justify-center shadow-md group-hover:translate-x-1 transition-transform">
+            <div className="w-9 h-9 rounded-full bg-white text-[#176BFF] flex items-center justify-center shadow-md group-hover:translate-x-1 transition-transform">
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </div>
           </div>

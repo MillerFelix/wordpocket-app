@@ -87,6 +87,10 @@
   --gradient-card-verbs: linear-gradient(135deg, #6545F5 0%, #7C4DF8 50%, #9D75FB 100%);
   --gradient-card-vocab: linear-gradient(135deg, #0BAE90 0%, #15C7A5 45%, #22E1BC 100%);
   --gradient-card-translator: linear-gradient(135deg, #FF5B26 0%, #FF6E38 45%, #FF8D54 100%);
+  --gradient-card-listening: linear-gradient(135deg, #176BFF 0%, #20A4FF 50%, #26D9FF 100%);
+  --gradient-card-speaking: linear-gradient(135deg, #6545F5 0%, #7C4DF8 50%, #9D75FB 100%);
+  --gradient-card-reading: linear-gradient(135deg, #0BAE90 0%, #15C7A5 45%, #22E1BC 100%);
+  --gradient-card-writing: linear-gradient(135deg, #FF5B26 0%, #FF6E38 45%, #FF8D54 100%);
 
   /* Atmospheric Ambient App Glow with Visibly Present Blue Pulse Mesh */
   --app-ambient-bg: 
@@ -144,6 +148,22 @@
   background: var(--gradient-card-translator);
 }
 
+.bg-gradient-listening {
+  background: var(--gradient-card-listening);
+}
+
+.bg-gradient-speaking {
+  background: var(--gradient-card-speaking);
+}
+
+.bg-gradient-reading {
+  background: var(--gradient-card-reading);
+}
+
+.bg-gradient-writing {
+  background: var(--gradient-card-writing);
+}
+
 .text-gradient-brand {
   background: var(--gradient-brand);
   -webkit-background-clip: text;
@@ -178,6 +198,22 @@
 
 .shadow-colored-pink {
   box-shadow: 0 8px 24px -4px rgba(245, 46, 145, 0.38);
+}
+
+.shadow-colored-listening {
+  box-shadow: 0 8px 24px -4px rgba(23, 107, 255, 0.40);
+}
+
+.shadow-colored-speaking {
+  box-shadow: 0 8px 24px -4px rgba(101, 69, 245, 0.40);
+}
+
+.shadow-colored-reading {
+  box-shadow: 0 8px 24px -4px rgba(11, 174, 144, 0.40);
+}
+
+.shadow-colored-writing {
+  box-shadow: 0 8px 24px -4px rgba(255, 91, 38, 0.40);
 }
 
 /* Custom scrollbars with ice blue accents */

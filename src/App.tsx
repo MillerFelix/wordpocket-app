@@ -4,13 +4,13 @@ import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 import { HomeView } from './components/HomeView';
 import { IrregularVerbsView } from './components/IrregularVerbsView';
-import { VocabularyView } from './components/VocabularyView';
+import { PracticeView } from './components/practice/PracticeView';
 import { QuickTranslatorView } from './components/QuickTranslatorView';
 import { FavoritesView } from './components/FavoritesView';
 import { SettingsView } from './components/SettingsView';
 import { TabType } from './types';
 import { irregularVerbs } from './data/irregularVerbs';
-import { vocabularyData } from './data/vocabulary';
+import { PRACTICE_SKILLS } from './data/practiceSkills';
 
 interface AppProps {
   initialTab?: TabType;
@@ -48,7 +48,7 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
         activeTab={activeTab}
         onTabChange={handleNavigate}
         verbCount={irregularVerbs.length}
-        vocabCount={vocabularyData.length}
+        practiceCount={PRACTICE_SKILLS.length}
       />
 
       {/* Mobile Top Header & Bottom Navigation Bar */}
@@ -56,7 +56,7 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
         activeTab={activeTab}
         onTabChange={handleNavigate}
         verbCount={irregularVerbs.length}
-        vocabCount={vocabularyData.length}
+        practiceCount={PRACTICE_SKILLS.length}
       />
 
       {/* Main Content Area */}
@@ -76,8 +76,8 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
             <IrregularVerbsView initialSearch={pendingSearch} />
           )}
 
-          {activeTab === 'vocab' && (
-            <VocabularyView initialSearch={pendingSearch} />
+          {(activeTab === 'practice' || activeTab === 'vocab') && (
+            <PracticeView />
           )}
 
           {activeTab === 'translator' && (

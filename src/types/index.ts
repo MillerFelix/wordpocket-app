@@ -1,4 +1,24 @@
-export type TabType = 'home' | 'verbs' | 'vocab' | 'translator' | 'favorites' | 'history' | 'settings';
+export type TabType = 'home' | 'verbs' | 'practice' | 'translator' | 'favorites' | 'history' | 'settings' | 'vocab';
+
+export type PracticeSkillId = 'listening' | 'speaking' | 'reading' | 'writing';
+
+export type PracticeDifficulty = 'easy' | 'medium' | 'hard';
+
+export interface PracticeSkillConfig {
+  id: PracticeSkillId;
+  nameEn: string;
+  namePt: string;
+  tagline: string;
+  objective: string;
+  activitiesTag: string;
+  futureActivities: string[];
+  difficultyInfo: Record<PracticeDifficulty, { label: string; desc: string }>;
+  accentColor: string;
+  badgeBg: string;
+  badgeText: string;
+  gradientClass: string;
+  shadowClass: string;
+}
 
 export type VerbGroup = 'identical' | 'en-ending' | 'vowel-change' | 'past-same' | 'general';
 

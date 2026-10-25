@@ -12,7 +12,7 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(screen.getAllByText(/Olá, Lucas!/i).length).toBeGreaterThan(0);
     expect(screen.getAllByPlaceholderText(/Buscar palavra, verbo ou tradução/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Verbos Irregulares/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Vocabulário/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Praticar/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Tradutor/i).length).toBeGreaterThan(0);
   });
 
@@ -40,15 +40,17 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(screen.getByText(/Critérios Linguísticos e Fontes da Base/i)).toBeInTheDocument();
   });
 
-  it('navigates to vocabulary dictionary and displays phonetic notations and categories', () => {
+  it('navigates to Praticar Inglês hub and displays the 4 skills and discrete progress', () => {
     render(<App />);
-    const vocabButtons = screen.getAllByRole('button', { name: /Vocabulário/i });
-    fireEvent.click(vocabButtons[0]);
+    const practiceButtons = screen.getAllByRole('button', { name: /Praticar/i });
+    fireEvent.click(practiceButtons[0]);
 
-    expect(screen.getByPlaceholderText(/Consultar dicionário/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Resilient' })).toBeInTheDocument();
-    expect(screen.getByText('/rɪˈzɪl.jənt/')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Insightful' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Listening/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Speaking/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Reading/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Writing/i })).toBeInTheDocument();
+    expect(screen.getByText(/Progresso Geral/i)).toBeInTheDocument();
   });
 
   it('navigates to quick translator tab, supports typing, translation and language inversion on same screen', async () => {
