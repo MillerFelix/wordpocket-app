@@ -46,9 +46,9 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       id: 'verbs' as TabType,
       label: 'Verbos',
       icon: BookOpen,
-      color: 'text-[#176BFF]',
-      activeBg: 'bg-[#E1ECFC] text-[#176BFF] border border-white/90 shadow-2xs',
-      activeDot: 'bg-[#176BFF]'
+      color: 'text-[#6545F5]',
+      activeBg: 'bg-[#EDE8FD] text-[#6545F5] border border-white/90 shadow-2xs',
+      activeDot: 'bg-[#6545F5]'
     },
     {
       id: 'vocab' as TabType,
@@ -148,7 +148,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-150 active:scale-95 select-none min-h-[48px] ${
                   isActive
                     ? `${tab.color} font-bold ${tab.activeBg}`
-                    : 'text-[#2446C8]/80 hover:text-[#160F2E]'
+                    : 'text-[#52456F] hover:text-[#160F2E]'
                 }`}
               >
                 <div className="relative">

@@ -46,27 +46,59 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
   }
 };
 
+const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
+  home: {
+    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
+    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+  },
+  verbs: {
+    dot: 'bg-[#6545F5] ring-[#6545F5]/20',
+    badge: 'bg-[#EDE8FD] text-[#6545F5] border-[#D9CEFC]'
+  },
+  vocab: {
+    dot: 'bg-[#0A9B80] ring-[#0A9B80]/20',
+    badge: 'bg-[#DCF8F1] text-[#0A9B80] border-[#B6F5E8]'
+  },
+  translator: {
+    dot: 'bg-[#FF6534] ring-[#FF6534]/20',
+    badge: 'bg-[#FFEAE1] text-[#E04D1B] border-[#FFD2C2]'
+  },
+  favorites: {
+    dot: 'bg-[#F52E91] ring-[#F52E91]/20',
+    badge: 'bg-[#FDE8F1] text-[#F52E91] border-[#FFD0E5]'
+  },
+  history: {
+    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
+    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+  },
+  settings: {
+    dot: 'bg-[#52456F] ring-[#52456F]/20',
+    badge: 'bg-white/90 text-[#52456F] border-white/90'
+  }
+};
+
 export const TopHeader: React.FC<TopHeaderProps> = ({
   activeTab = 'home',
   onNavigate: _onNavigate
 }) => {
   const isOnline = useOnlineStatus();
   const currentTabInfo = TAB_TITLES[activeTab] || TAB_TITLES.home;
+  const currentTabTheme = TAB_THEMES[activeTab] || TAB_THEMES.home;
 
   return (
     <header className="hidden lg:flex items-center justify-between py-3.5 px-8 border-b border-white/80 bg-[#F0F6FF]/75 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(23,107,255,0.06)]">
-      {/* Contextual Section Header — Zero duplicate filter/search */}
+      {/* Contextual Section Header with pillar identity dot & badge */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#176BFF] ring-4 ring-[#176BFF]/20" />
+          <span className={`w-2.5 h-2.5 rounded-full ring-4 ${currentTabTheme.dot}`} />
           <h2 className="text-base font-extrabold text-[#160F2E] tracking-tight">
             {currentTabInfo.title}
           </h2>
         </div>
-        <span className="text-[11px] font-bold text-[#176BFF] bg-[#E1ECFC] px-2.5 py-0.5 rounded-full border border-[#BED7FA]">
+        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${currentTabTheme.badge}`}>
           {currentTabInfo.badge}
         </span>
-        <span className="text-xs text-[#2446C8]/75 font-medium hidden xl:inline">
+        <span className="text-xs text-[#52456F] font-medium hidden xl:inline">
           • {currentTabInfo.subtitle}
         </span>
       </div>
@@ -97,7 +129,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         {/* Notification bell */}
         <button
           type="button"
-          className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#2446C8] hover:text-[#176BFF] border border-white/90 shadow-2xs transition"
+          className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#52456F] hover:text-[#176BFF] border border-white/90 shadow-2xs transition"
           title="Notificações"
         >
           <Bell className="w-4 h-4" />
@@ -116,7 +148,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             <p className="text-xs font-extrabold text-[#160F2E] leading-tight">
               Lucas Silva
             </p>
-            <p className="text-[10px] font-semibold text-[#2446C8]">
+            <p className="text-[10px] font-semibold text-[#52456F]">
               Nível Intermediário
             </p>
           </div>

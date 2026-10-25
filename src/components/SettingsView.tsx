@@ -5,13 +5,13 @@ export const SettingsView: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex items-start gap-3.5 pb-1">
-        <div className="w-11 h-11 rounded-2xl bg-gradient-brand text-white flex items-center justify-center shadow-colored-violet shrink-0 ring-4 ring-white/80">
+        <div className="w-11 h-11 rounded-2xl bg-gradient-brand text-white flex items-center justify-center shadow-colored-blue shrink-0 ring-4 ring-white/80">
           <Settings className="w-5 h-5 stroke-[2.3]" />
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#6938F5]" />
-            <span className="text-xs font-bold uppercase tracking-wider text-[#6938F5]">
+            <span className="w-2 h-2 rounded-full bg-[#176BFF]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#176BFF]">
               Preferências
             </span>
           </div>
@@ -27,7 +27,7 @@ export const SettingsView: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-white/90 shadow-soft-card space-y-4">
           <h2 className="text-sm font-extrabold text-[#160F2E] flex items-center gap-2">
-            <Volume2 className="w-4 h-4 text-[#6938F5]" />
+            <Volume2 className="w-4 h-4 text-[#176BFF]" />
             Síntese de Voz & Áudio
           </h2>
           <div className="space-y-3 text-xs text-[#52456F]">

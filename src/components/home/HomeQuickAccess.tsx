@@ -16,7 +16,7 @@ export const HomeQuickAccess: React.FC<HomeQuickAccessProps> = ({ onNavigate }) 
         <button
           type="button"
           onClick={() => onNavigate('verbs')}
-          className="text-xs font-bold text-[#6938F5] hover:underline flex items-center gap-1"
+          className="text-xs font-bold text-[#176BFF] hover:underline flex items-center gap-1"
         >
           <span>Ver todos</span>
           <ArrowRight className="w-3 h-3" />
@@ -27,9 +27,9 @@ export const HomeQuickAccess: React.FC<HomeQuickAccessProps> = ({ onNavigate }) 
         <button
           type="button"
           onClick={() => onNavigate('verbs')}
-          className="flex items-center justify-center gap-2 py-3 px-3 rounded-2xl bg-[#EAE1FD] hover:bg-[#DFD4FA] text-[#6938F5] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group"
+          className="flex items-center justify-center gap-2 py-3 px-3 rounded-2xl bg-[#EDE8FD] hover:bg-[#E2D7F8] text-[#6545F5] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group"
         >
-          <div className="w-6 h-6 rounded-lg bg-white/90 text-[#6938F5] flex items-center justify-center group-hover:bg-[#6938F5] group-hover:text-white transition shadow-2xs">
+          <div className="w-6 h-6 rounded-lg bg-white/90 text-[#6545F5] flex items-center justify-center group-hover:bg-[#6545F5] group-hover:text-white transition shadow-2xs">
             <BookOpen className="w-3.5 h-3.5" />
           </div>
           <span>Verbos</span>

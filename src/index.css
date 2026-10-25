@@ -1,69 +1,92 @@
 @import "tailwindcss";
 
 @theme {
-  /* Blue Pulse Official Palette */
-  --color-electric-blue: #176BFF;
-  --color-deep-blue: #2446C8;
-  --color-violet: #6545F5;
-  --color-luminous-cyan: #26D9FF;
-  --color-surface-ice: #F0F6FF;
+  /* 1. Global Brand (Blue Pulse) */
+  --color-brand-primary: #176BFF;
+  --color-brand-deep: #2446C8;
+  --color-brand-cyan: #26D9FF;
+  --color-brand-subtle: #E1ECFC;
+  --color-brand-border: #BED7FA;
 
   /* Aliases for ease of use & primary identity mapping */
-  --color-electric-violet: #176BFF;
+  --color-electric-blue: #176BFF;
+  --color-deep-blue: #2446C8;
+  --color-luminous-cyan: #26D9FF;
   --color-primary: #176BFF;
   --color-blue: #176BFF;
   --color-cyan: #26D9FF;
-  --color-pink: #F52E91;
-  --color-tangerine: #FF6534;
-  --color-mint: #19D9B4;
-  --color-sunshine: #FFD447;
-  --color-lavender: #6545F5;
 
-  /* Neutrals & Semantic Surfaces */
+  /* 2. Three Pillars Recovered Identities */
+  /* Pillar 1: Verbos Irregulares (Violeta / Roxo) */
+  --color-pillar-verbs: #6545F5;
+  --color-pillar-verbs-subtle: #EDE8FD;
+  --color-pillar-verbs-border: #D9CEFC;
+  --color-pillar-verbs-text: #5528DB;
+  --color-violet: #6545F5;
+  --color-electric-violet: #6545F5;
+
+  /* Pillar 2: Vocabulário (Verde / Menta) */
+  --color-pillar-vocab: #19D9B4;
+  --color-pillar-vocab-dark: #0A9B80;
+  --color-pillar-vocab-subtle: #DCF8F1;
+  --color-pillar-vocab-border: #B6F5E8;
+  --color-pillar-vocab-text: #066B58;
+  --color-mint: #19D9B4;
+
+  /* Pillar 3: Tradutor (Laranja / Tangerine) */
+  --color-pillar-translator: #FF6534;
+  --color-pillar-translator-dark: #E04D1B;
+  --color-pillar-translator-subtle: #FFEAE1;
+  --color-pillar-translator-border: #FFD2C2;
+  --color-pillar-translator-text: #B83508;
+  --color-tangerine: #FF6534;
+
+  /* State & Accents */
+  --color-pink: #F52E91;
+  --color-sunshine: #FFD447;
+
+  /* 3. Neutrals & Reading Comfort Surfaces */
   --color-app-bg: #D4E5FE;
-  --color-surface: rgba(240, 246, 255, 0.88);
+  --color-surface: rgba(255, 255, 255, 0.88);
+  --color-surface-ice: #F0F6FF;
   --color-text-main: #160F2E;
-  --color-text-secondary: #2446C8;
+  --color-text-secondary: #52456F;
   --color-border-soft: #BED7FA;
 
   /* Tints & Subtles */
   --color-blue-subtle: #E1ECFC;
   --color-cyan-subtle: #E0F8FF;
   --color-violet-subtle: #EDE8FD;
-  --color-surface-subtle: #F0F6FF;
-  --color-pink-subtle: #FDE8F1;
-  --color-tangerine-subtle: #FFEAE1;
   --color-mint-subtle: #DCF8F1;
+  --color-tangerine-subtle: #FFEAE1;
+  --color-pink-subtle: #FDE8F1;
 }
 
 :root {
-  /* Blue Pulse Master Palette */
-  --color-electric-blue: #176BFF;
-  --color-deep-blue: #2446C8;
-  --color-violet: #6545F5;
-  --color-luminous-cyan: #26D9FF;
-  --color-surface-ice: #F0F6FF;
+  /* Global Brand */
+  --color-brand-primary: #176BFF;
+  --color-brand-deep: #2446C8;
+  --color-brand-cyan: #26D9FF;
+  --color-brand-subtle: #E1ECFC;
+  --color-brand-border: #BED7FA;
 
   /* Neutrals */
   --color-app-bg: #D4E5FE;
-  --color-surface: rgba(240, 246, 255, 0.88);
+  --color-surface: rgba(255, 255, 255, 0.88);
+  --color-surface-ice: #F0F6FF;
   --color-text-main: #160F2E;
-  --color-text-secondary: #2446C8;
+  --color-text-secondary: #52456F;
   --color-border-soft: #BED7FA;
 
   /* Official Blue Pulse Gradients */
   --gradient-brand: linear-gradient(135deg, #26D9FF 0%, #176BFF 50%, #2446C8 100%);
   --gradient-pulse: linear-gradient(135deg, #176BFF 0%, #2446C8 55%, #6545F5 100%);
   --gradient-cyan-blue: linear-gradient(135deg, #26D9FF 0%, #176BFF 100%);
-  --gradient-neon: linear-gradient(135deg, #176BFF 0%, #6545F5 100%);
-  --gradient-warm: linear-gradient(135deg, #FF6534 0%, #F52E91 100%);
-  --gradient-fresh: linear-gradient(135deg, #19D9B4 0%, #176BFF 100%);
-  --gradient-sun: linear-gradient(135deg, #FF6534 0%, #FFD447 100%);
 
-  /* Three Pillars Official Hero Gradients */
-  --gradient-card-verbs: linear-gradient(135deg, #176BFF 0%, #2446C8 55%, #6545F5 100%);
-  --gradient-card-vocab: linear-gradient(135deg, #26D9FF 0%, #176BFF 55%, #2446C8 100%);
-  --gradient-card-translator: linear-gradient(135deg, #176BFF 0%, #6545F5 50%, #F52E91 100%);
+  /* Three Pillars Official Hero Gradients with Distinct Identity Colors */
+  --gradient-card-verbs: linear-gradient(135deg, #6545F5 0%, #7C4DF8 50%, #9D75FB 100%);
+  --gradient-card-vocab: linear-gradient(135deg, #0BAE90 0%, #15C7A5 45%, #22E1BC 100%);
+  --gradient-card-translator: linear-gradient(135deg, #FF5B26 0%, #FF6E38 45%, #FF8D54 100%);
 
   /* Atmospheric Ambient App Glow with Visibly Present Blue Pulse Mesh */
   --app-ambient-bg: 
@@ -109,22 +132,6 @@
   background: var(--gradient-pulse);
 }
 
-.bg-gradient-neon {
-  background: var(--gradient-neon);
-}
-
-.bg-gradient-warm {
-  background: var(--gradient-warm);
-}
-
-.bg-gradient-fresh {
-  background: var(--gradient-fresh);
-}
-
-.bg-gradient-sun {
-  background: var(--gradient-sun);
-}
-
 .bg-gradient-verbs {
   background: var(--gradient-card-verbs);
 }
@@ -143,18 +150,6 @@
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-neon {
-  background: var(--gradient-neon);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-warm {
-  background: var(--gradient-warm);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 /* Soft card shadow with Blue Pulse ambient */
 .shadow-soft-card {
   box-shadow: 0 6px 28px -4px rgba(23, 107, 255, 0.14), 0 2px 8px -1px rgba(36, 70, 200, 0.08);
@@ -164,24 +159,25 @@
   box-shadow: 0 14px 40px -4px rgba(23, 107, 255, 0.24), 0 6px 16px -2px rgba(36, 70, 200, 0.12);
 }
 
+/* Pillar Specific Colored Glows */
 .shadow-colored-violet {
+  box-shadow: 0 8px 24px -4px rgba(101, 69, 245, 0.40);
+}
+
+.shadow-colored-mint {
+  box-shadow: 0 8px 24px -4px rgba(11, 174, 144, 0.40);
+}
+
+.shadow-colored-tangerine {
+  box-shadow: 0 8px 24px -4px rgba(255, 91, 38, 0.40);
+}
+
+.shadow-colored-blue {
   box-shadow: 0 8px 24px -4px rgba(23, 107, 255, 0.40);
 }
 
 .shadow-colored-pink {
   box-shadow: 0 8px 24px -4px rgba(245, 46, 145, 0.38);
-}
-
-.shadow-colored-mint {
-  box-shadow: 0 8px 24px -4px rgba(25, 217, 180, 0.38);
-}
-
-.shadow-colored-tangerine {
-  box-shadow: 0 8px 24px -4px rgba(255, 101, 52, 0.40);
-}
-
-.shadow-colored-blue {
-  box-shadow: 0 8px 24px -4px rgba(23, 107, 255, 0.40);
 }
 
 /* Custom scrollbars with ice blue accents */

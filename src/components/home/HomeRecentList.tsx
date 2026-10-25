@@ -17,8 +17,8 @@ const RECENT_ITEMS: RecentItem[] = [
     type: 'Verbos Irregulares',
     sub: 'went • gone • ir',
     targetTab: 'verbs',
-    color: 'bg-[#6938F5]',
-    itemBg: 'bg-[#EAE1FD]/80 hover:bg-[#DFD4FA] border-white/80'
+    color: 'bg-[#6545F5]',
+    itemBg: 'bg-[#EDE8FD]/80 hover:bg-[#E2D7F8] border-white/80'
   },
   {
     term: 'beautiful',
@@ -47,7 +47,7 @@ export const HomeRecentList: React.FC<HomeRecentListProps> = ({ onNavigate }) =>
     <div className="lg:col-span-7 bg-white/80 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-white/90 shadow-soft-card space-y-4">
       <div className="flex items-center justify-between pb-1">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#6938F5]" />
+          <Clock className="w-4 h-4 text-[#176BFF]" />
           <h2 className="text-sm font-extrabold text-[#160F2E]">
             Recentemente acessados
           </h2>
@@ -55,7 +55,7 @@ export const HomeRecentList: React.FC<HomeRecentListProps> = ({ onNavigate }) =>
         <button
           type="button"
           onClick={() => onNavigate('verbs')}
-          className="text-xs font-bold text-[#6938F5] hover:underline flex items-center gap-1"
+          className="text-xs font-bold text-[#176BFF] hover:underline flex items-center gap-1"
         >
           <span>Ver histórico</span>
           <ArrowRight className="w-3 h-3" />
@@ -79,7 +79,7 @@ export const HomeRecentList: React.FC<HomeRecentListProps> = ({ onNavigate }) =>
                 {item.term.charAt(0).toUpperCase()}
               </div>
               <div>
-                <p className="text-sm font-extrabold text-[#160F2E] group-hover:text-[#6938F5] transition">
+                <p className="text-sm font-extrabold text-[#160F2E] group-hover:text-[#176BFF] transition">
                   {item.term}
                 </p>
                 <p className="text-xs text-[#52456F] font-medium">
@@ -88,7 +88,7 @@ export const HomeRecentList: React.FC<HomeRecentListProps> = ({ onNavigate }) =>
               </div>
             </div>
 
-            <ChevronRight className="w-4 h-4 text-[#52456F] group-hover:text-[#6938F5] group-hover:translate-x-0.5 transition" />
+            <ChevronRight className="w-4 h-4 text-[#52456F] group-hover:text-[#176BFF] group-hover:translate-x-0.5 transition" />
           </div>
         ))}
       </div>

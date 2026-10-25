@@ -51,10 +51,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitle: 'Tabela das 3 formas',
       icon: BookOpen,
       count: verbCount,
-      color: 'text-[#176BFF]',
-      activeBg: 'bg-[#E1ECFC] border border-white/90',
-      activeText: 'text-[#176BFF]',
-      activeBar: 'bg-[#176BFF]'
+      color: 'text-[#6545F5]',
+      activeBg: 'bg-[#EDE8FD] border border-white/90',
+      activeText: 'text-[#6545F5]',
+      activeBar: 'bg-[#6545F5]'
     },
     {
       id: 'vocab' as TabType,
@@ -192,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-colors text-xs font-semibold ${
                   isActive
                     ? 'bg-[#E1ECFC] text-[#176BFF] font-bold border border-white/90 shadow-2xs'
-                    : 'text-[#2446C8]/80 hover:bg-white/80 hover:text-[#160F2E]'
+                    : 'text-[#52456F] hover:bg-white/80 hover:text-[#160F2E]'
                 }`}
               >
                 <Icon className={`w-4 h-4 stroke-[2] ${item.iconColor}`} />
@@ -211,7 +211,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <p className="text-xs font-bold text-[#160F2E] leading-tight">
             O inglês abre portas para o mundo.
           </p>
-          <p className="text-[11px] text-[#2446C8] leading-relaxed font-medium">
+          <p className="text-[11px] text-[#52456F] leading-relaxed font-medium">
             E você tem tudo o que precisa para chegar lá no seu bolso.
           </p>
           <button
@@ -228,7 +228,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Bottom Status & Install Prompt */}
       <div className="pt-4 border-t border-white/80 space-y-2.5">
         <div className="flex items-center justify-between px-1 text-xs">
-          <span className="text-[#2446C8] font-semibold">Estado da Conexão</span>
+          <span className="text-[#52456F] font-semibold">Estado da Conexão</span>
           <div
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[11px] ${
               isOnline
@@ -254,7 +254,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={promptInstall}
-            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-gradient-brand text-white text-xs font-bold shadow-colored-violet hover:opacity-95 active:scale-[0.98] transition"
+            className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-gradient-brand text-white text-xs font-bold shadow-colored-blue hover:opacity-95 active:scale-[0.98] transition"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Instalar Aplicativo (PWA)</span>

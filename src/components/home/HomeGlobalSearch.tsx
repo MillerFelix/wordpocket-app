@@ -36,7 +36,7 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
           <button
             type="button"
             onClick={() => onSearchChange('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#2446C8] hover:text-[#160F2E] rounded-lg transition"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#52456F] hover:text-[#160F2E] rounded-lg transition"
             title="Limpar busca"
           >
             <X className="w-4 h-4" />
@@ -48,7 +48,7 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
       {searchResults && (
         <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-2xl rounded-3xl border border-white/90 shadow-soft-hover p-4 z-50 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="flex items-center justify-between pb-2 border-b border-[#BED7FA]">
-            <span className="text-xs font-bold text-[#2446C8]">
+            <span className="text-xs font-bold text-[#52456F]">
               {searchResults.totalCount} resultados encontrados
             </span>
             <button
@@ -60,10 +60,10 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
             </button>
           </div>
 
-          {/* Verbs Results */}
+          {/* Verbs Results with Violet Pillar Identity */}
           {searchResults.verbs.length > 0 && (
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#176BFF] px-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#6545F5] px-1">
                 Verbos Irregulares
               </span>
               <div className="space-y-1 mt-1">
@@ -75,13 +75,13 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
                       onNavigate('verbs', verb.infinitive);
                       onSearchChange('');
                     }}
-                    className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#E1ECFC] text-left transition group"
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#EDE8FD] text-left transition group"
                   >
                     <div>
-                      <span className="text-sm font-bold text-[#160F2E] group-hover:text-[#176BFF] transition">
+                      <span className="text-sm font-bold text-[#160F2E] group-hover:text-[#6545F5] transition">
                         {verb.infinitive}
                       </span>
-                      <span className="text-xs text-[#2446C8] ml-2 font-mono">
+                      <span className="text-xs text-[#52456F] ml-2 font-mono">
                         ({verb.pastSimple} • {verb.pastParticiple})
                       </span>
                     </div>

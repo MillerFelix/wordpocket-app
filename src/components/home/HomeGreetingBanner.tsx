@@ -14,7 +14,7 @@ export const HomeGreetingBanner: React.FC = () => {
           <h1 className="text-xl font-extrabold text-[#160F2E] tracking-tight">
             Olá, Lucas! 👋
           </h1>
-          <p className="text-xs font-semibold text-[#2446C8] mt-1 leading-snug">
+          <p className="text-xs font-semibold text-[#52456F] mt-1 leading-snug">
             Que bom te ver por aqui! Seu inglês te leva mais longe.
           </p>
         </div>
@@ -101,7 +101,7 @@ export const HomeGreetingBanner: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-[#160F2E] tracking-tight">
               Olá, Lucas! 👋
             </h1>
-            <p className="text-sm text-[#2446C8] font-medium leading-relaxed">
+            <p className="text-sm text-[#52456F] font-medium leading-relaxed">
               Aprenda, explore e evolua no seu ritmo. Seu inglês te leva mais longe a cada consulta no Word Pocket.
             </p>
           </div>
