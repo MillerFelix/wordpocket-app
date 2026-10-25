@@ -24,28 +24,59 @@ export const AuthModal: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   if (!isAuthModalOpen) return null;
+
+  const isValidEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+
+  const handleSwitchMode = (mode: 'login' | 'signup' | 'reset') => {
+    clearAuthError();
+    setValidationError(null);
+    setResetSuccess(false);
+    openAuthModal(mode);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearAuthError();
+    setValidationError(null);
     setResetSuccess(false);
 
-    if (!email.trim()) return;
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
+      setValidationError('Por favor, informe seu endereço de e-mail.');
+      return;
+    }
+
+    if (!isValidEmail(trimmedEmail)) {
+      setValidationError('Por favor, insira um endereço de e-mail válido (ex: seuemail@exemplo.com).');
+      return;
+    }
+
+    if (authModalMode === 'signup' && !displayName.trim()) {
+      setValidationError('Por favor, informe seu nome completo.');
+      return;
+    }
+
+    if (authModalMode !== 'reset' && !password) {
+      setValidationError('Por favor, informe sua senha.');
+      return;
+    }
 
     setSubmitting(true);
     try {
       if (authModalMode === 'login') {
-        await signInWithEmail(email, password);
+        await signInWithEmail(trimmedEmail, password);
       } else if (authModalMode === 'signup') {
-        await signUpWithEmail(email, password, displayName);
+        await signUpWithEmail(trimmedEmail, password, displayName);
       } else if (authModalMode === 'reset') {
-        await sendPasswordReset(email);
+        await sendPasswordReset(trimmedEmail);
         setResetSuccess(true);
       }
     } catch {
-      // Erro já tratado no AuthContext e exposto em authError
+      // Erro gerenciado no AuthContext e exposto em authError
     } finally {
       setSubmitting(false);
     }
@@ -53,6 +84,7 @@ export const AuthModal: React.FC = () => {
 
   const handleGoogleClick = async () => {
     clearAuthError();
+    setValidationError(null);
     setSubmitting(true);
     try {
       await signInWithGoogle();
@@ -62,6 +94,8 @@ export const AuthModal: React.FC = () => {
       setSubmitting(false);
     }
   };
+
+  const activeError = validationError || authError;
 
   return (
     <div
@@ -77,11 +111,23 @@ export const AuthModal: React.FC = () => {
         {/* Ambient Top Glow */}
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-brand pointer-events-none" />
 
+        {/* Back button for reset mode */}
+        {authModalMode === 'reset' && (
+          <button
+            type="button"
+            onClick={() => handleSwitchMode('login')}
+            className="absolute top-4 left-4 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition flex items-center gap-1 text-xs font-bold cursor-pointer"
+            aria-label="Voltar para a tela de login"
+          >
+            <span>← Voltar</span>
+          </button>
+        )}
+
         {/* Close button */}
         <button
           type="button"
           onClick={closeAuthModal}
-          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
           aria-label="Fechar janela de autenticação"
         >
           <X className="w-5 h-5" />
@@ -96,13 +142,13 @@ export const AuthModal: React.FC = () => {
           <h2 id="auth-modal-title" className="text-xl sm:text-2xl font-black text-[#160F2E] tracking-tight">
             {authModalMode === 'login' && 'Entrar no Word Pocket'}
             {authModalMode === 'signup' && 'Criar Conta Gratuita'}
-            {authModalMode === 'reset' && 'Recuperar sua Senha'}
+            {authModalMode === 'reset' && 'Recuperar Senha'}
           </h2>
 
           <p className="text-xs text-[#52456F] font-medium max-w-xs mx-auto">
             {authModalMode === 'login' && 'Acesse seu perfil e continue seus estudos de onde você parou.'}
             {authModalMode === 'signup' && 'Comece a desenvolver suas 4 habilidades e sincronize seu progresso.'}
-            {authModalMode === 'reset' && 'Digite seu e-mail cadastrado para receber o link de redefinição.'}
+            {authModalMode === 'reset' && 'Informe seu endereço de e-mail para enviarmos as instruções de redefinição.'}
           </p>
         </div>
 
@@ -115,20 +161,29 @@ export const AuthModal: React.FC = () => {
         )}
 
         {/* Error message banner */}
-        {authError && (
+        {activeError && (
           <div className="mt-4 p-3.5 rounded-2xl bg-[#FDE8F1] border border-[#FFD0E5] text-[#F52E91] text-xs font-bold flex items-start gap-2.5 animate-in fade-in">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-            <div className="flex-1">{authError}</div>
+            <div className="flex-1">{activeError}</div>
           </div>
         )}
 
-        {/* Reset success banner */}
+        {/* Reset success banner - Neutral confirmation message */}
         {resetSuccess && (
-          <div className="mt-4 p-3.5 rounded-2xl bg-[#DCF8F1] border border-[#B6F5E8] text-[#0A9B80] text-xs font-bold flex items-start gap-2.5 animate-in fade-in">
-            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
-            <div className="flex-1">
-              Link de recuperação enviado com sucesso para seu e-mail! Verifique sua caixa de entrada e spam.
+          <div className="mt-4 p-4 rounded-2xl bg-[#DCF8F1] border border-[#B6F5E8] text-[#0A9B80] text-xs font-bold space-y-2 animate-in fade-in">
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#0A9B80]" />
+              <div className="flex-1 leading-relaxed">
+                Se o endereço de e-mail informado estiver cadastrado, enviamos um link com as instruções para redefinição da sua senha. Verifique sua caixa de entrada e a pasta de spam.
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={() => handleSwitchMode('login')}
+              className="w-full mt-2 py-2 px-3 rounded-xl bg-white border border-[#B6F5E8] text-[#0A9B80] font-extrabold text-xs hover:bg-[#F2FBF8] transition cursor-pointer"
+            >
+              Voltar para o Login
+            </button>
           </div>
         )}
 
@@ -172,107 +227,125 @@ export const AuthModal: React.FC = () => {
         )}
 
         {/* Email & Password Form */}
-        <form onSubmit={handleSubmit} className="mt-4 space-y-3.5">
-          {authModalMode === 'signup' && (
+        {!resetSuccess ? (
+          <form onSubmit={handleSubmit} noValidate className="mt-4 space-y-3.5">
+            {authModalMode === 'signup' && (
+              <div>
+                <label className="block text-xs font-bold text-[#160F2E] mb-1">
+                  Seu Nome Completo
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    required
+                    disabled={submitting}
+                    value={displayName}
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    placeholder="Ex: Lucas Silva"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30 focus:border-[#176BFF] transition disabled:opacity-60"
+                  />
+                </div>
+              </div>
+            )}
+
             <div>
               <label className="block text-xs font-bold text-[#160F2E] mb-1">
-                Seu Nome Completo
+                Endereço de E-mail
               </label>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  type="text"
+                  type="email"
                   required
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="Ex: Lucas Silva"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30 focus:border-[#176BFF] transition"
+                  disabled={submitting}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seuemail@exemplo.com"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30 focus:border-[#176BFF] transition disabled:opacity-60"
                 />
               </div>
             </div>
-          )}
 
-          <div>
-            <label className="block text-xs font-bold text-[#160F2E] mb-1">
-              Endereço de E-mail
-            </label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="seuemail@exemplo.com"
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30 focus:border-[#176BFF] transition"
-              />
-            </div>
-          </div>
-
-          {authModalMode !== 'reset' && (
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-bold text-[#160F2E]">
-                  Senha
-                </label>
-                {authModalMode === 'login' && (
+            {authModalMode !== 'reset' && (
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-bold text-[#160F2E]">
+                    Senha
+                  </label>
+                  {authModalMode === 'login' && (
+                    <button
+                      type="button"
+                      onClick={() => handleSwitchMode('reset')}
+                      className="text-[11px] font-semibold text-[#176BFF] hover:underline cursor-pointer"
+                    >
+                      Esqueci minha senha?
+                    </button>
+                  )}
+                </div>
+                <div className="relative">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    disabled={submitting}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Mínimo 6 caracteres"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30 focus:border-[#176BFF] transition disabled:opacity-60"
+                  />
                   <button
                     type="button"
-                    onClick={() => openAuthModal('reset')}
-                    className="text-[11px] font-semibold text-[#176BFF] hover:underline"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                    aria-label={showPassword ? 'Ocultar senha' : 'Ver senha'}
                   >
-                    Esqueceu a senha?
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
-                )}
+                </div>
               </div>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  minLength={6}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Mínimo 6 caracteres"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30 focus:border-[#176BFF] transition"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
-                  aria-label={showPassword ? 'Ocultar senha' : 'Ver senha'}
-                >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-brand text-white font-extrabold text-xs sm:text-sm shadow-colored-blue hover:opacity-95 transition active:scale-[0.99] disabled:opacity-60 cursor-pointer"
-          >
-            {submitting ? (
-              <span className="inline-flex items-center gap-2">
-                <svg className="animate-spin w-4 h-4 text-white" viewBox="0 0 24 24" fill="none">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                </svg>
-                <span>Processando...</span>
-              </span>
-            ) : (
-              <>
-                <span>
-                  {authModalMode === 'login' && 'Entrar na Conta'}
-                  {authModalMode === 'signup' && 'Concluir Cadastro Gratuito'}
-                  {authModalMode === 'reset' && 'Enviar Link de Redefinição'}
-                </span>
-                <ArrowRight className="w-4 h-4" />
-              </>
             )}
-          </button>
-        </form>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-brand text-white font-extrabold text-xs sm:text-sm shadow-colored-blue hover:opacity-95 transition active:scale-[0.99] disabled:opacity-60 cursor-pointer"
+            >
+              {submitting ? (
+                <span className="inline-flex items-center gap-2">
+                  <svg className="animate-spin w-4 h-4 text-white" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  <span>Processando...</span>
+                </span>
+              ) : (
+                <>
+                  <span>
+                    {authModalMode === 'login' && 'Entrar na Conta'}
+                    {authModalMode === 'signup' && 'Concluir Cadastro Gratuito'}
+                    {authModalMode === 'reset' && 'Enviar Link de Redefinição'}
+                  </span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </form>
+        ) : (
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setResetSuccess(false);
+                setEmail('');
+              }}
+              className="text-xs font-semibold text-[#176BFF] hover:underline cursor-pointer"
+            >
+              Informar outro endereço de e-mail
+            </button>
+          </div>
+        )}
 
         {/* Footer switch between Login / Signup */}
         <div className="mt-5 pt-4 border-t border-slate-100 text-center text-xs text-[#52456F]">
@@ -281,7 +354,7 @@ export const AuthModal: React.FC = () => {
               Ainda não tem uma conta?{' '}
               <button
                 type="button"
-                onClick={() => openAuthModal('signup')}
+                onClick={() => handleSwitchMode('signup')}
                 className="font-bold text-[#176BFF] hover:underline cursor-pointer"
               >
                 Cadastre-se gratuitamente
@@ -294,7 +367,7 @@ export const AuthModal: React.FC = () => {
               Já possui uma conta?{' '}
               <button
                 type="button"
-                onClick={() => openAuthModal('login')}
+                onClick={() => handleSwitchMode('login')}
                 className="font-bold text-[#176BFF] hover:underline cursor-pointer"
               >
                 Fazer login
@@ -307,7 +380,7 @@ export const AuthModal: React.FC = () => {
               Lembrou sua senha?{' '}
               <button
                 type="button"
-                onClick={() => openAuthModal('login')}
+                onClick={() => handleSwitchMode('login')}
                 className="font-bold text-[#176BFF] hover:underline cursor-pointer"
               >
                 Voltar para o login

@@ -37,6 +37,10 @@ export function formatAuthError(error: unknown): string {
       return 'Falha de conexão com a rede. Verifique sua internet.';
     case 'auth/too-many-requests':
       return 'Muitas tentativas consecutivas. Aguarde alguns instantes antes de tentar novamente.';
+    case 'auth/missing-email':
+      return 'Por favor, informe seu endereço de e-mail.';
+    case 'auth/unauthorized-domain':
+      return 'O domínio desta aplicação não está autorizado no console do Firebase Authentication.';
     case 'auth/popup-blocked':
       return 'O navegador bloqueou a janela pop-up do Google. Permita pop-ups para entrar.';
     default:
@@ -59,11 +63,16 @@ export async function signUpWithEmail(
     throw new Error('O Firebase não está configurado. Verifique o arquivo .env.');
   }
 
+  const cleanName = displayName.trim();
   const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), pass);
   const user = userCredential.user;
 
-  if (displayName.trim()) {
-    await updateProfile(user, { displayName: displayName.trim() });
+  if (cleanName) {
+    try {
+      await updateProfile(user, { displayName: cleanName });
+    } catch (profileErr) {
+      console.warn('Erro ao atualizar displayName no Firebase Auth:', profileErr);
+    }
   }
 
   return user;
@@ -109,5 +118,15 @@ export async function sendPasswordReset(email: string): Promise<void> {
     throw new Error('O Firebase não está configurado. Verifique o arquivo .env.');
   }
 
-  await sendPasswordResetEmail(auth, email.trim());
+  try {
+    await sendPasswordResetEmail(auth, email.trim());
+  } catch (error: unknown) {
+    const err = error as { code?: string };
+    // Por segurança e mitigação de enumeração de contas (OWASP),
+    // se o usuário não for encontrado no Firebase, consideramos concluído de forma neutra.
+    if (err?.code === 'auth/user-not-found') {
+      return;
+    }
+    throw error;
+  }
 }

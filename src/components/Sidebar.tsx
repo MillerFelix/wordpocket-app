@@ -223,7 +223,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </p>
           <button
             type="button"
-            onClick={() => onTabChange('verbs')}
+            onClick={() => onTabChange('practice')}
             className="w-full flex items-center justify-between p-2 rounded-xl bg-white/90 hover:bg-white text-[#176BFF] text-xs font-bold hover:shadow-2xs transition mt-1 border border-white/90"
           >
             <span>Praticar agora</span>

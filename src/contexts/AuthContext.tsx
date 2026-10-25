@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
+import { User, onAuthStateChanged, updateProfile } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '../services/firebase';
 import { 
   signInWithEmail as apiSignInWithEmail,
@@ -61,6 +61,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState<boolean>(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // Armazena temporariamente o nome informado durante o cadastro para evitar que o onAuthStateChanged sobrescreva
+  const pendingRegistrationNameRef = useRef<string | null>(null);
+
   // Modals
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<AuthMode>('login');
@@ -112,7 +115,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       if (firebaseUser) {
         try {
-          const userProf = await createOrUpdateProfile(firebaseUser);
+          const regName = pendingRegistrationNameRef.current;
+          const userProf = await createOrUpdateProfile(
+            firebaseUser,
+            regName || firebaseUser.displayName || undefined
+          );
           setProfile(userProf);
 
           // Sincroniza favoritos locais anônimos com a nuvem de forma transparente
@@ -155,9 +162,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const signUpWithEmail = async (email: string, pass: string, displayName: string) => {
     setLoading(true);
     setAuthError(null);
+    const cleanName = displayName.trim();
+    pendingRegistrationNameRef.current = cleanName;
     try {
-      const newUser = await apiSignUpWithEmail(email, pass, displayName);
-      const userProf = await createOrUpdateProfile(newUser, displayName);
+      const newUser = await apiSignUpWithEmail(email, pass, cleanName);
+      const userProf = await createOrUpdateProfile(newUser, cleanName);
       setProfile(userProf);
       closeAuthModal();
       // Abre onboarding após cadastro
@@ -167,6 +176,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setAuthError(msg);
       throw new Error(msg);
     } finally {
+      pendingRegistrationNameRef.current = null;
       setLoading(false);
     }
   };
@@ -222,8 +232,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const updateProfileData = async (data: Partial<UserProfile>) => {
     if (!user) return;
     await updateUserProfile(user.uid, data);
+    if (data.displayName && auth?.currentUser) {
+      try {
+        await updateProfile(auth.currentUser, { displayName: data.displayName.trim() });
+      } catch (err) {
+        console.warn('Erro ao sincronizar nome com Firebase Auth:', err);
+      }
+    }
     const updated = await getUserProfile(user.uid);
-    if (updated) setProfile(updated);
+    if (updated) {
+      setProfile(updated);
+    } else {
+      setProfile((prev) => (prev ? { ...prev, ...data } : null));
+    }
   };
 
   const completeOnboarding = async () => {

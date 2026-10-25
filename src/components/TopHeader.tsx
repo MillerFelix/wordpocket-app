@@ -96,7 +96,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   const currentTabInfo = TAB_TITLES[activeTab] || TAB_TITLES.home;
   const currentTabTheme = TAB_THEMES[activeTab] || TAB_THEMES.home;
 
-  const initialLetter = (profile?.displayName || user?.displayName || user?.email || 'U').charAt(0).toUpperCase();
+  const initialLetter = (profile?.displayName || user?.displayName || 'Estudante').charAt(0).toUpperCase();
 
   return (
     <header className="hidden lg:flex items-center justify-between py-3.5 px-8 border-b border-white/80 bg-[#F0F6FF]/75 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(23,107,255,0.06)]">
@@ -168,7 +168,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               </div>
               <div className="hidden xl:block text-left">
                 <p className="text-xs font-extrabold text-[#160F2E] leading-tight group-hover:text-[#176BFF] transition">
-                  {profile?.displayName || user.displayName || user.email?.split('@')[0]}
+                  {profile?.displayName || user.displayName || 'Estudante'}
                 </p>
                 <p className="text-[10px] font-semibold text-[#52456F]">
                   Conta Conectada

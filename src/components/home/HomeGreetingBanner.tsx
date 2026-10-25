@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 
 export const HomeGreetingBanner: React.FC = () => {
   const { user, profile } = useAuth();
-  const rawName = profile?.displayName || user?.displayName || user?.email?.split('@')[0];
+  const rawName = profile?.displayName || user?.displayName;
   const firstName = rawName ? rawName.split(' ')[0] : null;
   const greetingTitle = firstName ? `Olá, ${firstName}! 👋` : 'Olá! Bem-vindo ao Word Pocket 👋';
 

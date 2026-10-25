@@ -31,7 +31,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
   const { user, profile, openAuthModal } = useAuth();
-  const initialLetter = (profile?.displayName || user?.displayName || user?.email || 'U').charAt(0).toUpperCase();
+  const initialLetter = (profile?.displayName || user?.displayName || 'Estudante').charAt(0).toUpperCase();
 
   const handleInstallClick = async () => {
     await promptInstall();

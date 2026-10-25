@@ -7,20 +7,36 @@ import { UserProfile } from '../types/auth';
  * Busca o documento de perfil do usuário no Firestore
  */
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-  if (!isFirebaseConfigured || !db) return null;
+  if (isFirebaseConfigured && db) {
+    try {
+      const userRef = doc(db, 'users', uid);
+      const snap = await getDoc(userRef);
 
-  try {
-    const userRef = doc(db, 'users', uid);
-    const snap = await getDoc(userRef);
-
-    if (snap.exists()) {
-      return snap.data() as UserProfile;
+      if (snap.exists()) {
+        const data = snap.data() as UserProfile;
+        try {
+          localStorage.setItem(`wordpocket_profile_${uid}`, JSON.stringify(data));
+        } catch {
+          // Fallback silencioso para erro de storage
+        }
+        return data;
+      }
+    } catch (error) {
+      console.warn('Erro ao buscar perfil do usuário no Firestore, verificando cache local:', error);
     }
-    return null;
-  } catch (error) {
-    console.error('Erro ao buscar perfil do usuário no Firestore:', error);
-    return null;
   }
+
+  // Fallback para cache local (offline ou Firestore não configurado)
+  try {
+    const cached = localStorage.getItem(`wordpocket_profile_${uid}`);
+    if (cached) {
+      return JSON.parse(cached) as UserProfile;
+    }
+  } catch {
+    // Ignora erro de parsing
+  }
+
+  return null;
 }
 
 /**
@@ -33,35 +49,54 @@ export async function createOrUpdateProfile(
   const existing = await getUserProfile(user.uid);
 
   const nowIso = new Date().toISOString();
-  const displayName = user.displayName || fallbackName || user.email?.split('@')[0] || 'Estudante';
-  const email = user.email || '';
-  const photoURL = user.photoURL || null;
+  const cleanExplicitName = fallbackName?.trim();
+  const cleanAuthName = user.displayName?.trim();
 
   if (existing) {
-    // Atualiza último login
+    // Se recebemos um nome explícito (ex: formulário de cadastro) ou novo do Firebase Auth
+    const candidateName = cleanExplicitName || cleanAuthName;
+    const shouldUpdateName = !!candidateName && candidateName !== existing.displayName;
+    const resolvedName = shouldUpdateName ? candidateName : (existing.displayName || 'Estudante');
+
+    const updatedProfile: UserProfile = {
+      ...existing,
+      displayName: resolvedName,
+      lastLoginAt: nowIso
+    };
+
+    try {
+      localStorage.setItem(`wordpocket_profile_${user.uid}`, JSON.stringify(updatedProfile));
+    } catch {
+      // Ignora erro de storage
+    }
+
     if (isFirebaseConfigured && db) {
       try {
         const userRef = doc(db, 'users', user.uid);
-        await updateDoc(userRef, {
+        const updates: Record<string, unknown> = {
           lastLoginAt: nowIso,
           updatedAtServer: serverTimestamp()
-        });
+        };
+        if (shouldUpdateName) {
+          updates.displayName = resolvedName;
+        }
+        await updateDoc(userRef, updates);
       } catch {
         // Fallback silencioso para modo offline
       }
     }
-    return {
-      ...existing,
-      displayName: existing.displayName || displayName,
-      lastLoginAt: nowIso
-    };
+    return updatedProfile;
   }
 
-  // Cria novo perfil
+  // Cria novo perfil com o nome explícito informado no cadastro
+  const resolvedDisplayName = cleanExplicitName || cleanAuthName || 'Estudante';
+  const email = user.email || '';
+  const photoURL = user.photoURL || null;
+
   const newProfile: UserProfile = {
     uid: user.uid,
     email,
-    displayName,
+    displayName: resolvedDisplayName,
     photoURL,
     createdAt: nowIso,
     lastLoginAt: nowIso,
@@ -71,6 +106,12 @@ export async function createOrUpdateProfile(
       preferredVoice: 'en-US'
     }
   };
+
+  try {
+    localStorage.setItem(`wordpocket_profile_${user.uid}`, JSON.stringify(newProfile));
+  } catch {
+    // Ignora erro de storage
+  }
 
   if (isFirebaseConfigured && db) {
     try {
@@ -95,6 +136,16 @@ export async function updateUserProfile(
   uid: string,
   updates: Partial<UserProfile>
 ): Promise<void> {
+  try {
+    const cached = localStorage.getItem(`wordpocket_profile_${uid}`);
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      localStorage.setItem(`wordpocket_profile_${uid}`, JSON.stringify({ ...parsed, ...updates }));
+    }
+  } catch {
+    // Ignora erro de storage
+  }
+
   if (!isFirebaseConfigured || !db) return;
 
   const userRef = doc(db, 'users', uid);

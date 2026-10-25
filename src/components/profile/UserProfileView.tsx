@@ -12,7 +12,10 @@ import {
   BookOpen, 
   PenTool, 
   ArrowRight,
-  TrendingUp
+  TrendingUp,
+  Edit2,
+  Check,
+  X
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserSkillProgress } from '../../services/progressService';
@@ -38,9 +41,12 @@ const SKILL_COLORS: Record<PracticeSkillId, { bg: string; text: string; badge: s
 };
 
 export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) => {
-  const { user, profile, signOut, openOnboarding, openAuthModal, isVisitor } = useAuth();
+  const { user, profile, signOut, openOnboarding, openAuthModal, isVisitor, updateProfileData } = useAuth();
   const [skillProgress, setSkillProgress] = useState<Record<PracticeSkillId, SkillProgress> | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editedName, setEditedName] = useState('');
+  const [savingName, setSavingName] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -51,6 +57,30 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
         .finally(() => setLoadingProgress(false));
     }
   }, [user]);
+
+  const startEditingName = () => {
+    setEditedName(profile?.displayName || user?.displayName || '');
+    setIsEditingName(true);
+  };
+
+  const cancelEditingName = () => {
+    setIsEditingName(false);
+    setEditedName('');
+  };
+
+  const saveEditingName = async () => {
+    const clean = editedName.trim();
+    if (!clean) return;
+    setSavingName(true);
+    try {
+      await updateProfileData({ displayName: clean });
+      setIsEditingName(false);
+    } catch (err) {
+      console.error('Erro ao salvar nome:', err);
+    } finally {
+      setSavingName(false);
+    }
+  };
 
   if (isVisitor || !user) {
     return (
@@ -82,7 +112,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
     );
   }
 
-  const initialLetter = (profile?.displayName || user.displayName || user.email || 'U').charAt(0).toUpperCase();
+  const initialLetter = (profile?.displayName || user.displayName || 'Estudante').charAt(0).toUpperCase();
 
   const formattedJoinDate = profile?.createdAt
     ? new Date(profile.createdAt).toLocaleDateString('pt-BR', {
@@ -111,15 +141,63 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
             </div>
 
             {/* User Details */}
-            <div className="space-y-1">
+            <div className="space-y-1.5 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="text-xl sm:text-2xl font-black text-[#160F2E] tracking-tight">
-                  {profile?.displayName || user.displayName || 'Estudante Word Pocket'}
-                </h1>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E1ECFC] text-[#176BFF] text-[10px] font-bold border border-[#BED7FA]">
-                  <CloudCheck className="w-3 h-3 text-[#176BFF]" />
-                  <span>Sincronizado</span>
-                </span>
+                {isEditingName ? (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <input
+                      type="text"
+                      value={editedName}
+                      disabled={savingName}
+                      onChange={(e) => setEditedName(e.target.value)}
+                      placeholder="Seu nome"
+                      className="px-3 py-1 rounded-xl border border-slate-300 text-sm font-bold text-[#160F2E] focus:outline-none focus:ring-2 focus:ring-[#176BFF]/30"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') saveEditingName();
+                        if (e.key === 'Escape') cancelEditingName();
+                      }}
+                    />
+                    <button
+                      type="button"
+                      disabled={savingName || !editedName.trim()}
+                      onClick={saveEditingName}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-brand text-white text-xs font-bold shadow-xs hover:opacity-95 transition cursor-pointer disabled:opacity-50"
+                      title="Salvar nome"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>{savingName ? 'Salvando...' : 'Salvar'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      disabled={savingName}
+                      onClick={cancelEditingName}
+                      className="p-1 rounded-xl text-slate-400 hover:text-slate-600 transition cursor-pointer"
+                      title="Cancelar"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <h1 className="text-xl sm:text-2xl font-black text-[#160F2E] tracking-tight truncate">
+                      {profile?.displayName || user.displayName || 'Estudante Word Pocket'}
+                    </h1>
+                    <button
+                      type="button"
+                      onClick={startEditingName}
+                      className="p-1.5 rounded-xl text-slate-400 hover:text-[#176BFF] hover:bg-slate-100 transition cursor-pointer"
+                      title="Editar nome"
+                      aria-label="Editar nome do perfil"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E1ECFC] text-[#176BFF] text-[10px] font-bold border border-[#BED7FA]">
+                      <CloudCheck className="w-3 h-3 text-[#176BFF]" />
+                      <span>Sincronizado</span>
+                    </span>
+                  </>
+                )}
               </div>
 
               <div className="flex items-center gap-3 text-xs text-[#52456F] font-medium flex-wrap">

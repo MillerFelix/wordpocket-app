@@ -4,6 +4,15 @@ import App from '../App';
 import { formatAuthError } from '../services/authService';
 import { syncLocalFavoritesToRemote } from '../services/favoritesSyncService';
 import { createDefaultProgress } from '../services/progressService';
+import { createOrUpdateProfile } from '../services/userService';
+
+vi.mock('../services/authService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../services/authService')>();
+  return {
+    ...actual,
+    sendPasswordReset: vi.fn().mockResolvedValue(undefined)
+  };
+});
 
 describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
   beforeEach(() => {
@@ -17,6 +26,8 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
     expect(formatAuthError({ code: 'auth/weak-password' })).toContain('mínimo 6 caracteres');
     expect(formatAuthError({ code: 'auth/network-request-failed' })).toContain('Falha de conexão');
     expect(formatAuthError({ code: 'auth/popup-closed-by-user' })).toContain('fechada antes da conclusão');
+    expect(formatAuthError({ code: 'auth/missing-email' })).toContain('informe seu endereço de e-mail');
+    expect(formatAuthError({ code: 'auth/unauthorized-domain' })).toContain('não está autorizado');
   });
 
   it('generates a clean default progress model for all 4 skills', () => {
@@ -136,5 +147,61 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
 
     // Exercise question runner is shown
     expect(screen.getByText(/Questão 1 de/i)).toBeInTheDocument();
+  });
+
+  it('supports the full password reset flow from the login modal with validation and neutral message', async () => {
+    render(<App />);
+
+    const loginBtns = screen.getAllByRole('button', { name: /Entrar/i });
+    fireEvent.click(loginBtns[0]);
+
+    // Click "Esqueci minha senha?"
+    const forgotBtn = screen.getByRole('button', { name: /Esqueci minha senha\?/i });
+    fireEvent.click(forgotBtn);
+
+    // Modal is now in reset mode
+    expect(screen.getByRole('heading', { level: 2, name: /Recuperar Senha/i })).toBeInTheDocument();
+    expect(screen.getByText(/Informe seu endereço de e-mail/i)).toBeInTheDocument();
+
+    // Try submitting with invalid email format
+    const emailInput = screen.getByPlaceholderText(/seuemail@exemplo.com/i);
+    fireEvent.change(emailInput, { target: { value: 'email-invalido' } });
+
+    const submitBtn = screen.getByRole('button', { name: /Enviar Link de Redefinição/i });
+    fireEvent.click(submitBtn);
+
+    // Validation error shown
+    expect(await screen.findByText(/Por favor, insira um endereço de e-mail válido/i)).toBeInTheDocument();
+
+    // Type valid email
+    fireEvent.change(emailInput, { target: { value: 'aluno@exemplo.com' } });
+    fireEvent.click(submitBtn);
+
+    // Neutral confirmation message displayed
+    expect(await screen.findByText(/Se o endereço de e-mail informado estiver cadastrado/i)).toBeInTheDocument();
+
+    // Return to login
+    const backToLoginBtns = screen.getAllByRole('button', { name: /Voltar para o Login/i });
+    expect(backToLoginBtns.length).toBeGreaterThan(0);
+    fireEvent.click(backToLoginBtns[0]);
+    expect(screen.getByRole('heading', { level: 2, name: /Entrar no Word Pocket/i })).toBeInTheDocument();
+  });
+
+  it('preserves user registration name in createOrUpdateProfile without defaulting to email prefix', async () => {
+    const mockUser = {
+      uid: 'user_test_name_1',
+      email: 'lucas.dev@example.com',
+      displayName: null,
+      photoURL: null
+    };
+
+    // When created with explicit registration name
+    const profile = await createOrUpdateProfile(mockUser as any, 'Lucas Silva');
+    expect(profile.displayName).toBe('Lucas Silva');
+    expect(profile.displayName).not.toBe('lucas.dev');
+
+    // When reloading profile without explicit fallback, preserves the existing name
+    const reloaded = await createOrUpdateProfile(mockUser as any);
+    expect(reloaded.displayName).toBe('Lucas Silva');
   });
 });

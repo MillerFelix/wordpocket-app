@@ -78,4 +78,14 @@ describe('Word Pocket Refined Interface Tests', () => {
     fireEvent.click(invertBtn);
     expect(screen.getByText(/Tradução em Inglês/i)).toBeInTheDocument();
   });
+
+  it('navigates to Praticar Inglês when clicking "Praticar agora" in Grandes Conquistas card', () => {
+    render(<App />);
+    const praticarAgoraBtn = screen.getByRole('button', { name: /Praticar agora/i });
+    expect(praticarAgoraBtn).toBeInTheDocument();
+    fireEvent.click(praticarAgoraBtn);
+
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 3, name: /Listening/i })).toBeInTheDocument();
+  });
 });
