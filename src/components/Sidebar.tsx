@@ -40,10 +40,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Início',
       subtitle: 'Painel e visão geral',
       icon: Home,
-      color: 'text-[#6938F5]',
-      activeBg: 'bg-[#EAE1FD] border border-white/90',
-      activeText: 'text-[#6938F5]',
-      activeBar: 'bg-[#6938F5]'
+      color: 'text-[#176BFF]',
+      activeBg: 'bg-[#E1ECFC] border border-white/90',
+      activeText: 'text-[#176BFF]',
+      activeBar: 'bg-[#176BFF]'
     },
     {
       id: 'verbs' as TabType,
@@ -51,10 +51,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitle: 'Tabela das 3 formas',
       icon: BookOpen,
       count: verbCount,
-      color: 'text-[#6938F5]',
-      activeBg: 'bg-[#EAE1FD] border border-white/90',
-      activeText: 'text-[#6938F5]',
-      activeBar: 'bg-[#6938F5]'
+      color: 'text-[#176BFF]',
+      activeBg: 'bg-[#E1ECFC] border border-white/90',
+      activeText: 'text-[#176BFF]',
+      activeBar: 'bg-[#176BFF]'
     },
     {
       id: 'vocab' as TabType,
@@ -62,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitle: 'Dicionário e sentidos',
       icon: BookA,
       count: vocabCount,
-      color: 'text-[#19D9B4]',
+      color: 'text-[#0A9B80]',
       activeBg: 'bg-[#DCF8F1] border border-white/90',
       activeText: 'text-[#0A9B80]',
       activeBar: 'bg-[#19D9B4]'
@@ -73,7 +73,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       subtitle: 'Google Tradutor oficial',
       icon: Languages,
       count: 'Google',
-      color: 'text-[#FF6534]',
+      color: 'text-[#E04D1B]',
       activeBg: 'bg-[#FFEAE1] border border-white/90',
       activeText: 'text-[#E04D1B]',
       activeBar: 'bg-[#FF6534]'
@@ -91,18 +91,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'history' as TabType,
       label: 'Histórico',
       icon: Clock,
-      iconColor: 'text-[#2878FF]'
+      iconColor: 'text-[#176BFF]'
     },
     {
       id: 'settings' as TabType,
       label: 'Configurações',
       icon: Settings,
-      iconColor: 'text-[#52456F]'
+      iconColor: 'text-[#2446C8]'
     }
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col w-72 shrink-0 bg-white/70 backdrop-blur-2xl border-r border-white/80 p-5 justify-between h-screen sticky top-0 shadow-[4px_0_32px_rgba(105,56,245,0.08)] select-none">
+    <aside className="hidden lg:flex flex-col w-72 shrink-0 bg-[#F0F6FF]/75 backdrop-blur-2xl border-r border-white/80 p-5 justify-between h-screen sticky top-0 shadow-[4px_0_32px_rgba(23,107,255,0.08)] select-none">
       {/* Top Brand & Navigation */}
       <div className="space-y-6">
         {/* Brand Logo */}
@@ -191,8 +191,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onTabChange(item.id)}
                 className={`w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-colors text-xs font-semibold ${
                   isActive
-                    ? 'bg-[#EAE1FD] text-[#6938F5] font-bold border border-white/90 shadow-2xs'
-                    : 'text-[#52456F] hover:bg-white/80 hover:text-[#160F2E]'
+                    ? 'bg-[#E1ECFC] text-[#176BFF] font-bold border border-white/90 shadow-2xs'
+                    : 'text-[#2446C8]/80 hover:bg-white/80 hover:text-[#160F2E]'
                 }`}
               >
                 <Icon className={`w-4 h-4 stroke-[2] ${item.iconColor}`} />
@@ -202,22 +202,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </div>
 
-        {/* Side Promo Card (Acolhedor com gradiente Neon Candy Vibrant) */}
-        <div className="p-4 rounded-2xl bg-gradient-to-br from-[#E6D9FB] via-[#FCE4F0] to-[#DCF7EF] border border-white/90 space-y-2 relative overflow-hidden shadow-soft-card">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#6938F5]">
-            <Sparkles className="w-3.5 h-3.5 text-[#FFD447]" />
+        {/* Side Promo Card with Blue Pulse Gradient */}
+        <div className="p-4 rounded-2xl bg-gradient-to-br from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] border border-white/90 space-y-2 relative overflow-hidden shadow-soft-card">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#176BFF]">
+            <Sparkles className="w-3.5 h-3.5 text-[#26D9FF]" />
             <span>Grandes Conquistas</span>
           </div>
           <p className="text-xs font-bold text-[#160F2E] leading-tight">
             O inglês abre portas para o mundo.
           </p>
-          <p className="text-[11px] text-[#52456F] leading-relaxed">
+          <p className="text-[11px] text-[#2446C8] leading-relaxed font-medium">
             E você tem tudo o que precisa para chegar lá no seu bolso.
           </p>
           <button
             type="button"
             onClick={() => onTabChange('verbs')}
-            className="w-full flex items-center justify-between p-2 rounded-xl bg-white/90 hover:bg-white text-[#6938F5] text-xs font-bold hover:shadow-2xs transition mt-1 border border-white/90"
+            className="w-full flex items-center justify-between p-2 rounded-xl bg-white/90 hover:bg-white text-[#176BFF] text-xs font-bold hover:shadow-2xs transition mt-1 border border-white/90"
           >
             <span>Praticar agora</span>
             <ArrowRight className="w-3 h-3" />
@@ -228,17 +228,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Bottom Status & Install Prompt */}
       <div className="pt-4 border-t border-white/80 space-y-2.5">
         <div className="flex items-center justify-between px-1 text-xs">
-          <span className="text-[#52456F] font-medium">Estado da Conexão</span>
+          <span className="text-[#2446C8] font-semibold">Estado da Conexão</span>
           <div
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-bold text-[11px] ${
               isOnline
-                ? 'bg-[#DCF8F1] text-[#0A9B80] border border-[#B6F5E8]'
+                ? 'bg-[#E1ECFC] text-[#176BFF] border border-[#BED7FA]'
                 : 'bg-[#FDE8F1] text-[#F52E91] border border-[#FFD2E5]'
             }`}
           >
             {isOnline ? (
               <>
-                <Wifi className="w-3 h-3 text-[#19D9B4]" />
+                <Wifi className="w-3 h-3 text-[#176BFF]" />
                 <span>Online</span>
               </>
             ) : (

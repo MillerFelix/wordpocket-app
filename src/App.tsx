@@ -19,7 +19,6 @@ interface AppProps {
 export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [pendingSearch, setPendingSearch] = useState<string>('');
-  const [topHeaderQuery, setTopHeaderQuery] = useState<string>('');
 
   const handleNavigate = (tab: TabType, term?: string) => {
     setActiveTab(tab);
@@ -30,28 +29,18 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
     }
   };
 
-  const handleTopHeaderSearchChange = (query: string) => {
-    setTopHeaderQuery(query);
-    if (query) {
-      setPendingSearch(query);
-      if (activeTab === 'home') {
-        setActiveTab('verbs');
-      }
-    }
-  };
-
   return (
-    <div className="min-h-screen text-[#160F2E] flex flex-col lg:flex-row font-sans selection:bg-[#FFE5F0] selection:text-[#6938F5] relative">
-      {/* Decorative Atmospheric Floating Lavender, Violet, Blue & Neon Candy Glows */}
+    <div className="min-h-screen text-[#160F2E] flex flex-col lg:flex-row font-sans selection:bg-[#BED7FA] selection:text-[#176BFF] relative">
+      {/* Decorative Atmospheric Floating Blue Pulse, Cyan & Deep Blue Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden="true">
-        {/* Electric Violet top-left glow */}
-        <div className="absolute -top-32 left-[15%] w-[780px] h-[480px] rounded-full bg-gradient-to-b from-[#6938F5]/26 via-[#A78BFA]/22 to-transparent blur-3xl" />
-        {/* Electric Blue & Mint top-right glow */}
-        <div className="absolute top-10 -right-24 w-[560px] h-[560px] rounded-full bg-gradient-to-br from-[#2878FF]/26 to-[#19D9B4]/22 blur-3xl" />
-        {/* Bright Lavender & Tangerine mid-left glow */}
-        <div className="absolute top-[35%] -left-32 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#A78BFA]/26 to-[#FF6534]/18 blur-3xl" />
-        {/* Neon Pink & Electric Blue bottom-right glow */}
-        <div className="absolute bottom-10 right-10 w-[620px] h-[620px] rounded-full bg-gradient-to-tl from-[#F52E91]/22 via-[#A78BFA]/20 to-[#2878FF]/20 blur-3xl" />
+        {/* Electric Blue top-left glow */}
+        <div className="absolute -top-32 left-[15%] w-[780px] h-[480px] rounded-full bg-gradient-to-b from-[#176BFF]/32 via-[#26D9FF]/22 to-transparent blur-3xl" />
+        {/* Luminous Cyan & Electric Blue top-right glow */}
+        <div className="absolute top-10 -right-24 w-[560px] h-[560px] rounded-full bg-gradient-to-br from-[#26D9FF]/30 to-[#176BFF]/24 blur-3xl" />
+        {/* Deep Blue mid-left glow */}
+        <div className="absolute top-[35%] -left-32 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#2446C8]/28 to-[#176BFF]/20 blur-3xl" />
+        {/* Violet complement & Deep Blue bottom-right glow */}
+        <div className="absolute bottom-10 right-10 w-[620px] h-[620px] rounded-full bg-gradient-to-tl from-[#6545F5]/22 via-[#2446C8]/22 to-[#176BFF]/22 blur-3xl" />
       </div>
 
       {/* Desktop Vertical Sidebar */}
@@ -72,10 +61,9 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden">
-        {/* Desktop Top Header Bar with Global Search & User Profile */}
+        {/* Desktop Top Header Bar with Context & User Profile */}
         <TopHeader
-          searchQuery={topHeaderQuery}
-          onSearchChange={handleTopHeaderSearchChange}
+          activeTab={activeTab}
           onNavigate={handleNavigate}
         />
 

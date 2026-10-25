@@ -59,12 +59,12 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
             : `Ouvir pronúncia de "${speechLabel}"`
         }
         aria-label={`Ouvir pronúncia de ${speechLabel}`}
-        className={`inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6938F5]/40 select-none ${
+        className={`inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#176BFF]/40 select-none ${
           sizeClasses[size]
         } ${
           isPlaying
-            ? 'bg-[#6938F5] text-white shadow-sm shadow-[#6938F5]/30 scale-105'
-            : 'text-[#645A82] hover:text-[#6938F5] hover:bg-[#F3EFFF] active:bg-[#EDE6FA] border border-transparent hover:border-[#EDE6FA]'
+            ? 'bg-[#176BFF] text-white shadow-sm shadow-[#176BFF]/30 scale-105'
+            : 'text-[#2446C8] hover:text-[#176BFF] hover:bg-[#E1ECFC] active:bg-[#BED7FA] border border-transparent hover:border-[#BED7FA]'
         } ${className}`}
       >
         {!supported ? (

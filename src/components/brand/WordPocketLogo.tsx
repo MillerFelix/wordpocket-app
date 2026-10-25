@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 export interface WordPocketLogoProps {
   /**
@@ -38,16 +38,20 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
   inverted = false,
   className = '',
 }) => {
+  // Generate unique ID per instance so gradient references never break across responsive breakpoints
+  const rawId = useId();
+  const gradientId = `wp-pulse-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
+
   // Dimensions mapping
   const symbolSizeMap = {
-    sm: 'w-8 h-8',
-    md: 'w-11 h-11',
+    sm: 'w-7 h-7 sm:w-8 sm:h-8',
+    md: 'w-10 h-10 sm:w-11 sm:h-11',
     lg: 'w-14 h-14',
     xl: 'w-20 h-20',
   };
 
   const titleSizeMap = {
-    sm: 'text-sm',
+    sm: 'text-sm sm:text-base',
     md: 'text-xl',
     lg: 'text-2xl',
     xl: 'text-3xl',
@@ -67,11 +71,11 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
       viewBox="0 0 512 512"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full drop-shadow-[0_4px_12px_rgba(23,107,255,0.32)] select-none"
+      className="w-full h-full drop-shadow-[0_3px_10px_rgba(23,107,255,0.35)] select-none shrink-0"
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="wpSymbolBluePulse" x1="12%" y1="8%" x2="88%" y2="92%">
+        <linearGradient id={gradientId} x1="12%" y1="8%" x2="88%" y2="92%">
           <stop offset="0%" stopColor="#26D9FF" />
           <stop offset="46%" stopColor="#176BFF" />
           <stop offset="100%" stopColor="#6545F5" />
@@ -80,7 +84,7 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
       {/* Speech bubble silhouette */}
       <path
         d="M144 72 H368 C424 72 456 104 456 160 V288 C456 344 424 376 368 376 H224 L144 440 C132 448 116 440 116 424 V376 C76 372 56 348 56 304 V160 C56 104 88 72 144 72 Z"
-        fill="url(#wpSymbolBluePulse)"
+        fill={`url(#${gradientId})`}
       />
       {/* Open book / language study pages in negative space */}
       <path
@@ -99,22 +103,22 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
 
   if (variant === 'icon') {
     return (
-      <div className={`relative inline-flex items-center justify-center ${symbolSizeMap[size]} ${className}`}>
+      <div className={`relative inline-flex items-center justify-center shrink-0 ${symbolSizeMap[size]} ${className}`}>
         {symbolSvg}
       </div>
     );
   }
 
   return (
-    <div className={`inline-flex items-center gap-3 ${className}`}>
+    <div className={`inline-flex items-center gap-2 sm:gap-2.5 shrink-0 select-none ${className}`}>
       {/* Brand Icon Mark */}
       <div className={`relative shrink-0 flex items-center justify-center ${symbolSizeMap[size]}`}>
         {symbolSvg}
       </div>
 
       {/* Brand Typography */}
-      <div className="flex flex-col justify-center leading-tight">
-        <div className="flex items-center gap-1.5">
+      <div className="flex flex-col justify-center leading-none">
+        <div className="flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
           <span
             className={`font-black tracking-tight ${
               inverted ? 'text-white' : 'text-[#160F2E]'
@@ -123,12 +127,12 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
             Word
           </span>
           <span
-            className={`font-black bg-gradient-to-r from-[#176BFF] to-[#6545F5] bg-clip-text text-transparent ${titleSizeMap[size]}`}
+            className={`font-black bg-gradient-to-r from-[#176BFF] via-[#2446C8] to-[#6545F5] bg-clip-text text-transparent ${titleSizeMap[size]}`}
           >
             Pocket
           </span>
           {badge && (
-            <span className="text-[9px] font-bold uppercase tracking-wider bg-white/80 text-[#176BFF] px-1.5 py-0.5 rounded-full ml-1 border border-white/90 shadow-2xs">
+            <span className="text-[9px] font-bold uppercase tracking-wider bg-white/90 text-[#176BFF] px-1.5 py-0.5 rounded-full border border-[#BED7FA] shadow-2xs">
               {badge}
             </span>
           )}
@@ -136,8 +140,8 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
 
         {showSubtitle && (
           <p
-            className={`font-bold tracking-wide mt-0.5 ${
-              inverted ? 'text-[#C5BDE0]' : 'text-[#52456F]'
+            className={`font-bold tracking-wide mt-0.5 hidden xs:block ${
+              inverted ? 'text-[#C5BDE0]' : 'text-[#2446C8]'
             } ${subtitleSizeMap[size]}`}
           >
             {subtitleText}

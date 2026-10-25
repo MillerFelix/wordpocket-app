@@ -10,19 +10,19 @@ export const HomeFeatureCards: React.FC<HomeFeatureCardsProps> = ({ onNavigate }
   return (
     <div>
       <div className="flex items-center justify-between mb-3 px-1">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#645A82]">
+        <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#2446C8]">
           Acessos Principais
         </h2>
-        <span className="text-[11px] font-semibold text-[#6938F5]">
+        <span className="text-[11px] font-semibold text-[#176BFF]">
           3 Módulos Integrados
         </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-5">
-        {/* Card 1: Verbos Irregulares (Electric Violet / Lavender Gradient) */}
+        {/* Card 1: Verbos Irregulares (Blue Pulse Electric & Deep Blue Gradient) */}
         <div
           onClick={() => onNavigate('verbs')}
-          className="group relative overflow-hidden rounded-3xl p-6 bg-gradient-verbs text-white shadow-soft-card hover:shadow-colored-violet ring-1 ring-white/30 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[160px] active:scale-[0.99]"
+          className="group relative overflow-hidden rounded-3xl p-6 bg-gradient-verbs text-white shadow-soft-card hover:shadow-colored-blue ring-1 ring-white/30 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[160px] active:scale-[0.99]"
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && onNavigate('verbs')}
@@ -56,7 +56,7 @@ export const HomeFeatureCards: React.FC<HomeFeatureCardsProps> = ({ onNavigate }
 
           {/* Bottom Arrow Indicator */}
           <div className="flex justify-end pt-3 z-10">
-            <div className="w-9 h-9 rounded-full bg-white text-[#6938F5] flex items-center justify-center shadow-md group-hover:translate-x-1 transition-transform">
+            <div className="w-9 h-9 rounded-full bg-white text-[#176BFF] flex items-center justify-center shadow-md group-hover:translate-x-1 transition-transform">
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </div>
           </div>

@@ -38,17 +38,17 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       id: 'home' as TabType,
       label: 'Início',
       icon: Home,
-      color: 'text-[#6938F5]',
-      activeBg: 'bg-[#EAE1FD] text-[#6938F5] border border-white/90 shadow-2xs',
-      activeDot: 'bg-[#6938F5]'
+      color: 'text-[#176BFF]',
+      activeBg: 'bg-[#E1ECFC] text-[#176BFF] border border-white/90 shadow-2xs',
+      activeDot: 'bg-[#176BFF]'
     },
     {
       id: 'verbs' as TabType,
       label: 'Verbos',
       icon: BookOpen,
-      color: 'text-[#6938F5]',
-      activeBg: 'bg-[#EAE1FD] text-[#6938F5] border border-white/90 shadow-2xs',
-      activeDot: 'bg-[#6938F5]'
+      color: 'text-[#176BFF]',
+      activeBg: 'bg-[#E1ECFC] text-[#176BFF] border border-white/90 shadow-2xs',
+      activeDot: 'bg-[#176BFF]'
     },
     {
       id: 'vocab' as TabType,
@@ -71,36 +71,34 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   return (
     <>
       {/* Mobile & Tablet Compact Top Header */}
-      <header className="lg:hidden sticky top-0 z-30 bg-white/75 backdrop-blur-2xl border-b border-white/80 px-4 py-2.5 shadow-2xs">
-        <div className="flex items-center justify-between gap-3 max-w-lg mx-auto">
-          {/* Brand */}
+      <header className="lg:hidden sticky top-0 z-30 bg-[#F0F6FF]/85 backdrop-blur-2xl border-b border-white/80 px-3.5 py-2.5 shadow-2xs">
+        <div className="flex items-center justify-between gap-2 max-w-lg mx-auto">
+          {/* Brand — Logo symbol alongside Word Pocket logotype */}
           <button 
             type="button"
             onClick={() => onTabChange('home')}
-            className="text-left active:scale-95 transition"
-            aria-label="Ir para a página inicial"
+            className="flex items-center text-left active:scale-95 transition shrink-0"
+            aria-label="Ir para a página inicial do Word Pocket"
           >
             <WordPocketLogo
               variant="horizontal"
               size="sm"
               badge="PWA"
-              showSubtitle
-              subtitleText="Consulta Rápida de Inglês"
             />
           </button>
 
           {/* Right Status & Avatar Profile */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <div
               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
                 isOnline
-                  ? 'bg-[#DCF8F1] text-[#0A9B80] border-[#B6F5E8]'
+                  ? 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
                   : 'bg-[#FDE8F1] text-[#F52E91] border-[#FFD0E5]'
               }`}
             >
               {isOnline ? (
                 <>
-                  <Wifi className="w-2.5 h-2.5 text-[#19D9B4]" />
+                  <Wifi className="w-2.5 h-2.5 text-[#176BFF]" />
                   <span>Online</span>
                 </>
               ) : (
@@ -122,12 +120,12 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               </button>
             )}
 
-            {/* Profile Avatar with Neon Candy gradient */}
-            <div className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#6938F5] via-[#F52E91] to-[#FF6534] p-0.5 cursor-pointer shadow-xs">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-extrabold text-[11px] text-[#6938F5]">
+            {/* Profile Avatar with Blue Pulse colors */}
+            <div className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-extrabold text-[11px] text-[#176BFF]">
                 L
               </div>
-              <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#19D9B4] ring-1 ring-white" />
+              <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#26D9FF] ring-1 ring-white" />
             </div>
           </div>
         </div>
@@ -136,7 +134,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       {/* Mobile Bottom Navigation Bar (Hidden on desktop) */}
       <nav
         aria-label="Navegação Móvel"
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/80 backdrop-blur-2xl border-t border-white/80 px-3 py-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-[0_-8px_32px_rgba(105,56,245,0.08)]"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F0F6FF]/85 backdrop-blur-2xl border-t border-white/80 px-3 py-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-[0_-8px_32px_rgba(23,107,255,0.08)]"
       >
         <div className="grid grid-cols-4 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
@@ -150,7 +148,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                 className={`flex flex-col items-center justify-center py-2 px-1 rounded-2xl transition-all duration-150 active:scale-95 select-none min-h-[48px] ${
                   isActive
                     ? `${tab.color} font-bold ${tab.activeBg}`
-                    : 'text-[#52456F] hover:text-[#160F2E]'
+                    : 'text-[#2446C8]/80 hover:text-[#160F2E]'
                 }`}
               >
                 <div className="relative">

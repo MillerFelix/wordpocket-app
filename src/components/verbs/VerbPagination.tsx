@@ -121,8 +121,8 @@ export const VerbPagination: React.FC<VerbPaginationProps> = ({
                 aria-current={isActive ? 'page' : undefined}
                 className={`w-8 h-8 rounded-xl text-xs font-bold transition active:scale-95 flex items-center justify-center shadow-2xs ${
                   isActive
-                    ? 'bg-gradient-verbs text-white shadow-colored-violet ring-2 ring-[#6938F5]/30'
-                    : 'bg-white/75 hover:bg-white text-[#160F2E] hover:text-[#6938F5] border border-white/90'
+                    ? 'bg-gradient-verbs text-white shadow-colored-blue ring-2 ring-[#176BFF]/30'
+                    : 'bg-white/75 hover:bg-white text-[#160F2E] hover:text-[#176BFF] border border-white/90'
                 }`}
               >
                 {pageNum}
@@ -138,7 +138,7 @@ export const VerbPagination: React.FC<VerbPaginationProps> = ({
           disabled={currentPage === totalPages}
           aria-label="Próxima página"
           title="Próxima página"
-          className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition border border-white/90 disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:bg-white enabled:hover:text-[#6938F5] enabled:active:scale-95 text-[#52456F] bg-white/70 shadow-2xs"
+          className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition border border-white/90 disabled:opacity-40 disabled:cursor-not-allowed enabled:hover:bg-white enabled:hover:text-[#176BFF] enabled:active:scale-95 text-[#2446C8] bg-white/70 shadow-2xs"
         >
           <span className="hidden sm:inline">Próxima</span>
           <ChevronRight className="w-4 h-4" />

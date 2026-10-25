@@ -24,19 +24,19 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
   return (
     <div className="relative z-20">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6938F5]" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#176BFF]" />
         <input
           type="text"
           value={globalSearch}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Buscar palavra, verbo ou tradução..."
-          className="w-full pl-11 pr-10 py-3.5 text-sm bg-white/85 backdrop-blur-md hover:border-[#6938F5]/40 focus:border-[#6938F5] focus:bg-white focus:ring-4 focus:ring-[#6938F5]/10 rounded-2xl border border-white/90 shadow-soft-card outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
+          className="w-full pl-11 pr-10 py-3.5 text-sm bg-white/85 backdrop-blur-md hover:border-[#176BFF]/40 focus:border-[#176BFF] focus:bg-white focus:ring-4 focus:ring-[#176BFF]/10 rounded-2xl border border-white/90 shadow-soft-card outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
         />
         {globalSearch && (
           <button
             type="button"
             onClick={() => onSearchChange('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#52456F] hover:text-[#160F2E] rounded-lg transition"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#2446C8] hover:text-[#160F2E] rounded-lg transition"
             title="Limpar busca"
           >
             <X className="w-4 h-4" />
@@ -47,14 +47,14 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
       {/* Global Live Search Results Dropdown */}
       {searchResults && (
         <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-2xl rounded-3xl border border-white/90 shadow-soft-hover p-4 z-50 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="flex items-center justify-between pb-2 border-b border-[#E2D7F8]">
-            <span className="text-xs font-bold text-[#52456F]">
+          <div className="flex items-center justify-between pb-2 border-b border-[#BED7FA]">
+            <span className="text-xs font-bold text-[#2446C8]">
               {searchResults.totalCount} resultados encontrados
             </span>
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="text-xs font-semibold text-[#6938F5] hover:underline"
+              className="text-xs font-semibold text-[#176BFF] hover:underline"
             >
               Fechar
             </button>
@@ -63,7 +63,7 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
           {/* Verbs Results */}
           {searchResults.verbs.length > 0 && (
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#6938F5] px-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#176BFF] px-1">
                 Verbos Irregulares
               </span>
               <div className="space-y-1 mt-1">
@@ -75,13 +75,13 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
                       onNavigate('verbs', verb.infinitive);
                       onSearchChange('');
                     }}
-                    className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#EAE1FD] text-left transition group"
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-[#E1ECFC] text-left transition group"
                   >
                     <div>
-                      <span className="text-sm font-bold text-[#160F2E] group-hover:text-[#6938F5] transition">
+                      <span className="text-sm font-bold text-[#160F2E] group-hover:text-[#176BFF] transition">
                         {verb.infinitive}
                       </span>
-                      <span className="text-xs text-[#52456F] ml-2 font-mono">
+                      <span className="text-xs text-[#2446C8] ml-2 font-mono">
                         ({verb.pastSimple} • {verb.pastParticiple})
                       </span>
                     </div>

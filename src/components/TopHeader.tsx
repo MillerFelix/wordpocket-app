@@ -1,66 +1,122 @@
 import React from 'react';
-import { Search, Bell, X } from 'lucide-react';
+import { Bell, Wifi, WifiOff } from 'lucide-react';
 import { TabType } from '../types';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
 
 interface TopHeaderProps {
-  onSearchSelect?: (tab: TabType, term: string) => void;
+  activeTab?: TabType;
   onNavigate: (tab: TabType) => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
 }
 
+const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: string }> = {
+  home: {
+    title: 'Painel Geral',
+    subtitle: 'Word Pocket — Guia e Estudo Inteligente de Inglês',
+    badge: 'Início'
+  },
+  verbs: {
+    title: 'Verbos Irregulares',
+    subtitle: 'Base completa com 200 verbos e três formas gramaticais',
+    badge: '200 Verbos'
+  },
+  vocab: {
+    title: 'Dicionário de Vocabulário',
+    subtitle: 'Termos contextualizados, pronúncias fonéticas e exemplos',
+    badge: 'Vocabulário'
+  },
+  translator: {
+    title: 'Tradutor Rápido',
+    subtitle: 'Consulta e tradução imediata com inteligência contextual',
+    badge: 'Tradutor'
+  },
+  favorites: {
+    title: 'Palavras Salvas',
+    subtitle: 'Sua lista personalizada de estudo e revisão',
+    badge: 'Favoritos'
+  },
+  history: {
+    title: 'Histórico de Consultas',
+    subtitle: 'Registro das suas últimas pesquisas no aplicativo',
+    badge: 'Histórico'
+  },
+  settings: {
+    title: 'Configurações & Guia',
+    subtitle: 'Preferências do aplicativo, voz de áudio e informações do sistema',
+    badge: 'Ajustes'
+  }
+};
+
 export const TopHeader: React.FC<TopHeaderProps> = ({
-  searchQuery,
-  onSearchChange,
+  activeTab = 'home',
   onNavigate: _onNavigate
 }) => {
+  const isOnline = useOnlineStatus();
+  const currentTabInfo = TAB_TITLES[activeTab] || TAB_TITLES.home;
+
   return (
-    <header className="hidden lg:flex items-center justify-between gap-4 py-4 px-8 border-b border-white/80 bg-white/70 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(105,56,245,0.06)]">
-      {/* Global Search Bar */}
-      <div className="relative flex-1 max-w-xl">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6938F5]" />
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Buscar palavra, verbo ou tradução..."
-          className="w-full pl-11 pr-10 py-2.5 text-sm bg-white/85 backdrop-blur-md hover:border-[#6938F5]/40 focus:border-[#6938F5] focus:bg-white focus:ring-4 focus:ring-[#6938F5]/10 rounded-2xl border border-white/90 shadow-2xs outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
-        />
-        {searchQuery && (
-          <button
-            type="button"
-            onClick={() => onSearchChange('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#52456F] hover:text-[#160F2E] rounded-lg"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
+    <header className="hidden lg:flex items-center justify-between py-3.5 px-8 border-b border-white/80 bg-[#F0F6FF]/75 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(23,107,255,0.06)]">
+      {/* Contextual Section Header — Zero duplicate filter/search */}
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#176BFF] ring-4 ring-[#176BFF]/20" />
+          <h2 className="text-base font-extrabold text-[#160F2E] tracking-tight">
+            {currentTabInfo.title}
+          </h2>
+        </div>
+        <span className="text-[11px] font-bold text-[#176BFF] bg-[#E1ECFC] px-2.5 py-0.5 rounded-full border border-[#BED7FA]">
+          {currentTabInfo.badge}
+        </span>
+        <span className="text-xs text-[#2446C8]/75 font-medium hidden xl:inline">
+          • {currentTabInfo.subtitle}
+        </span>
       </div>
 
-      {/* Right Controls: Notifications, Avatar */}
+      {/* Right Controls: Online Status, Notifications, Avatar */}
       <div className="flex items-center gap-3">
+        {/* Network status indicator */}
+        <div
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold border transition ${
+            isOnline
+              ? 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+              : 'bg-[#FDE8F1] text-[#F52E91] border-[#FFD0E5]'
+          }`}
+        >
+          {isOnline ? (
+            <>
+              <Wifi className="w-3.5 h-3.5 text-[#176BFF]" />
+              <span>Conectado</span>
+            </>
+          ) : (
+            <>
+              <WifiOff className="w-3.5 h-3.5 text-[#F52E91]" />
+              <span>Modo Offline</span>
+            </>
+          )}
+        </div>
+
+        {/* Notification bell */}
         <button
           type="button"
-          className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#52456F] hover:text-[#6938F5] border border-white/90 shadow-2xs transition"
+          className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#2446C8] hover:text-[#176BFF] border border-white/90 shadow-2xs transition"
           title="Notificações"
         >
           <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#F52E91]" />
+          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#176BFF]" />
         </button>
 
-        {/* Profile Avatar with Neon Candy colors */}
+        {/* Profile Avatar with Blue Pulse colors */}
         <div className="flex items-center gap-2.5 pl-3 border-l border-white/80">
-          <div className="relative w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#6938F5] via-[#F52E91] to-[#FF6534] p-0.5 cursor-pointer shadow-xs">
-            <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-black text-sm text-[#6938F5]">
+          <div className="relative w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs">
+            <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-black text-sm text-[#176BFF]">
               L
             </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#19D9B4] ring-2 ring-white" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#26D9FF] ring-2 ring-white" />
           </div>
           <div className="hidden xl:block text-left">
             <p className="text-xs font-extrabold text-[#160F2E] leading-tight">
               Lucas Silva
             </p>
-            <p className="text-[10px] font-semibold text-[#52456F]">
+            <p className="text-[10px] font-semibold text-[#2446C8]">
               Nível Intermediário
             </p>
           </div>

@@ -1,79 +1,78 @@
 @import "tailwindcss";
 
 @theme {
-  /* Neon Candy Vibrant Official Palette */
-  --color-electric-violet: #6938F5;
-  --color-neon-pink: #F52E91;
-  --color-tangerine: #FF6534;
-  --color-electric-blue: #2878FF;
-  --color-fresh-mint: #19D9B4;
-  --color-bright-lavender: #A78BFA;
-  --color-sunshine: #FFD447;
-  --color-candy-blush: #FFE5F0;
+  /* Blue Pulse Official Palette */
+  --color-electric-blue: #176BFF;
+  --color-deep-blue: #2446C8;
+  --color-violet: #6545F5;
+  --color-luminous-cyan: #26D9FF;
+  --color-surface-ice: #F0F6FF;
 
-  /* Aliases for ease of use */
-  --color-violet: #6938F5;
+  /* Aliases for ease of use & primary identity mapping */
+  --color-electric-violet: #176BFF;
+  --color-primary: #176BFF;
+  --color-blue: #176BFF;
+  --color-cyan: #26D9FF;
   --color-pink: #F52E91;
-  --color-blue: #2878FF;
+  --color-tangerine: #FF6534;
   --color-mint: #19D9B4;
-  --color-lavender: #A78BFA;
+  --color-sunshine: #FFD447;
+  --color-lavender: #6545F5;
 
   /* Neutrals & Semantic Surfaces */
-  --color-app-bg: #EAE2FB;
-  --color-surface: rgba(255, 255, 255, 0.85);
+  --color-app-bg: #D4E5FE;
+  --color-surface: rgba(240, 246, 255, 0.88);
   --color-text-main: #160F2E;
-  --color-text-secondary: #52456F;
-  --color-border-soft: #E2D7F8;
+  --color-text-secondary: #2446C8;
+  --color-border-soft: #BED7FA;
 
   /* Tints & Subtles */
-  --color-violet-subtle: #EDE5FC;
+  --color-blue-subtle: #E1ECFC;
+  --color-cyan-subtle: #E0F8FF;
+  --color-violet-subtle: #EDE8FD;
+  --color-surface-subtle: #F0F6FF;
   --color-pink-subtle: #FDE8F1;
   --color-tangerine-subtle: #FFEAE1;
-  --color-blue-subtle: #E2EDFF;
   --color-mint-subtle: #DCF8F1;
-  --color-lavender-subtle: #F0E9FC;
-  --color-sunshine-subtle: #FFF8D9;
 }
 
 :root {
-  /* Neon Candy Vibrant Official & Immutable Palette */
-  --color-electric-violet: #6938F5;
-  --color-neon-pink: #F52E91;
-  --color-tangerine: #FF6534;
-  --color-electric-blue: #2878FF;
-  --color-fresh-mint: #19D9B4;
-  --color-bright-lavender: #A78BFA;
-  --color-sunshine: #FFD447;
-  --color-candy-blush: #FFE5F0;
+  /* Blue Pulse Master Palette */
+  --color-electric-blue: #176BFF;
+  --color-deep-blue: #2446C8;
+  --color-violet: #6545F5;
+  --color-luminous-cyan: #26D9FF;
+  --color-surface-ice: #F0F6FF;
 
   /* Neutrals */
-  --color-app-bg: #EAE2FB;
-  --color-surface: rgba(255, 255, 255, 0.85);
+  --color-app-bg: #D4E5FE;
+  --color-surface: rgba(240, 246, 255, 0.88);
   --color-text-main: #160F2E;
-  --color-text-secondary: #52456F;
-  --color-border-soft: #E2D7F8;
+  --color-text-secondary: #2446C8;
+  --color-border-soft: #BED7FA;
 
-  /* Official Gradients */
-  --gradient-brand: linear-gradient(135deg, #6938F5 0%, #2878FF 100%);
-  --gradient-neon: linear-gradient(135deg, #6938F5 0%, #F52E91 100%);
+  /* Official Blue Pulse Gradients */
+  --gradient-brand: linear-gradient(135deg, #26D9FF 0%, #176BFF 50%, #2446C8 100%);
+  --gradient-pulse: linear-gradient(135deg, #176BFF 0%, #2446C8 55%, #6545F5 100%);
+  --gradient-cyan-blue: linear-gradient(135deg, #26D9FF 0%, #176BFF 100%);
+  --gradient-neon: linear-gradient(135deg, #176BFF 0%, #6545F5 100%);
   --gradient-warm: linear-gradient(135deg, #FF6534 0%, #F52E91 100%);
-  --gradient-fresh: linear-gradient(135deg, #19D9B4 0%, #2878FF 100%);
+  --gradient-fresh: linear-gradient(135deg, #19D9B4 0%, #176BFF 100%);
   --gradient-sun: linear-gradient(135deg, #FF6534 0%, #FFD447 100%);
 
   /* Three Pillars Official Hero Gradients */
-  --gradient-card-verbs: linear-gradient(135deg, #6938F5 0%, #834EF8 50%, #A78BFA 100%);
-  --gradient-card-vocab: linear-gradient(135deg, #19D9B4 0%, #15C7A5 35%, #2878FF 100%);
-  --gradient-card-translator: linear-gradient(135deg, #FF6534 0%, #F8496E 50%, #F52E91 100%);
+  --gradient-card-verbs: linear-gradient(135deg, #176BFF 0%, #2446C8 55%, #6545F5 100%);
+  --gradient-card-vocab: linear-gradient(135deg, #26D9FF 0%, #176BFF 55%, #2446C8 100%);
+  --gradient-card-translator: linear-gradient(135deg, #176BFF 0%, #6545F5 50%, #F52E91 100%);
 
-  /* Atmospheric Ambient App Glow with Visibly Present Lavender, Violet & Electric Blue Mesh */
+  /* Atmospheric Ambient App Glow with Visibly Present Blue Pulse Mesh */
   --app-ambient-bg: 
-    radial-gradient(ellipse 85% 60% at 18% -8%, rgba(105, 56, 245, 0.32), transparent 60%),
-    radial-gradient(ellipse 75% 55% at 85% 10%, rgba(40, 120, 255, 0.28), transparent 58%),
-    radial-gradient(circle 580px at 0% 50%, rgba(167, 139, 250, 0.30), transparent 60%),
-    radial-gradient(circle 540px at 100% 55%, rgba(245, 46, 145, 0.22), transparent 60%),
-    radial-gradient(ellipse 70% 55% at 40% 102%, rgba(25, 217, 180, 0.25), transparent 60%),
-    radial-gradient(circle 460px at 90% 95%, rgba(255, 101, 52, 0.18), transparent 60%),
-    linear-gradient(155deg, #DFD4F8 0%, #D8E4FC 32%, #E5D6F9 68%, #F2DFEC 100%);
+    radial-gradient(ellipse 85% 60% at 15% -8%, rgba(23, 107, 255, 0.35), transparent 62%),
+    radial-gradient(ellipse 80% 55% at 85% 8%, rgba(38, 217, 255, 0.30), transparent 58%),
+    radial-gradient(circle 580px at 0% 48%, rgba(36, 70, 200, 0.28), transparent 60%),
+    radial-gradient(circle 540px at 100% 55%, rgba(101, 69, 245, 0.20), transparent 60%),
+    radial-gradient(ellipse 70% 55% at 45% 102%, rgba(38, 217, 255, 0.25), transparent 60%),
+    linear-gradient(155deg, #D4E5FE 0%, #C4DCFD 35%, #D0E4FD 70%, #E3EAFC 100%);
 
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -104,6 +103,10 @@
 /* Custom aesthetic utility classes */
 .bg-gradient-brand {
   background: var(--gradient-brand);
+}
+
+.bg-gradient-pulse {
+  background: var(--gradient-pulse);
 }
 
 .bg-gradient-neon {
@@ -152,17 +155,17 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Soft card shadow with slight violet ambient */
+/* Soft card shadow with Blue Pulse ambient */
 .shadow-soft-card {
-  box-shadow: 0 6px 28px -4px rgba(105, 56, 245, 0.12), 0 2px 8px -1px rgba(40, 120, 255, 0.06);
+  box-shadow: 0 6px 28px -4px rgba(23, 107, 255, 0.14), 0 2px 8px -1px rgba(36, 70, 200, 0.08);
 }
 
 .shadow-soft-hover {
-  box-shadow: 0 14px 40px -4px rgba(105, 56, 245, 0.22), 0 6px 16px -2px rgba(40, 120, 255, 0.10);
+  box-shadow: 0 14px 40px -4px rgba(23, 107, 255, 0.24), 0 6px 16px -2px rgba(36, 70, 200, 0.12);
 }
 
 .shadow-colored-violet {
-  box-shadow: 0 8px 24px -4px rgba(105, 56, 245, 0.40);
+  box-shadow: 0 8px 24px -4px rgba(23, 107, 255, 0.40);
 }
 
 .shadow-colored-pink {
@@ -178,10 +181,10 @@
 }
 
 .shadow-colored-blue {
-  box-shadow: 0 8px 24px -4px rgba(40, 120, 255, 0.38);
+  box-shadow: 0 8px 24px -4px rgba(23, 107, 255, 0.40);
 }
 
-/* Custom scrollbars */
+/* Custom scrollbars with ice blue accents */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -190,9 +193,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #DDD4F4;
+  background: #BED7FA;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C4B5EC;
+  background: #94BEF7;
 }

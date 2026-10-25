@@ -4,17 +4,17 @@ import { Sparkles } from 'lucide-react';
 export const HomeGreetingBanner: React.FC = () => {
   return (
     <>
-      {/* Mobile Top Greeting Card with Rocket Illustration (Neon Candy Vibrant) */}
-      <div className="md:hidden relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#DDD0FB] via-[#EAE1FD] to-[#D5E5FE] p-5 border border-white/90 shadow-soft-card">
+      {/* Mobile Top Greeting Card with Rocket Illustration (Blue Pulse Palette) */}
+      <div className="md:hidden relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-5 border border-white/90 shadow-soft-card">
         <div className="relative z-10 max-w-[70%]">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 text-[#6938F5] text-[11px] font-bold mb-2 shadow-2xs border border-white/90">
-            <Sparkles className="w-3 5 h-3 text-[#FFD447]" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 text-[#176BFF] text-[11px] font-bold mb-2 shadow-2xs border border-[#BED7FA]">
+            <Sparkles className="w-3.5 h-3.5 text-[#26D9FF]" />
             <span>Bem-vindo ao Word Pocket</span>
           </div>
           <h1 className="text-xl font-extrabold text-[#160F2E] tracking-tight">
             Olá, Lucas! 👋
           </h1>
-          <p className="text-xs font-semibold text-[#52456F] mt-1 leading-snug">
+          <p className="text-xs font-semibold text-[#2446C8] mt-1 leading-snug">
             Que bom te ver por aqui! Seu inglês te leva mais longe.
           </p>
         </div>
@@ -28,9 +28,9 @@ export const HomeGreetingBanner: React.FC = () => {
             className="w-full h-full drop-shadow-md"
           >
             {/* Soft Pastel Clouds */}
-            <ellipse cx="60" cy="100" rx="36" ry="12" fill="#E2D7F8" />
-            <ellipse cx="40" cy="98" rx="20" ry="10" fill="#EDE5FC" />
-            <ellipse cx="80" cy="98" rx="22" ry="10" fill="#EDE5FC" />
+            <ellipse cx="60" cy="100" rx="36" ry="12" fill="#BED7FA" />
+            <ellipse cx="40" cy="98" rx="20" ry="10" fill="#D4E5FE" />
+            <ellipse cx="80" cy="98" rx="22" ry="10" fill="#D4E5FE" />
 
             {/* Rocket Body */}
             <g transform="rotate(-35 60 55)">
@@ -39,8 +39,8 @@ export const HomeGreetingBanner: React.FC = () => {
               <path d="M57 85 Q60 94 63 85 Z" fill="#FFE5F0" />
 
               {/* Wings */}
-              <path d="M42 66 C42 66 38 78 48 80 L52 70 Z" fill="#19D9B4" />
-              <path d="M78 66 C78 66 82 78 72 80 L68 70 Z" fill="#19D9B4" />
+              <path d="M42 66 C42 66 38 78 48 80 L52 70 Z" fill="#26D9FF" />
+              <path d="M78 66 C78 66 82 78 72 80 L68 70 Z" fill="#26D9FF" />
 
               {/* Main Fuselage */}
               <path
@@ -49,8 +49,8 @@ export const HomeGreetingBanner: React.FC = () => {
               />
 
               {/* Window */}
-              <circle cx="60" cy="44" r="7" fill="white" stroke="#6938F5" strokeWidth="2.5" />
-              <circle cx="60" cy="44" r="4.5" fill="#19D9B4" />
+              <circle cx="60" cy="44" r="7" fill="white" stroke="#176BFF" strokeWidth="2.5" />
+              <circle cx="60" cy="44" r="4.5" fill="#26D9FF" />
               <circle cx="58" cy="42" r="1.5" fill="white" />
 
               {/* Decorative stripes */}
@@ -58,9 +58,9 @@ export const HomeGreetingBanner: React.FC = () => {
             </g>
 
             {/* Sparkles / Stars */}
-            <circle cx="95" cy="25" r="2.5" fill="#FFD447" />
-            <path d="M22 45 L25 48 L22 51 L19 48 Z" fill="#6938F5" />
-            <circle cx="28" cy="20" r="1.5" fill="#19D9B4" />
+            <circle cx="95" cy="25" r="2.5" fill="#26D9FF" />
+            <path d="M22 45 L25 48 L22 51 L19 48 Z" fill="#176BFF" />
+            <circle cx="28" cy="20" r="1.5" fill="#2446C8" />
 
             <defs>
               <linearGradient
@@ -71,8 +71,8 @@ export const HomeGreetingBanner: React.FC = () => {
                 y2="82"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="#6938F5" />
-                <stop offset="1" stopColor="#A78BFA" />
+                <stop stopColor="#176BFF" />
+                <stop offset="1" stopColor="#26D9FF" />
               </linearGradient>
               <linearGradient
                 id="flameGrad"
@@ -90,18 +90,18 @@ export const HomeGreetingBanner: React.FC = () => {
         </div>
       </div>
 
-      {/* Desktop / Tablet Header Greeting Banner (Neon Candy Vibrant Landscape) */}
-      <div className="hidden md:block relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#DDD0FB] via-[#EAE1FD] to-[#D5E5FE] p-7 border border-white/90 shadow-soft-card">
+      {/* Desktop / Tablet Header Greeting Banner (Blue Pulse Landscape) */}
+      <div className="hidden md:block relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-7 border border-white/90 shadow-soft-card">
         <div className="flex items-center justify-between">
           <div className="max-w-xl space-y-2 z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 text-[#6938F5] text-xs font-bold border border-white/90 shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-[#FFD447]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 text-[#176BFF] text-xs font-bold border border-[#BED7FA] shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-[#26D9FF]" />
               <span>Painel de Aprendizagem Ativa</span>
             </div>
             <h1 className="text-3xl font-extrabold text-[#160F2E] tracking-tight">
               Olá, Lucas! 👋
             </h1>
-            <p className="text-sm text-[#52456F] font-medium leading-relaxed">
+            <p className="text-sm text-[#2446C8] font-medium leading-relaxed">
               Aprenda, explore e evolua no seu ritmo. Seu inglês te leva mais longe a cada consulta no Word Pocket.
             </p>
           </div>
@@ -109,7 +109,7 @@ export const HomeGreetingBanner: React.FC = () => {
           {/* Badge Sticker & Landscape SVG Art */}
           <div className="flex items-center gap-4 z-10">
             <div className="hidden lg:flex flex-col items-center justify-center bg-white/95 px-4 py-2.5 rounded-2xl border border-white/90 shadow-sm transform rotate-2">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#6938F5]">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#176BFF]">
                 Better English
               </span>
               <span className="text-xs font-black text-[#160F2E]">Bigger Dreams ✨</span>
