@@ -21,7 +21,7 @@
  */
 
 export interface PillarTheme {
-  readonly id: 'verbs' | 'practice' | 'translator' | 'vocab';
+  readonly id: 'verbs' | 'practice' | 'translator';
   readonly name: string;
   readonly primary: string;
   readonly dark: string;
@@ -70,18 +70,6 @@ export const THEME_TOKENS = {
       badgeText: 'text-[#176BFF]',
       gradient: 'linear-gradient(135deg, #176BFF 0%, #20A4FF 50%, #26D9FF 100%)',
       shadow: '0 8px 24px -4px rgba(23, 107, 255, 0.40)',
-    },
-    vocab: {
-      id: 'vocab',
-      name: 'Vocabulário',
-      primary: '#19D9B4',
-      dark: '#0A9B80',
-      subtle: '#DCF8F1',
-      border: '#B6F5E8',
-      badgeBg: 'bg-[#DCF8F1]',
-      badgeText: 'text-[#0A9B80]',
-      gradient: 'linear-gradient(135deg, #0BAE90 0%, #15C7A5 45%, #22E1BC 100%)',
-      shadow: '0 8px 24px -4px rgba(11, 174, 144, 0.40)',
     },
     translator: {
       id: 'translator',

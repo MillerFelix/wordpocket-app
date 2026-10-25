@@ -1,20 +1,11 @@
 import { vocabularyData } from '../data/vocabulary';
-import { VocabWord, WordCategory, PartOfSpeech } from '../types';
+import { VocabWord } from '../types';
 
 /**
- * Serviço de Acesso e Consulta ao Vocabulário do Word Pocket.
+ * Serviço de Consulta ao Vocabulário do Word Pocket.
  *
- * Arquitetura:
- * - Isola a base educacional de vocabulário.
- * - Centraliza buscas multissetoriais (por palavra, tradução, sentido, exemplos e sinônimos).
- * - Fornece métodos de filtro por classe gramatical e temas contextuais.
+ * Utilizado para resolução de termos e frases no Tradutor Rápido (100% offline).
  */
-
-export interface VocabFilterCriteria {
-  search?: string;
-  category?: WordCategory | 'all';
-  partOfSpeech?: PartOfSpeech | 'all';
-}
 
 export const vocabularyService = {
   /**
@@ -48,61 +39,7 @@ export const vocabularyService = {
   },
 
   /**
-   * Filtra termos conforme critérios de pesquisa, tema e classe gramatical.
-   */
-  filter(criteria: VocabFilterCriteria): VocabWord[] {
-    const { search = '', category = 'all', partOfSpeech = 'all' } = criteria;
-    const q = search.trim().toLowerCase();
-
-    return vocabularyData.filter((item: VocabWord) => {
-      if (category !== 'all' && item.category !== category) {
-        return false;
-      }
-
-      if (partOfSpeech !== 'all' && item.partOfSpeech !== partOfSpeech) {
-        return false;
-      }
-
-      if (!q) return true;
-
-      const matchesMain =
-        item.word.toLowerCase().includes(q) ||
-        item.translation.toLowerCase().includes(q) ||
-        item.meaning.toLowerCase().includes(q) ||
-        item.exampleEn.toLowerCase().includes(q) ||
-        item.examplePt.toLowerCase().includes(q);
-
-      const matchesSynonyms = item.synonyms?.some((s) => s.toLowerCase().includes(q));
-
-      const matchesSenses = item.senses?.some(
-        (sense) =>
-          sense.meaning.toLowerCase().includes(q) ||
-          sense.translation.toLowerCase().includes(q) ||
-          (sense.exampleEn && sense.exampleEn.toLowerCase().includes(q))
-      );
-
-      return matchesMain || matchesSynonyms || matchesSenses;
-    });
-  },
-
-  /**
-   * Busca rápida para a barra de pesquisa global da Home.
-   */
-  searchGlobal(query: string, maxResults = 4): VocabWord[] {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-
-    return vocabularyData
-      .filter((w) =>
-        w.word.toLowerCase().includes(q) ||
-        w.translation.toLowerCase().includes(q) ||
-        w.meaning.toLowerCase().includes(q)
-      )
-      .slice(0, maxResults);
-  },
-
-  /**
-   * Localiza um termo por tradução em português (tradução reversa).
+   * Localiza um termo por tradução em português (tradução reversa para tradutor).
    */
   findByTranslation(term: string): VocabWord | undefined {
     const normalized = term.trim().toLowerCase();

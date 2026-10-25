@@ -4,7 +4,6 @@ import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 import { HomeView } from './components/HomeView';
 import { IrregularVerbsView } from './components/IrregularVerbsView';
-import { VocabularyView } from './components/VocabularyView';
 import { PracticeView } from './components/practice/PracticeView';
 import { QuickTranslatorView } from './components/QuickTranslatorView';
 import { FavoritesView } from './components/FavoritesView';
@@ -83,10 +82,6 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
 
           {activeTab === 'verbs' && (
             <IrregularVerbsView initialSearch={pendingSearch} />
-          )}
-
-          {activeTab === 'vocab' && (
-            <VocabularyView initialSearch={pendingSearch} />
           )}
 
           {activeTab === 'practice' && (

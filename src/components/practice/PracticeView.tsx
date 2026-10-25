@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PracticeSkillId } from '../../types';
-import { getSkillConfig } from '../../data/practiceSkills';
+import { practiceService } from '../../services/practiceService';
 import { PracticeHub } from './PracticeHub';
 import { PracticeSkillView } from './PracticeSkillView';
 
@@ -28,7 +28,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ initialSkill = null 
   };
 
   if (selectedSkill) {
-    const config = getSkillConfig(selectedSkill);
+    const config = practiceService.getSkillById(selectedSkill);
     return (
       <PracticeSkillView
         skill={config}

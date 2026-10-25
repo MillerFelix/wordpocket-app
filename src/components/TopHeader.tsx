@@ -25,11 +25,6 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     subtitle: 'Desenvolvimento das 4 habilidades: Escuta, Fala, Leitura e Escrita',
     badge: '4 Habilidades'
   },
-  vocab: {
-    title: 'Praticar Inglês',
-    subtitle: 'Desenvolvimento das 4 habilidades: Escuta, Fala, Leitura e Escrita',
-    badge: '4 Habilidades'
-  },
   translator: {
     title: 'Tradutor Rápido',
     subtitle: 'Consulta e tradução imediata com inteligência contextual',
@@ -71,10 +66,6 @@ const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
     badge: 'bg-[#EDE8FD] text-[#6545F5] border-[#D9CEFC]'
   },
   practice: {
-    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
-    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
-  },
-  vocab: {
     dot: 'bg-[#176BFF] ring-[#176BFF]/20',
     badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
   },

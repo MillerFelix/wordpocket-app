@@ -23,7 +23,6 @@ interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   verbCount: number;
-  vocabCount?: number;
   practiceCount?: number;
 }
 
@@ -31,7 +30,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onTabChange,
   verbCount,
-  vocabCount: _vocabCount,
   practiceCount: _practiceCount
 }) => {
   const isOnline = useOnlineStatus();
@@ -135,7 +133,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <nav className="space-y-1.5" aria-label="Navegação Principal Desktop">
           {mainNavItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id || (item.id === 'practice' && activeTab === 'vocab');
+            const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}

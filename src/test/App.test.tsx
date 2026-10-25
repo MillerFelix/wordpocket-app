@@ -3,14 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 
 describe('Word Pocket Refined Interface Tests', () => {
-  it('renders brand Word Pocket and Home dashboard with greeting, global search, and 3 main feature cards', () => {
+  it('renders brand Word Pocket and Home dashboard with greeting and 3 main feature cards without global search', () => {
     render(<App />);
     const wordMatches = screen.getAllByText(/Word/i);
     expect(wordMatches.length).toBeGreaterThan(0);
     const pocketMatches = screen.getAllByText(/Pocket/i);
     expect(pocketMatches.length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Olá/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByPlaceholderText(/Buscar palavra, verbo ou tradução/i).length).toBeGreaterThan(0);
+    expect(screen.queryByPlaceholderText(/Buscar palavra, verbo ou tradução/i)).not.toBeInTheDocument();
     expect(screen.getAllByText(/Verbos Irregulares/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Praticar/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Tradutor/i).length).toBeGreaterThan(0);

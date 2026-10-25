@@ -93,23 +93,6 @@ export const verbsService = {
   },
 
   /**
-   * Busca rápida para a barra de pesquisa global da Home.
-   */
-  searchGlobal(query: string, maxResults = 4): IrregularVerb[] {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-
-    return irregularVerbs
-      .filter((v) =>
-        v.infinitive.toLowerCase().includes(q) ||
-        v.pastSimple.toLowerCase().includes(q) ||
-        v.pastParticiple.toLowerCase().includes(q) ||
-        v.translation.toLowerCase().includes(q)
-      )
-      .slice(0, maxResults);
-  },
-
-  /**
    * Localiza um verbo que corresponda a qualquer uma de suas formas conjugadas
    * (usado para suporte a tradução e identificação contextual).
    */

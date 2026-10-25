@@ -1,4 +1,4 @@
-export type TabType = 'home' | 'verbs' | 'practice' | 'translator' | 'favorites' | 'history' | 'settings' | 'vocab' | 'profile';
+export type TabType = 'home' | 'verbs' | 'practice' | 'translator' | 'favorites' | 'history' | 'settings' | 'profile';
 
 export * from './auth';
 export * from './progress';
@@ -36,22 +36,6 @@ export interface IrregularVerb {
   group?: VerbGroup;
 }
 
-export type WordCategory = 
-  | 'cotidiano' 
-  | 'trabalho' 
-  | 'viagem' 
-  | 'tecnologia' 
-  | 'expressoes' 
-  | 'academico';
-
-export type PartOfSpeech = 
-  | 'substantivo' 
-  | 'verbo' 
-  | 'adjetivo' 
-  | 'adverbio' 
-  | 'expressao' 
-  | 'phrasal-verb';
-
 export interface WordSense {
   meaning: string;
   translation: string;
@@ -64,11 +48,11 @@ export interface VocabWord {
   word: string;
   phonetic?: string;
   translation: string;
-  partOfSpeech: PartOfSpeech;
-  category: WordCategory;
   meaning: string;
   exampleEn: string;
   examplePt: string;
+  partOfSpeech?: string;
+  category?: string;
   senses?: WordSense[];
   synonyms?: string[];
 }

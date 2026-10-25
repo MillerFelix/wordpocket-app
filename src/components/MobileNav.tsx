@@ -19,7 +19,6 @@ interface MobileNavProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   verbCount: number;
-  vocabCount?: number;
   practiceCount?: number;
 }
 
@@ -27,7 +26,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   activeTab,
   onTabChange,
   verbCount: _verbCount,
-  vocabCount: _vocabCount,
   practiceCount: _practiceCount
 }) => {
   const isOnline = useOnlineStatus();
@@ -160,7 +158,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         <div className="grid grid-cols-4 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = activeTab === tab.id || (tab.id === 'practice' && activeTab === 'vocab');
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}

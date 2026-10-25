@@ -65,9 +65,10 @@ describe('Data Services Layer Architectural Tests', () => {
       expect(ptMatch?.word.toLowerCase()).toBe('resilient');
     });
 
-    it('filters vocab by search query and category', () => {
-      const techResults = vocabularyService.filter({ category: 'tecnologia' });
-      expect(techResults.every((w) => w.category === 'tecnologia')).toBe(true);
+    it('finds vocab by unique id', () => {
+      const item = vocabularyService.getById('resilient');
+      expect(item).toBeDefined();
+      expect(item?.word).toBe('Resilient');
     });
   });
 
