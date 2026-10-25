@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { speakEnglish, isSpeechSupported, formatTextForSpeech } from '../utils/speech';
+import { speakText, isSpeechSupported, formatTextForSpeech } from '../utils/speech';
 
 interface PronounceButtonProps {
   text: string;
   className?: string;
   size?: 'xs' | 'sm' | 'md';
   showLabel?: boolean;
+  lang?: 'en' | 'pt';
 }
 
 export const PronounceButton: React.FC<PronounceButtonProps> = ({
   text,
   className = '',
   size = 'sm',
-  showLabel = false
+  showLabel = false,
+  lang = 'en'
 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
@@ -29,7 +31,7 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
       return;
     }
 
-    const result = speakEnglish(text);
+    const result = speakText(text, lang);
     if (!result.success) {
       setErrorNotice(result.message || 'Falha na pronúncia');
       setTimeout(() => setErrorNotice(null), 2500);

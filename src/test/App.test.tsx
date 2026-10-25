@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 
@@ -51,23 +51,29 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(screen.getByRole('heading', { name: 'Insightful' })).toBeInTheDocument();
   });
 
-  it('navigates to quick translator tab and supports paste, typing, and translate button', () => {
-    window.open = vi.fn();
+  it('navigates to quick translator tab, supports typing, translation and language inversion on same screen', async () => {
     render(<App />);
     const translatorButtons = screen.getAllByRole('button', { name: /Tradutor/i });
     fireEvent.click(translatorButtons[0]);
 
-    expect(screen.getByText(/Texto para Tradução/i)).toBeInTheDocument();
-    const textarea = screen.getByPlaceholderText(/Digite ou cole qualquer palavra/i);
-    fireEvent.change(textarea, { target: { value: 'Hello world' } });
+    expect(screen.getByRole('heading', { level: 1, name: 'Tradutor Rápido' })).toBeInTheDocument();
+    expect(screen.getByText('Inglês ⇄ Português')).toBeInTheDocument();
 
-    const translateBtn = screen.getByText(/Abrir Tradução no Google Tradutor/i);
+    const textarea = screen.getByPlaceholderText(/Digite ou cole a palavra ou frase em inglês/i);
+    expect(textarea).toBeInTheDocument();
+
+    // Type a word and translate
+    fireEvent.change(textarea, { target: { value: 'break' } });
+    const translateBtn = screen.getByRole('button', { name: /Traduzir/i });
     fireEvent.click(translateBtn);
 
-    expect(window.open).toHaveBeenCalledWith(
-      expect.stringContaining('translate.google.com'),
-      '_blank',
-      'noopener,noreferrer'
-    );
+    // Should display result directly on the same screen
+    expect(await screen.findByText(/Tradução em Português/i)).toBeInTheDocument();
+    expect(screen.getByText(/quebrar/i)).toBeInTheDocument();
+
+    // Test invert direction
+    const invertBtn = screen.getByTitle(/Inverter direção da tradução/i);
+    fireEvent.click(invertBtn);
+    expect(screen.getByText(/Tradução em Inglês/i)).toBeInTheDocument();
   });
 });

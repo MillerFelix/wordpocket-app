@@ -40,6 +40,19 @@ export function getEnglishVoice(): SpeechSynthesisVoice | null {
   return null;
 }
 
+export function getPortugueseVoice(): SpeechSynthesisVoice | null {
+  if (!isSpeechSupported()) return null;
+  const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
+  
+  const ptBr = voices.find(v => v.lang === 'pt-BR');
+  if (ptBr) return ptBr;
+
+  const anyPt = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
+  if (anyPt) return anyPt;
+
+  return null;
+}
+
 /**
  * Normalizes text for natural English speech synthesis:
  * - Replaces alternative slashes (e.g. "was / were", "abode/abided") with natural "or"
@@ -127,4 +140,45 @@ export function speakEnglish(text: string): SpeechResult {
       message: 'Não foi possível reproduzir a pronúncia no momento.'
     };
   }
+}
+
+export function speakPortuguese(text: string): SpeechResult {
+  if (!isSpeechSupported()) {
+    return {
+      success: false,
+      message: 'Síntese de voz não é suportada neste navegador ou dispositivo.'
+    };
+  }
+
+  const cleanText = text.trim();
+  if (!cleanText) {
+    return {
+      success: false,
+      message: 'Texto vazio para pronúncia.'
+    };
+  }
+
+  try {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    const voice = getPortugueseVoice();
+    if (voice) {
+      utterance.voice = voice;
+    }
+    utterance.lang = 'pt-BR';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+
+    window.speechSynthesis.speak(utterance);
+    return { success: true };
+  } catch {
+    return {
+      success: false,
+      message: 'Não foi possível reproduzir a pronúncia no momento.'
+    };
+  }
+}
+
+export function speakText(text: string, lang: 'en' | 'pt' = 'en'): SpeechResult {
+  return lang === 'pt' ? speakPortuguese(text) : speakEnglish(text);
 }
