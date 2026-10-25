@@ -18,6 +18,9 @@ import { PronounceButton } from '../PronounceButton';
 import { PracticeExerciseRunner } from './PracticeExerciseRunner';
 import { WritingActivitiesHub } from './writing/WritingActivitiesHub';
 import { WritingActivityRunner } from './writing/WritingActivityRunner';
+import { ReadingActivitiesHub } from './reading/ReadingActivitiesHub';
+import { ReadingActivityRunner } from './reading/ReadingActivityRunner';
+import { ReadingQuestion } from '../../types/activity';
 import { Play } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -43,6 +46,8 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
   const [isPracticing, setIsPracticing] = useState(false);
   const [activeWritingActivity, setActiveWritingActivity] = useState<Activity | null>(null);
   const [writingLevel, setWritingLevel] = useState<ActivityLevel | 'all'>('all');
+  const [activeReadingActivity, setActiveReadingActivity] = useState<Activity<ReadingQuestion> | null>(null);
+  const [readingLevel, setReadingLevel] = useState<ActivityLevel | 'all'>('all');
   const { isVisitor, openVisitorPrompt } = useAuth();
   const Icon = SKILL_ICONS[skill.id];
   const otherSkills = practiceService.getAllSkills().filter((s) => s.id !== skill.id);
@@ -68,6 +73,17 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
         <WritingActivityRunner
           activity={activeWritingActivity}
           onExit={() => setActiveWritingActivity(null)}
+        />
+      </div>
+    );
+  }
+
+  if (skill.id === 'reading' && activeReadingActivity) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-300">
+        <ReadingActivityRunner
+          activity={activeReadingActivity}
+          onExit={() => setActiveReadingActivity(null)}
         />
       </div>
     );
@@ -148,6 +164,20 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
               );
             }
             setActiveWritingActivity(activity);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      ) : skill.id === 'reading' ? (
+        <ReadingActivitiesHub
+          selectedLevel={readingLevel}
+          onLevelChange={setReadingLevel}
+          onSelectActivity={(activity) => {
+            if (isVisitor) {
+              openVisitorPrompt(
+                'Você está prestes a iniciar uma atividade de Reading. Entre ou crie uma conta para salvar suas notas no seu perfil, ou continue sem salvar.'
+              );
+            }
+            setActiveReadingActivity(activity);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />

@@ -1,4 +1,4 @@
-import { Activity, ActivityGradingResult, QuestionGrading, WritingQuestion } from '../types/activity';
+import { Activity, ActivityGradingResult, QuestionGrading, WritingQuestion, ReadingQuestion } from '../types/activity';
 
 /**
  * Normaliza textos para comparação determinística justa
@@ -164,7 +164,37 @@ function gradeOpenPrompt(
 }
 
 /**
- * Motor central de correção para qualquer atividade padronizada de Writing
+ * Corrige uma questão de múltipla escolha (Reading / Compreensão de texto)
+ */
+function gradeMultipleChoice(
+  q: ReadingQuestion,
+  userAnswer: string
+): QuestionGrading {
+  const cleanUser = (userAnswer || '').trim().toUpperCase();
+  const cleanExpected = (q.correctOptionId || '').trim().toUpperCase();
+  const isMatch = cleanUser.length > 0 && cleanUser === cleanExpected;
+
+  const correctOption = q.options.find((o) => o.id.toUpperCase() === cleanExpected);
+  const userOption = q.options.find((o) => o.id.toUpperCase() === cleanUser);
+
+  const expectedStr = correctOption ? `(${correctOption.id}) ${correctOption.text}` : cleanExpected;
+  const userStr = userOption ? `(${userOption.id}) ${userOption.text}` : (userAnswer || 'Não respondida');
+
+  return {
+    questionId: q.id,
+    isCorrect: isMatch,
+    scorePercent: isMatch ? 100 : 0,
+    userAnswer: userStr,
+    expectedAnswer: expectedStr,
+    feedback: isMatch
+      ? 'Correto! Excelente identificação e interpretação da alternativa.'
+      : `Incorreto. A alternativa correta era a (${cleanExpected}): "${correctOption?.text || ''}".`,
+    explanation: q.explanation
+  };
+}
+
+/**
+ * Motor central de correção para qualquer atividade padronizada (Writing, Reading, etc.)
  */
 export function gradeActivity(
   activity: Activity,
@@ -175,13 +205,15 @@ export function gradeActivity(
 
     switch (q.type) {
       case 'fill_blank':
-        return gradeFillBlank(q, userAns);
+        return gradeFillBlank(q as Extract<WritingQuestion, { type: 'fill_blank' }>, userAns);
       case 'sentence_order':
-        return gradeSentenceOrder(q, userAns);
+        return gradeSentenceOrder(q as Extract<WritingQuestion, { type: 'sentence_order' }>, userAns);
       case 'find_fix_error':
-        return gradeFindFixError(q, userAns);
+        return gradeFindFixError(q as Extract<WritingQuestion, { type: 'find_fix_error' }>, userAns);
       case 'open_prompt':
-        return gradeOpenPrompt(q, userAns);
+        return gradeOpenPrompt(q as Extract<WritingQuestion, { type: 'open_prompt' }>, userAns);
+      case 'multiple_choice':
+        return gradeMultipleChoice(q as ReadingQuestion, userAns);
       default:
         return {
           questionId: (q as any).id,

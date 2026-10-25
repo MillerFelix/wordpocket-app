@@ -15,9 +15,18 @@ export type WritingActivityType =
   | 'open_prompt';       // Escreva sua resposta
 
 /**
+ * Modalidades de atividades específicas para o pilar de Reading (Leitura)
+ */
+export type ReadingActivityType =
+  | 'read_comprehend'    // Leia e compreenda
+  | 'context_clue'       // Descubra pelo contexto
+  | 'message_interpret'  // Interprete a mensagem
+  | 'main_idea';         // Identifique a ideia principal
+
+/**
  * Identificador universal do tipo de atividade (extensível aos 4 pilares)
  */
-export type ActivityType = WritingActivityType | string;
+export type ActivityType = WritingActivityType | ReadingActivityType | string;
 
 /**
  * Estrutura base para qualquer questão nos 4 pilares
@@ -97,6 +106,45 @@ export interface OpenPromptQuestion extends BaseQuestion {
 }
 
 /**
+ * Opção de múltipla escolha para atividades de leitura e interpretação
+ */
+export interface MultipleChoiceOption {
+  id: string; // Ex: 'A', 'B', 'C', 'D'
+  text: string;
+}
+
+/**
+ * Questão de múltipla escolha para o pilar de Reading (todos os 4 formatos)
+ */
+export interface ReadingQuestion extends BaseQuestion {
+  type: 'multiple_choice';
+  questionText: string;
+  options: MultipleChoiceOption[];
+  correctOptionId: string; // Ex: 'A'
+}
+
+/**
+ * Item de vocabulário ou glossário do texto
+ */
+export interface GlossaryItem {
+  word: string;
+  translation: string;
+  context?: string;
+}
+
+/**
+ * Estrutura do texto ou mensagem para atividades de Reading
+ */
+export interface ReadingPassage {
+  title?: string;
+  content: string;
+  genre?: string; // Ex: 'E-mail de Trabalho', 'Aviso no Aeroporto', 'Mensagem de WhatsApp', 'Artigo'
+  estimatedReadTimeMinutes?: number;
+  glossary?: GlossaryItem[];
+  passageTranslation?: string;
+}
+
+/**
  * União de todas as questões suportadas pelo Writing
  */
 export type WritingQuestion = 
@@ -106,18 +154,24 @@ export type WritingQuestion =
   | OpenPromptQuestion;
 
 /**
- * Contrato de uma atividade educacional padronizada
+ * União universal de tipos de questões nos pilares
  */
-export interface Activity<TQuestion = WritingQuestion> {
+export type AnyQuestion = WritingQuestion | ReadingQuestion;
+
+/**
+ * Contrato de uma atividade educacional padronizada (Writing, Reading, etc.)
+ */
+export interface Activity<TQuestion = AnyQuestion> {
   id: string;
   pillar: PracticeSkillId;
-  type: WritingActivityType;
+  type: ActivityType;
   title: string;
   description: string;
   level: ActivityLevel;
   topic: string;
   objective: string;
   instructions: string;
+  readingPassage?: ReadingPassage;
   questions: TQuestion[];
   maxScore: number;
   version: number;
@@ -143,7 +197,7 @@ export interface ActivityGradingResult {
   activityId: string;
   pillar: PracticeSkillId;
   level: ActivityLevel;
-  type: WritingActivityType;
+  type: ActivityType;
   score: number; // 0 a 100%
   earnedPoints: number;
   totalPoints: number;
@@ -160,7 +214,7 @@ export interface UserActivityResult {
   activityId: string;
   pillar: PracticeSkillId;
   level: ActivityLevel;
-  type: WritingActivityType;
+  type: ActivityType;
   score: number; // 0 a 100%
   earnedPoints: number;
   totalPoints: number;

@@ -116,7 +116,7 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
       {/* Activities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {activities.map((activity) => {
-          const typeMeta = TYPE_CONFIG[activity.type] || TYPE_CONFIG.fill_blank;
+          const typeMeta = TYPE_CONFIG[activity.type as WritingActivityType] || TYPE_CONFIG.fill_blank;
           const TypeIcon = typeMeta.icon;
           const lastAttempt = latestResults[activity.id];
           const hasAttempted = Boolean(lastAttempt);
