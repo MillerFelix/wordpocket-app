@@ -14,6 +14,10 @@ import { PracticeDifficulty, PracticeSkillConfig, PracticeSkillId } from '../../
 import { PRACTICE_SKILLS } from '../../data/practiceSkills';
 import { PronounceButton } from '../PronounceButton';
 
+import { PracticeExerciseRunner } from './PracticeExerciseRunner';
+import { Play } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+
 interface PracticeSkillViewProps {
   skill: PracticeSkillConfig;
   onBack: () => void;
@@ -33,14 +37,46 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
   onSelectOtherSkill
 }) => {
   const [difficulty, setDifficulty] = useState<PracticeDifficulty>('easy');
+  const [isPracticing, setIsPracticing] = useState(false);
+  const { isVisitor, openVisitorPrompt } = useAuth();
   const Icon = SKILL_ICONS[skill.id];
   const otherSkills = PRACTICE_SKILLS.filter((s) => s.id !== skill.id);
+
+  const handleStartPractice = () => {
+    if (isVisitor) {
+      openVisitorPrompt(
+        `Você está prestes a iniciar uma atividade de ${skill.namePt}. Entre ou crie uma conta para salvar suas notas e acompanhar sua evolução, ou continue sem salvar.`
+      );
+    }
+    setIsPracticing(true);
+  };
 
   const difficultyLevels: { id: PracticeDifficulty; title: string; badge: string }[] = [
     { id: 'easy', title: 'Fácil', badge: 'Iniciante (A1–A2)' },
     { id: 'medium', title: 'Médio', badge: 'Intermediário (B1–B2)' },
     { id: 'hard', title: 'Difícil', badge: 'Avançado (C1–C2)' }
   ];
+
+  if (isPracticing) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-300">
+        <button
+          type="button"
+          onClick={() => setIsPracticing(false)}
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/80 hover:bg-white text-[#160F2E] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4 text-[#176BFF]" />
+          <span>Voltar para Trilha de {skill.namePt}</span>
+        </button>
+
+        <PracticeExerciseRunner
+          skill={skill}
+          difficulty={difficulty}
+          onFinish={() => setIsPracticing(false)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
@@ -177,10 +213,34 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
 
               <div className="pt-2 flex items-center gap-1.5 text-[11px] text-[#52456F] font-medium border-t border-slate-100">
                 <CheckCircle className="w-3.5 h-3.5 text-[#0A9B80]" />
-                <span>Estrutura preparada</span>
+                <span>Atividade disponível</span>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Interactive Practice Launch Card */}
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-50 to-white border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#176BFF]" />
+              <strong className="text-sm font-extrabold text-[#160F2E]">
+                Sessão de Prática Avaliada — {skill.namePt}
+              </strong>
+            </div>
+            <p className="text-xs text-[#52456F] font-medium">
+              Responda a questões objetivas no nível {difficultyLevels.find((d) => d.id === difficulty)?.title} com áudio nativo e feedback instantâneo.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleStartPractice}
+            className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-gradient-brand text-white font-extrabold text-xs sm:text-sm shadow-colored-blue hover:opacity-95 transition active:scale-[0.99] shrink-0 cursor-pointer"
+          >
+            <Play className="w-4 h-4 fill-white" />
+            <span>Iniciar Prática</span>
+          </button>
         </div>
 
         {/* Interactive Audio Demonstration for Listening & Speaking */}

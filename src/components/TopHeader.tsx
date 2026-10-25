@@ -1,7 +1,8 @@
 import React from 'react';
-import { Bell, Wifi, WifiOff } from 'lucide-react';
+import { Bell, Wifi, WifiOff, LogIn } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { useAuth } from '../contexts/AuthContext';
 
 interface TopHeaderProps {
   activeTab?: TabType;
@@ -48,11 +49,20 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     title: 'Configurações & Guia',
     subtitle: 'Preferências do aplicativo, voz de áudio e informações do sistema',
     badge: 'Ajustes'
+  },
+  profile: {
+    title: 'Perfil Pessoal',
+    subtitle: 'Gerencie sua conta, progresso sincronizado e histórico',
+    badge: 'Conta'
   }
 };
 
 const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
   home: {
+    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
+    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+  },
+  profile: {
     dot: 'bg-[#176BFF] ring-[#176BFF]/20',
     badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
   },
@@ -88,11 +98,14 @@ const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
 
 export const TopHeader: React.FC<TopHeaderProps> = ({
   activeTab = 'home',
-  onNavigate: _onNavigate
+  onNavigate
 }) => {
   const isOnline = useOnlineStatus();
+  const { user, profile, openAuthModal } = useAuth();
   const currentTabInfo = TAB_TITLES[activeTab] || TAB_TITLES.home;
   const currentTabTheme = TAB_THEMES[activeTab] || TAB_THEMES.home;
+
+  const initialLetter = (profile?.displayName || user?.displayName || user?.email || 'U').charAt(0).toUpperCase();
 
   return (
     <header className="hidden lg:flex items-center justify-between py-3.5 px-8 border-b border-white/80 bg-[#F0F6FF]/75 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(23,107,255,0.06)]">
@@ -145,22 +158,42 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#176BFF]" />
         </button>
 
-        {/* Profile Avatar with Blue Pulse colors */}
+        {/* Profile Avatar or Visitor Login */}
         <div className="flex items-center gap-2.5 pl-3 border-l border-white/80">
-          <div className="relative w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs">
-            <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-black text-sm text-[#176BFF]">
-              L
+          {user ? (
+            <div 
+              onClick={() => onNavigate('profile')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && onNavigate('profile')}
+              className="flex items-center gap-2.5 cursor-pointer group"
+              title="Acessar Perfil"
+            >
+              <div className="relative w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 shadow-xs group-hover:scale-105 transition-transform">
+                <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-black text-sm text-[#176BFF]">
+                  {initialLetter}
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#26D9FF] ring-2 ring-white" />
+              </div>
+              <div className="hidden xl:block text-left">
+                <p className="text-xs font-extrabold text-[#160F2E] leading-tight group-hover:text-[#176BFF] transition">
+                  {profile?.displayName || user.displayName || user.email?.split('@')[0]}
+                </p>
+                <p className="text-[10px] font-semibold text-[#52456F]">
+                  Conta Conectada
+                </p>
+              </div>
             </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#26D9FF] ring-2 ring-white" />
-          </div>
-          <div className="hidden xl:block text-left">
-            <p className="text-xs font-extrabold text-[#160F2E] leading-tight">
-              Lucas Silva
-            </p>
-            <p className="text-[10px] font-semibold text-[#52456F]">
-              Nível Intermediário
-            </p>
-          </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openAuthModal('login')}
+              className="inline-flex items-center gap-2 py-2 px-3.5 rounded-2xl bg-gradient-brand text-white font-extrabold text-xs shadow-colored-blue hover:opacity-95 transition active:scale-95 cursor-pointer"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Entrar</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

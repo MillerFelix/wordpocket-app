@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Bloqueio padrão para todas as coleções não explicitamente liberadas
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Regras para a coleção 'users' e suas subcoleções
+    // Cada usuário tem acesso EXCLUSIVO e irrestrito apenas aos seus próprios documentos
+    match /users/{userId} {
+      // Leitura e escrita do documento de perfil do próprio usuário
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Subcoleção de progresso consolidado das 4 habilidades (listening, speaking, reading, writing)
+      match /progress/{skillId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Subcoleção de histórico de tentativas de atividades
+      match /attempts/{attemptId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Subcoleção de favoritos sincronizados (verbos e vocabulário)
+      match /favorites/{favoriteType} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Subcoleções futuras (conquistas, metas, preferências)
+      match /{subcollection}/{docId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}

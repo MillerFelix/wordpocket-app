@@ -6,12 +6,14 @@ import {
   Languages, 
   Wifi, 
   WifiOff, 
-  Download 
+  Download,
+  LogIn
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { usePwaInstall } from '../hooks/usePwaInstall';
 import { WordPocketLogo } from './brand/WordPocketLogo';
+import { useAuth } from '../contexts/AuthContext';
 
 interface MobileNavProps {
   activeTab: TabType;
@@ -30,6 +32,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
+  const { user, profile, openAuthModal } = useAuth();
+  const initialLetter = (profile?.displayName || user?.displayName || user?.email || 'U').charAt(0).toUpperCase();
 
   const handleInstallClick = async () => {
     await promptInstall();
@@ -122,13 +126,28 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               </button>
             )}
 
-            {/* Profile Avatar with Blue Pulse colors */}
-            <div className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-extrabold text-[11px] text-[#176BFF]">
-                L
+            {/* Profile Avatar or Visitor Login */}
+            {user ? (
+              <div 
+                onClick={() => onTabChange('profile')}
+                className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs active:scale-95 transition"
+                title="Acessar Perfil"
+              >
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-extrabold text-[11px] text-[#176BFF]">
+                  {initialLetter}
+                </div>
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#26D9FF] ring-1 ring-white" />
               </div>
-              <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#26D9FF] ring-1 ring-white" />
-            </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => openAuthModal('login')}
+                className="inline-flex items-center gap-1 bg-white hover:bg-slate-100 text-[#176BFF] border border-[#BED7FA] text-[10px] font-bold px-2 py-1 rounded-lg shadow-2xs active:scale-95 transition cursor-pointer"
+              >
+                <LogIn className="w-2.5 h-2.5" />
+                <span>Entrar</span>
+              </button>
+            )}
           </div>
         </div>
       </header>

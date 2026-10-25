@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export interface UseFavoritesResult {
   favorites: Set<string>;
@@ -26,6 +26,25 @@ export function useFavorites(
       return new Set(defaultItems);
     }
   });
+
+  // Re-sincroniza estado quando ocorre merge de favoritos no login
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handleSyncUpdate = () => {
+      try {
+        const saved = localStorage.getItem(storageKey);
+        if (saved) {
+          setFavorites(new Set(JSON.parse(saved)));
+        }
+      } catch {
+        // Ignora
+      }
+    };
+    window.addEventListener('wordpocket-favorites-updated', handleSyncUpdate);
+    return () => {
+      window.removeEventListener('wordpocket-favorites-updated', handleSyncUpdate);
+    };
+  }, [storageKey]);
 
   const persist = useCallback(
     (nextSet: Set<string>) => {

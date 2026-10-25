@@ -12,6 +12,9 @@ import {
 import { PracticeSkillId } from '../../types';
 import { PRACTICE_SKILLS } from '../../data/practiceSkills';
 import { PracticeSkillCard } from './PracticeSkillCard';
+import { useAuth } from '../../contexts/AuthContext';
+import { getUserSkillProgress } from '../../services/progressService';
+import { SkillProgress } from '../../types/progress';
 
 interface PracticeHubProps {
   onSelectSkill: (skillId: PracticeSkillId) => void;
@@ -25,6 +28,14 @@ const SKILL_ICONS_SMALL: Record<PracticeSkillId, React.ElementType> = {
 };
 
 export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
+  const { user } = useAuth();
+  const [skillProgress, setSkillProgress] = React.useState<Record<PracticeSkillId, SkillProgress> | null>(null);
+
+  React.useEffect(() => {
+    if (user) {
+      getUserSkillProgress(user.uid).then(setSkillProgress).catch(() => {});
+    }
+  }, [user]);
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* Page Header */}
@@ -113,7 +124,9 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
                     <Icon className="w-3.5 h-3.5" />
                   </div>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-[#52456F]">
-                    Pronto
+                    {skillProgress?.[skill.id]?.completedActivitiesCount
+                      ? `${skillProgress[skill.id].completedActivitiesCount} feitas`
+                      : 'Pronto'}
                   </span>
                 </div>
 

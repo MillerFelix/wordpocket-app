@@ -17,11 +17,11 @@ describe('TopHeader Component Tests', () => {
     expect(screen.queryByPlaceholderText(/Buscar/i)).not.toBeInTheDocument();
   });
 
-  it('renders network connection status and profile avatar', () => {
+  it('renders network connection status and visitor login action', () => {
     const handleNavigate = vi.fn();
     render(<TopHeader activeTab="home" onNavigate={handleNavigate} />);
 
     expect(screen.getByText(/Conectado|Modo Offline/i)).toBeInTheDocument();
-    expect(screen.getByText(/Lucas Silva/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Entrar/i })).toBeInTheDocument();
   });
 });

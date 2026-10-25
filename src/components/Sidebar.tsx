@@ -11,7 +11,8 @@ import {
   Wifi, 
   WifiOff, 
   Sparkles, 
-  ArrowRight
+  ArrowRight,
+  User
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
@@ -100,6 +101,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Configurações',
       icon: Settings,
       iconColor: 'text-[#2446C8]'
+    },
+    {
+      id: 'profile' as TabType,
+      label: 'Perfil',
+      icon: User,
+      iconColor: 'text-[#176BFF]'
     }
   ];
 

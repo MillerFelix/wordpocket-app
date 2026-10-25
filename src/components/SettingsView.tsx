@@ -1,7 +1,9 @@
 import React from 'react';
-import { Settings, ShieldCheck, Volume2, Smartphone } from 'lucide-react';
+import { Settings, ShieldCheck, Volume2, Smartphone, User as UserIcon, HelpCircle } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export const SettingsView: React.FC = () => {
+  const { user, signOut, openAuthModal, openOnboarding } = useAuth();
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="flex items-start gap-3.5 pb-1">
@@ -76,6 +78,51 @@ export const SettingsView: React.FC = () => {
               </div>
               <ShieldCheck className="w-4 h-4 text-[#0A9B80]" />
             </div>
+          </div>
+        </div>
+
+        {/* Conta & Onboarding */}
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-white/90 shadow-soft-card space-y-4 md:col-span-2">
+          <h2 className="text-sm font-extrabold text-[#160F2E] flex items-center gap-2">
+            <UserIcon className="w-4 h-4 text-[#176BFF]" />
+            Conta & Guia Inicial
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-[#52456F]">
+            <div className="flex items-center justify-between p-3.5 rounded-2xl bg-white/70 border border-white/80 shadow-2xs">
+              <div>
+                <strong className="text-[#160F2E] block font-bold">Estado da sessão</strong>
+                <span>{user ? `Conectado como ${user.email}` : 'Navegando no modo visitante'}</span>
+              </div>
+              {user ? (
+                <button
+                  type="button"
+                  onClick={signOut}
+                  className="text-xs font-bold text-[#F52E91] hover:underline cursor-pointer"
+                >
+                  Sair
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal('login')}
+                  className="text-xs font-bold text-[#176BFF] hover:underline cursor-pointer"
+                >
+                  Entrar
+                </button>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={openOnboarding}
+              className="flex items-center justify-between p-3.5 rounded-2xl bg-white/70 hover:bg-white border border-white/80 shadow-2xs transition text-left cursor-pointer group"
+            >
+              <div>
+                <strong className="text-[#160F2E] block font-bold">Tutorial de Boas-Vindas</strong>
+                <span>Rever apresentação das 4 habilidades e do desenvolvedor</span>
+              </div>
+              <HelpCircle className="w-4 h-4 text-[#176BFF] group-hover:scale-110 transition-transform shrink-0" />
+            </button>
           </div>
         </div>
       </div>

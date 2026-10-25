@@ -1,7 +1,13 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const HomeGreetingBanner: React.FC = () => {
+  const { user, profile } = useAuth();
+  const rawName = profile?.displayName || user?.displayName || user?.email?.split('@')[0];
+  const firstName = rawName ? rawName.split(' ')[0] : null;
+  const greetingTitle = firstName ? `Olá, ${firstName}! 👋` : 'Olá! Bem-vindo ao Word Pocket 👋';
+
   return (
     <>
       {/* Mobile Top Greeting Card with Rocket Illustration (Blue Pulse Palette) */}
@@ -12,7 +18,7 @@ export const HomeGreetingBanner: React.FC = () => {
             <span>Bem-vindo ao Word Pocket</span>
           </div>
           <h1 className="text-xl font-extrabold text-[#160F2E] tracking-tight">
-            Olá, Lucas! 👋
+            {greetingTitle}
           </h1>
           <p className="text-xs font-semibold text-[#52456F] mt-1 leading-snug">
             Que bom te ver por aqui! Seu inglês te leva mais longe.
@@ -99,7 +105,7 @@ export const HomeGreetingBanner: React.FC = () => {
               <span>Painel de Aprendizagem Ativa</span>
             </div>
             <h1 className="text-3xl font-extrabold text-[#160F2E] tracking-tight">
-              Olá, Lucas! 👋
+              {greetingTitle}
             </h1>
             <p className="text-sm text-[#52456F] font-medium leading-relaxed">
               Aprenda, explore e evolua no seu ritmo. Seu inglês te leva mais longe a cada consulta no Word Pocket.

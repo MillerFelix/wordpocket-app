@@ -8,6 +8,11 @@ import { PracticeView } from './components/practice/PracticeView';
 import { QuickTranslatorView } from './components/QuickTranslatorView';
 import { FavoritesView } from './components/FavoritesView';
 import { SettingsView } from './components/SettingsView';
+import { UserProfileView } from './components/profile/UserProfileView';
+import { AuthModal } from './components/auth/AuthModal';
+import { VisitorPromptModal } from './components/auth/VisitorPromptModal';
+import { OnboardingModal } from './components/onboarding/OnboardingModal';
+import { AuthProvider } from './contexts/AuthContext';
 import { TabType } from './types';
 import { irregularVerbs } from './data/irregularVerbs';
 import { PRACTICE_SKILLS } from './data/practiceSkills';
@@ -16,7 +21,7 @@ interface AppProps {
   initialTab?: TabType;
 }
 
-export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
+const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [pendingSearch, setPendingSearch] = useState<string>('');
 
@@ -95,7 +100,16 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
           {activeTab === 'settings' && (
             <SettingsView />
           )}
+
+          {activeTab === 'profile' && (
+            <UserProfileView onNavigate={handleNavigate} />
+          )}
         </main>
+
+        {/* Global Modals for Auth, Visitor Prompt & Onboarding */}
+        <AuthModal />
+        <VisitorPromptModal />
+        <OnboardingModal />
 
         {/* Desktop Footer */}
         <footer className="hidden lg:block border-t border-white/80 bg-white/60 backdrop-blur-xl py-4 px-8 text-xs text-[#52456F]">
@@ -104,7 +118,7 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
               <strong className="text-[#160F2E]">Word Pocket</strong> — Identidade Visual Neon Candy Vibrant & Guia Inteligente de Inglês.
             </p>
             <p className="font-bold text-[#6938F5]">
-              100% Offline • Sem Backend • PWA Nativo
+              100% Offline • Sem Backend Próprio • PWA Nativo
             </p>
           </div>
         </footer>
@@ -112,5 +126,11 @@ export const App: React.FC<AppProps> = ({ initialTab = 'home' }) => {
     </div>
   );
 };
+
+export const App: React.FC<AppProps> = (props) => (
+  <AuthProvider>
+    <AppContent {...props} />
+  </AuthProvider>
+);
 
 export default App;
