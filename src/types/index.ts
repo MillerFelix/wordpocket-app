@@ -2,6 +2,7 @@ export type TabType = 'home' | 'verbs' | 'practice' | 'translator' | 'favorites'
 
 export * from './auth';
 export * from './progress';
+export * from './activity';
 
 export type PracticeSkillId = 'listening' | 'speaking' | 'reading' | 'writing';
 
