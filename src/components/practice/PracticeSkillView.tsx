@@ -11,7 +11,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { PracticeDifficulty, PracticeSkillConfig, PracticeSkillId } from '../../types';
-import { PRACTICE_SKILLS } from '../../data/practiceSkills';
+import { practiceService } from '../../services/practiceService';
 import { PronounceButton } from '../PronounceButton';
 
 import { PracticeExerciseRunner } from './PracticeExerciseRunner';
@@ -40,7 +40,7 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
   const [isPracticing, setIsPracticing] = useState(false);
   const { isVisitor, openVisitorPrompt } = useAuth();
   const Icon = SKILL_ICONS[skill.id];
-  const otherSkills = PRACTICE_SKILLS.filter((s) => s.id !== skill.id);
+  const otherSkills = practiceService.getAllSkills().filter((s) => s.id !== skill.id);
 
   const handleStartPractice = () => {
     if (isVisitor) {

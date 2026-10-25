@@ -30,7 +30,60 @@ export interface ActivityAttempt {
 }
 
 /**
- * Estrutura para atividade interativa de prática
+ * Modalidades de atividades pedagógicas para os 4 pilares
+ */
+export type ActivityModality = 
+  | 'multiple_choice' 
+  | 'audio_matching' 
+  | 'voice_repetition' 
+  | 'sentence_reorder' 
+  | 'cloze_fill';
+
+/**
+ * Contrato base para qualquer atividade interativa nos 4 pilares
+ */
+export interface BaseActivityMetadata {
+  id: string;
+  skillId: PracticeSkillId;
+  difficulty: PracticeDifficulty;
+  title: string;
+  instruction: string;
+  modality: ActivityModality;
+}
+
+/**
+ * Especialização de contratos para cada um dos 4 pilares
+ */
+export interface ListeningActivityMetadata extends BaseActivityMetadata {
+  skillId: 'listening';
+  audioSource?: string;
+  phonemeFocus?: string;
+  playbackSpeedDefault?: number;
+}
+
+export interface SpeakingActivityMetadata extends BaseActivityMetadata {
+  skillId: 'speaking';
+  targetPhoneme?: string;
+  referenceAudioText: string;
+  nativeModelVoice?: string;
+}
+
+export interface ReadingActivityMetadata extends BaseActivityMetadata {
+  skillId: 'reading';
+  passageText: string;
+  passageTitle?: string;
+  glossaryHighlights?: string[];
+}
+
+export interface WritingActivityMetadata extends BaseActivityMetadata {
+  skillId: 'writing';
+  targetGrammarPoint?: string;
+  sentenceScrambleTokens?: string[];
+  expectedAnswerPattern?: string;
+}
+
+/**
+ * Estrutura para atividade interativa de prática (compatibilidade retroativa)
  */
 export interface PracticeQuestion {
   id: string;

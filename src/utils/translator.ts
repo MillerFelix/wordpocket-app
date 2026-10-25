@@ -1,5 +1,5 @@
-import { irregularVerbs } from '../data/irregularVerbs';
-import { vocabularyData } from '../data/vocabulary';
+import { verbsService } from '../services/verbsService';
+import { vocabularyService } from '../services/vocabularyService';
 
 export type TranslationDirection = 'en_pt' | 'pt_en';
 
@@ -16,7 +16,7 @@ export interface TranslationResult {
  * Translates text between English and Portuguese.
  *
  * Architecture:
- * 1. Checks local validated databases (irregular verbs + vocabulary) for instant,
+ * 1. Checks local validated services (irregular verbs + vocabulary) for instant,
  *    100% offline-ready and verified linguistic results.
  * 2. For free-form phrases and sentences, queries the public Google Translate
  *    client endpoint (zero cost, no external API keys required).
@@ -32,23 +32,17 @@ export async function translateText(
 
   const fromLang = direction === 'en_pt' ? 'en' : 'pt';
   const toLang = direction === 'en_pt' ? 'pt' : 'en';
-  const normalizedQuery = query.toLowerCase();
 
-  // 1. Try local databases for instant, high-quality offline resolution
+  // 1. Try local databases via services for instant, high-quality offline resolution
   if (direction === 'en_pt') {
     // Check irregular verbs
-    const verb = irregularVerbs.find(
-      (v) =>
-        v.infinitive.toLowerCase() === normalizedQuery ||
-        v.pastSimple.toLowerCase() === normalizedQuery ||
-        v.pastParticiple.toLowerCase() === normalizedQuery
-    );
-
-    if (verb) {
+    const verbMatch = verbsService.findByAnyForm(query);
+    if (verbMatch) {
+      const { verb, matchedForm } = verbMatch;
       let extra = `Formas: ${verb.infinitive} (infinitivo) • ${verb.pastSimple} (passado) • ${verb.pastParticiple} (particípio)`;
-      if (verb.pastSimple.toLowerCase() === normalizedQuery && verb.pastSimple !== verb.infinitive) {
+      if (matchedForm === 'pastSimple' && verb.pastSimple !== verb.infinitive) {
         extra = `Passado simples de "${verb.infinitive}" • particípio: ${verb.pastParticiple}`;
-      } else if (verb.pastParticiple.toLowerCase() === normalizedQuery && verb.pastParticiple !== verb.infinitive) {
+      } else if (matchedForm === 'pastParticiple' && verb.pastParticiple !== verb.infinitive) {
         extra = `Particípio passado de "${verb.infinitive}" • passado simples: ${verb.pastSimple}`;
       }
 
@@ -63,10 +57,7 @@ export async function translateText(
     }
 
     // Check vocabulary dictionary
-    const vocab = vocabularyData.find(
-      (w) => w.word.toLowerCase() === normalizedQuery
-    );
-
+    const vocab = vocabularyService.getByWord(query);
     if (vocab) {
       return {
         translatedText: vocab.translation,
@@ -80,11 +71,7 @@ export async function translateText(
   } else {
     // pt_en: Portuguese to English
     // Check irregular verbs translations
-    const verb = irregularVerbs.find((v) => {
-      const parts = v.translation.toLowerCase().split(/[;,/]/).map((s) => s.trim());
-      return parts.includes(normalizedQuery) || v.translation.toLowerCase() === normalizedQuery;
-    });
-
+    const verb = verbsService.findByTranslation(query);
     if (verb) {
       return {
         translatedText: verb.infinitive,
@@ -97,11 +84,7 @@ export async function translateText(
     }
 
     // Check vocabulary translations
-    const vocab = vocabularyData.find((w) => {
-      const parts = w.translation.toLowerCase().split(/[;,/]/).map((s) => s.trim());
-      return parts.includes(normalizedQuery) || w.translation.toLowerCase() === normalizedQuery;
-    });
-
+    const vocab = vocabularyService.findByTranslation(query);
     if (vocab) {
       return {
         translatedText: vocab.word,

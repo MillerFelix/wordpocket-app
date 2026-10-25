@@ -4,6 +4,7 @@ import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
 import { HomeView } from './components/HomeView';
 import { IrregularVerbsView } from './components/IrregularVerbsView';
+import { VocabularyView } from './components/VocabularyView';
 import { PracticeView } from './components/practice/PracticeView';
 import { QuickTranslatorView } from './components/QuickTranslatorView';
 import { FavoritesView } from './components/FavoritesView';
@@ -14,8 +15,8 @@ import { VisitorPromptModal } from './components/auth/VisitorPromptModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { TabType } from './types';
-import { irregularVerbs } from './data/irregularVerbs';
-import { PRACTICE_SKILLS } from './data/practiceSkills';
+import { verbsService } from './services/verbsService';
+import { practiceService } from './services/practiceService';
 
 interface AppProps {
   initialTab?: TabType;
@@ -33,6 +34,9 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
       setPendingSearch('');
     }
   };
+
+  const verbCount = verbsService.getCount();
+  const practiceCount = practiceService.getSkillsCount();
 
   return (
     <div className="min-h-screen text-[#160F2E] flex flex-col lg:flex-row font-sans selection:bg-[#BED7FA] selection:text-[#176BFF] relative">
@@ -52,16 +56,16 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
       <Sidebar
         activeTab={activeTab}
         onTabChange={handleNavigate}
-        verbCount={irregularVerbs.length}
-        practiceCount={PRACTICE_SKILLS.length}
+        verbCount={verbCount}
+        practiceCount={practiceCount}
       />
 
       {/* Mobile Top Header & Bottom Navigation Bar */}
       <MobileNav
         activeTab={activeTab}
         onTabChange={handleNavigate}
-        verbCount={irregularVerbs.length}
-        practiceCount={PRACTICE_SKILLS.length}
+        verbCount={verbCount}
+        practiceCount={practiceCount}
       />
 
       {/* Main Content Area */}
@@ -81,7 +85,11 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
             <IrregularVerbsView initialSearch={pendingSearch} />
           )}
 
-          {(activeTab === 'practice' || activeTab === 'vocab') && (
+          {activeTab === 'vocab' && (
+            <VocabularyView initialSearch={pendingSearch} />
+          )}
+
+          {activeTab === 'practice' && (
             <PracticeView />
           )}
 

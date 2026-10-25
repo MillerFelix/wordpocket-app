@@ -116,6 +116,26 @@ export async function saveRemoteFavorites(
 }
 
 /**
+ * Atualiza apenas verbos ou vocabulário no Firestore mantendo o outro tipo intacto
+ */
+export async function updateRemoteFavoritesByType(
+  uid: string,
+  type: 'verbs' | 'vocab',
+  items: string[]
+): Promise<void> {
+  if (!isFirebaseConfigured || !db || !uid) return;
+
+  try {
+    const local = getLocalFavorites();
+    const verbs = type === 'verbs' ? items : local.verbs;
+    const vocab = type === 'vocab' ? items : local.vocab;
+    await saveRemoteFavorites(uid, verbs, vocab);
+  } catch (error) {
+    console.warn('Erro ao atualizar favoritos remotos:', error);
+  }
+}
+
+/**
  * Sincroniza e une (merge) favoritos locais e remotos no momento do login
  */
 export async function syncLocalFavoritesToRemote(

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Star, BookOpen, BookA, ArrowRight, Trash2 } from 'lucide-react';
 import { TabType } from '../types';
-import { irregularVerbs } from '../data/irregularVerbs';
-import { vocabularyData } from '../data/vocabulary';
+import { verbsService } from '../services/verbsService';
+import { vocabularyService } from '../services/vocabularyService';
 import { PronounceButton } from './PronounceButton';
 import { useFavorites } from '../hooks/useFavorites';
 
@@ -23,8 +23,8 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({ onNavigate }) => {
     'upword_fav_vocab'
   );
 
-  const verbsList = irregularVerbs.filter((v) => favVerbsSet.has(v.infinitive));
-  const vocabList = vocabularyData.filter((w) => favVocabSet.has(w.word));
+  const verbsList = verbsService.getAll().filter((v) => favVerbsSet.has(v.infinitive));
+  const vocabList = vocabularyService.getAll().filter((w) => favVocabSet.has(w.word));
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Search, BookA, Volume2, Briefcase, Coffee, Plane, Cpu, MessageSquare, GraduationCap } from 'lucide-react';
-import { vocabularyData } from '../data/vocabulary';
+import { vocabularyService } from '../services/vocabularyService';
 import { VocabWord, WordCategory, PartOfSpeech } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { VocabFilterBar, CategoryOption, PartOfSpeechOption } from './vocabulary/VocabFilterBar';
@@ -48,36 +48,10 @@ export const VocabularyView: React.FC<VocabularyViewProps> = ({ initialSearch = 
   }, [initialSearch]);
 
   const filteredWords = useMemo(() => {
-    const q = search.trim().toLowerCase();
-
-    return vocabularyData.filter((item: VocabWord) => {
-      if (selectedCategory !== 'all' && item.category !== selectedCategory) {
-        return false;
-      }
-
-      if (selectedPos !== 'all' && item.partOfSpeech !== selectedPos) {
-        return false;
-      }
-
-      if (!q) return true;
-
-      const matchesMain =
-        item.word.toLowerCase().includes(q) ||
-        item.translation.toLowerCase().includes(q) ||
-        item.meaning.toLowerCase().includes(q) ||
-        item.exampleEn.toLowerCase().includes(q) ||
-        item.examplePt.toLowerCase().includes(q);
-
-      const matchesSynonyms = item.synonyms?.some((s) => s.toLowerCase().includes(q));
-
-      const matchesSenses = item.senses?.some(
-        (sense) =>
-          sense.meaning.toLowerCase().includes(q) ||
-          sense.translation.toLowerCase().includes(q) ||
-          (sense.exampleEn && sense.exampleEn.toLowerCase().includes(q))
-      );
-
-      return matchesMain || matchesSynonyms || matchesSenses;
+    return vocabularyService.filter({
+      search,
+      category: selectedCategory,
+      partOfSpeech: selectedPos
     });
   }, [search, selectedCategory, selectedPos]);
 

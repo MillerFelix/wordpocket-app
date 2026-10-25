@@ -10,7 +10,7 @@ import {
   Clock 
 } from 'lucide-react';
 import { PracticeDifficulty, PracticeSkillConfig } from '../../types';
-import { getExerciseForSkill } from '../../data/practiceExercises';
+import { practiceService } from '../../services/practiceService';
 import { PronounceButton } from '../PronounceButton';
 import { useAuth } from '../../contexts/AuthContext';
 import { saveActivityAttempt } from '../../services/progressService';
@@ -27,7 +27,7 @@ export const PracticeExerciseRunner: React.FC<PracticeExerciseRunnerProps> = ({
   onFinish
 }) => {
   const { user, isVisitor, openVisitorPrompt } = useAuth();
-  const exercise = getExerciseForSkill(skill.id, difficulty);
+  const exercise = practiceService.getExercise(skill.id, difficulty);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);

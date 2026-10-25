@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { updateRemoteFavoritesByType } from '../services/favoritesSyncService';
 
 export interface UseFavoritesResult {
   favorites: Set<string>;
@@ -10,12 +12,16 @@ export interface UseFavoritesResult {
 
 /**
  * Hook to manage persistent favorites saved in localStorage with fallback support and exception safety.
+ * When a user is authenticated, it also synchronizes the changes to Firestore in the background.
  */
 export function useFavorites(
   storageKey: string,
   defaultItems: string[] = [],
   fallbackKey?: string
 ): UseFavoritesResult {
+  const { user } = useAuth();
+  const favoriteType: 'verbs' | 'vocab' = storageKey.includes('verbs') ? 'verbs' : 'vocab';
+
   const [favorites, setFavorites] = useState<Set<string>>(() => {
     try {
       const saved =
@@ -48,13 +54,21 @@ export function useFavorites(
 
   const persist = useCallback(
     (nextSet: Set<string>) => {
+      const itemsList = Array.from(nextSet);
       try {
-        localStorage.setItem(storageKey, JSON.stringify(Array.from(nextSet)));
+        localStorage.setItem(storageKey, JSON.stringify(itemsList));
       } catch {
         // Fallback for storage quota or privacy mode limitations
       }
+
+      // Se autenticado, sincroniza com o Firestore em background sem bloquear a UI
+      if (user?.uid) {
+        updateRemoteFavoritesByType(user.uid, favoriteType, itemsList).catch(() => {
+          // Fallback silencioso (já enfileirado no IndexedDB pelo Firestore)
+        });
+      }
     },
-    [storageKey]
+    [storageKey, user?.uid, favoriteType]
   );
 
   const toggleFavorite = useCallback(

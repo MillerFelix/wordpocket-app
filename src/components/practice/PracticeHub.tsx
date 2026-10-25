@@ -10,7 +10,7 @@ import {
   PenTool 
 } from 'lucide-react';
 import { PracticeSkillId } from '../../types';
-import { PRACTICE_SKILLS } from '../../data/practiceSkills';
+import { practiceService } from '../../services/practiceService';
 import { PracticeSkillCard } from './PracticeSkillCard';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserSkillProgress } from '../../services/progressService';
@@ -79,7 +79,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-          {PRACTICE_SKILLS.map((skill) => (
+          {practiceService.getAllSkills().map((skill) => (
             <PracticeSkillCard
               key={skill.id}
               skill={skill}
@@ -105,7 +105,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
 
         {/* 4 Skill Status Chips */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {PRACTICE_SKILLS.map((skill) => {
+          {practiceService.getAllSkills().map((skill) => {
             const Icon = SKILL_ICONS_SMALL[skill.id];
             return (
               <div

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { TabType } from '../types';
-import { irregularVerbs } from '../data/irregularVerbs';
-import { vocabularyData } from '../data/vocabulary';
+import { verbsService } from '../services/verbsService';
+import { vocabularyService } from '../services/vocabularyService';
 import { HomeGreetingBanner } from './home/HomeGreetingBanner';
 import { HomeGlobalSearch } from './home/HomeGlobalSearch';
 import { HomeFeatureCards } from './home/HomeFeatureCards';
@@ -16,27 +16,13 @@ interface HomeViewProps {
 export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const [globalSearch, setGlobalSearch] = useState('');
 
-  // Global search filtering across both verbs and vocabulary
+  // Global search filtering across both verbs and vocabulary via dedicated services
   const searchResults = useMemo(() => {
     const q = globalSearch.trim().toLowerCase();
     if (!q) return null;
 
-    const matchedVerbs = irregularVerbs
-      .filter((v) =>
-        v.infinitive.toLowerCase().includes(q) ||
-        v.pastSimple.toLowerCase().includes(q) ||
-        v.pastParticiple.toLowerCase().includes(q) ||
-        v.translation.toLowerCase().includes(q)
-      )
-      .slice(0, 4);
-
-    const matchedVocab = vocabularyData
-      .filter((w) =>
-        w.word.toLowerCase().includes(q) ||
-        w.translation.toLowerCase().includes(q) ||
-        w.meaning.toLowerCase().includes(q)
-      )
-      .slice(0, 4);
+    const matchedVerbs = verbsService.searchGlobal(q, 4);
+    const matchedVocab = vocabularyService.searchGlobal(q, 4);
 
     return {
       verbs: matchedVerbs,

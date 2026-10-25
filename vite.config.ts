@@ -33,5 +33,16 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          'icons-vendor': ['lucide-react']
+        }
+      }
+    }
+  }
 });

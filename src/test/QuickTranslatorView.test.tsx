@@ -110,7 +110,7 @@ describe('QuickTranslatorView Component Tests', () => {
   });
 
   it('clears input text and result when clicking Limpar', async () => {
-    render(<QuickTranslatorView initialText="hello" />);
+    render(<QuickTranslatorView initialText="break" />);
     const translateBtn = screen.getByRole('button', { name: /Traduzir/i });
     fireEvent.click(translateBtn);
 

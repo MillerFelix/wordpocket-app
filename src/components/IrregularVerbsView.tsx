@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Search, BookOpen, HelpCircle } from 'lucide-react';
-import { irregularVerbs } from '../data/irregularVerbs';
+import { verbsService } from '../services/verbsService';
 import { VerbGroup } from '../types';
 import { useFavorites } from '../hooks/useFavorites';
 import { VerbFilterBar } from './verbs/VerbFilterBar';
@@ -48,33 +48,14 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   }, [search, selectedGroup, selectedLetter]);
 
   const alphabetLetters = useMemo(() => {
-    const letters = new Set<string>();
-    irregularVerbs.forEach((v) => {
-      letters.add(v.infinitive.charAt(0).toUpperCase());
-    });
-    return Array.from(letters).sort();
+    return verbsService.getAlphabetLetters();
   }, []);
 
   const filteredVerbs = useMemo(() => {
-    const q = search.trim().toLowerCase();
-
-    return irregularVerbs.filter((verb) => {
-      if (selectedGroup !== 'all' && verb.group !== selectedGroup) {
-        return false;
-      }
-
-      if (selectedLetter !== 'all' && !verb.infinitive.toUpperCase().startsWith(selectedLetter)) {
-        return false;
-      }
-
-      if (!q) return true;
-      return (
-        verb.infinitive.toLowerCase().includes(q) ||
-        verb.pastSimple.toLowerCase().includes(q) ||
-        verb.pastParticiple.toLowerCase().includes(q) ||
-        verb.translation.toLowerCase().includes(q) ||
-        (verb.variants && verb.variants.toLowerCase().includes(q))
-      );
+    return verbsService.filter({
+      search,
+      group: selectedGroup,
+      letter: selectedLetter
     });
   }, [search, selectedGroup, selectedLetter]);
 
