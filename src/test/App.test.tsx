@@ -2,20 +2,28 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from '../App';
 
-describe('WordPocket Application Tests', () => {
-  it('renders header with WordPocket brand and default irregular verbs view', () => {
+describe('Word Pocket Refined Interface Tests', () => {
+  it('renders brand Word Pocket and Home dashboard with greeting, global search, and 3 main feature cards', () => {
     render(<App />);
-    expect(screen.getByText('Word')).toBeInTheDocument();
-    expect(screen.getByText('Pocket')).toBeInTheDocument();
-    expect(screen.getByText('Guia Prático e Dicionário de Inglês')).toBeInTheDocument();
-    // Check for irregular verbs default content
-    expect(screen.getByPlaceholderText(/Buscar verbo em inglês/i)).toBeInTheDocument();
-    expect(screen.getByText(/Exibindo/i)).toBeInTheDocument();
+    const wordMatches = screen.getAllByText(/Word/i);
+    expect(wordMatches.length).toBeGreaterThan(0);
+    const pocketMatches = screen.getAllByText(/Pocket/i);
+    expect(pocketMatches.length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Olá, Lucas!/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByPlaceholderText(/Buscar palavra, verbo ou tradução/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Verbos Irregulares/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Vocabulário/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Tradutor/i).length).toBeGreaterThan(0);
   });
 
-  it('filters irregular verbs with search query', () => {
+  it('navigates to irregular verbs view, filters verbs with search query and highlights verb forms', () => {
     render(<App />);
+    const verbButtons = screen.getAllByRole('button', { name: /Verbos/i });
+    fireEvent.click(verbButtons[0]);
+
     const searchInput = screen.getByPlaceholderText(/Buscar verbo em inglês/i);
+    expect(searchInput).toBeInTheDocument();
+    expect(screen.getByText(/Exibindo/i)).toBeInTheDocument();
 
     fireEvent.change(searchInput, { target: { value: 'break' } });
     const breakMatches = screen.getAllByText('break');
@@ -24,18 +32,18 @@ describe('WordPocket Application Tests', () => {
     expect(brokenMatches.length).toBeGreaterThan(0);
   });
 
-  it('toggles coverage methodology information in irregular verbs', () => {
-    render(<App />);
-    const coverageBtn = screen.getByText(/Cobertura & Fontes/i);
+  it('toggles coverage methodology information modal in irregular verbs', () => {
+    render(<App initialTab="verbs" />);
+    const coverageBtn = screen.getByText(/Metodologia & Fontes/i);
     fireEvent.click(coverageBtn);
 
-    expect(screen.getByText(/Metodologia de Curadoria dos Verbos Irregulares/i)).toBeInTheDocument();
+    expect(screen.getByText(/Critérios Linguísticos e Fontes da Base/i)).toBeInTheDocument();
   });
 
   it('navigates to vocabulary dictionary and displays phonetic notations and categories', () => {
     render(<App />);
-    const vocabButton = screen.getAllByRole('button', { name: /Vocabulário/i })[0];
-    fireEvent.click(vocabButton);
+    const vocabButtons = screen.getAllByRole('button', { name: /Vocabulário/i });
+    fireEvent.click(vocabButtons[0]);
 
     expect(screen.getByPlaceholderText(/Consultar dicionário/i)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Resilient' })).toBeInTheDocument();
@@ -46,10 +54,10 @@ describe('WordPocket Application Tests', () => {
   it('navigates to quick translator tab and supports paste, typing, and translate button', () => {
     window.open = vi.fn();
     render(<App />);
-    const translatorButtons = screen.getAllByText(/Tradutor/i);
+    const translatorButtons = screen.getAllByRole('button', { name: /Tradutor/i });
     fireEvent.click(translatorButtons[0]);
 
-    expect(screen.getByText(/Tradutor Rápido Oficial/i)).toBeInTheDocument();
+    expect(screen.getByText(/Texto para Tradução/i)).toBeInTheDocument();
     const textarea = screen.getByPlaceholderText(/Digite ou cole qualquer palavra/i);
     fireEvent.change(textarea, { target: { value: 'Hello world' } });
 

@@ -12,11 +12,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'WordPocket',
-        short_name: 'WordPocket',
+        name: 'Word Pocket',
+        short_name: 'Word Pocket',
         description: 'Guia de consulta rápida em inglês: verbos irregulares, dicionário contextual e tradutor.',
-        theme_color: '#ffffff',
-        background_color: '#f8fafc',
+        theme_color: '#6938F5',
+        background_color: '#F9F7FE',
         display: 'standalone',
         orientation: 'portrait',
         icons: [

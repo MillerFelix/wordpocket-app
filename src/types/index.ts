@@ -1,4 +1,4 @@
-export type TabType = 'verbs' | 'vocab' | 'translator';
+export type TabType = 'home' | 'verbs' | 'vocab' | 'translator' | 'favorites' | 'history' | 'settings';
 
 export type VerbGroup = 'identical' | 'en-ending' | 'vowel-change' | 'past-same' | 'general';
 

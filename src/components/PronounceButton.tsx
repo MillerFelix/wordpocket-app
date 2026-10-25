@@ -23,14 +23,14 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!supported) {
-      setErrorNotice('Áudio não suportado neste navegador');
+      setErrorNotice('Áudio indisponível neste navegador');
       setTimeout(() => setErrorNotice(null), 2500);
       return;
     }
 
     const result = speakEnglish(text);
     if (!result.success) {
-      setErrorNotice(result.message || 'Falha ao reproduzir áudio');
+      setErrorNotice(result.message || 'Falha na pronúncia');
       setTimeout(() => setErrorNotice(null), 2500);
       return;
     }
@@ -54,31 +54,30 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
           errorNotice
             ? errorNotice
             : !supported
-            ? 'Síntese de voz não disponível no navegador'
+            ? 'Síntese de voz não suportada'
             : `Ouvir pronúncia de "${text}"`
         }
         aria-label={`Ouvir pronúncia de ${text}`}
-        className={`inline-flex items-center justify-center rounded-lg font-medium transition-all duration-150 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 select-none ${
+        className={`inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6938F5]/40 select-none ${
           sizeClasses[size]
         } ${
           isPlaying
-            ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-300 scale-105'
-            : 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/80 active:bg-indigo-100/70 border border-transparent hover:border-indigo-100'
+            ? 'bg-[#6938F5] text-white shadow-sm shadow-[#6938F5]/30 scale-105'
+            : 'text-[#645A82] hover:text-[#6938F5] hover:bg-[#F3EFFF] active:bg-[#EDE6FA] border border-transparent hover:border-[#EDE6FA]'
         } ${className}`}
       >
         {!supported ? (
-          <VolumeX className="w-3.5 h-3.5 opacity-50 text-slate-400" />
+          <VolumeX className="w-3.5 h-3.5 opacity-40 text-[#645A82]" />
         ) : (
           <Volume2 className={`w-3.5 h-3.5 transition-transform ${isPlaying ? 'scale-110' : ''}`} />
         )}
-        {showLabel && <span className="font-medium text-xs">Ouvir</span>}
+        {showLabel && <span className="font-semibold text-xs ml-1">Ouvir</span>}
       </button>
 
-      {/* Floating Error/Unsupported Toast */}
       {errorNotice && (
         <span
           role="status"
-          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 whitespace-nowrap bg-slate-900 text-white text-[11px] font-medium px-2 py-1 rounded-md shadow-lg z-50 animate-in fade-in zoom-in-95 duration-150"
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 whitespace-nowrap bg-[#1E1538] text-white text-[11px] font-semibold px-2 py-1 rounded-md shadow-lg z-50 animate-in fade-in zoom-in-95 duration-150"
         >
           {errorNotice}
         </span>

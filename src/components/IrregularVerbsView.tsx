@@ -1,26 +1,72 @@
-import React, { useMemo, useState } from 'react';
-import { Search, X, Filter, Sparkles, BookOpen, ChevronDown, ChevronUp, Info } from 'lucide-react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { 
+  Search, 
+  X, 
+  Filter, 
+  Sparkles, 
+  BookOpen, 
+  ChevronDown, 
+  ChevronUp, 
+  Info, 
+  HelpCircle,
+  Star
+} from 'lucide-react';
 import { irregularVerbs } from '../data/irregularVerbs';
 import { VerbGroup } from '../types';
 import { PronounceButton } from './PronounceButton';
 
-export const IrregularVerbsView: React.FC = () => {
-  const [search, setSearch] = useState('');
+interface IrregularVerbsViewProps {
+  initialSearch?: string;
+}
+
+export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialSearch = '' }) => {
+  const [search, setSearch] = useState(initialSearch);
   const [selectedGroup, setSelectedGroup] = useState<VerbGroup | 'all'>('all');
   const [selectedLetter, setSelectedLetter] = useState<string>('all');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [showCoverageInfo, setShowCoverageInfo] = useState<boolean>(false);
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem('wordpocket_fav_verbs') || localStorage.getItem('upword_fav_verbs');
+      return saved ? new Set(JSON.parse(saved)) : new Set(['go', 'be', 'begin']);
+    } catch {
+      return new Set(['go', 'be', 'begin']);
+    }
+  });
 
-  const filterOptions: { id: VerbGroup | 'all'; label: string; count?: number }[] = [
+  useEffect(() => {
+    if (initialSearch) {
+      setSearch(initialSearch);
+    }
+  }, [initialSearch]);
+
+  const toggleFavorite = (infinitive: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(infinitive)) {
+        next.delete(infinitive);
+      } else {
+        next.add(infinitive);
+      }
+      try {
+        localStorage.setItem('wordpocket_fav_verbs', JSON.stringify(Array.from(next)));
+      } catch {
+        // Fallback for storage quota
+      }
+      return next;
+    });
+  };
+
+  const filterOptions: { id: VerbGroup | 'all'; label: string }[] = [
     { id: 'all', label: 'Todos os Verbos' },
-    { id: 'identical', label: '3 Formas Iguais' },
-    { id: 'en-ending', label: 'Particípio em -en/-n' },
-    { id: 'vowel-change', label: 'Mudança Vocálica (i/a/u)' },
-    { id: 'past-same', label: 'Passado = Particípio' }
+    { id: 'identical', label: '3 Formas Iguais (hit / cut)' },
+    { id: 'en-ending', label: 'Particípio em -en/-n (broken)' },
+    { id: 'vowel-change', label: 'Mudança Vocálica (drank / drunk)' },
+    { id: 'past-same', label: 'Passado = Particípio (bought)' }
   ];
 
-  // Available initial letters from the dataset
   const alphabetLetters = useMemo(() => {
     const letters = new Set<string>();
     irregularVerbs.forEach((v) => {
@@ -34,17 +80,14 @@ export const IrregularVerbsView: React.FC = () => {
 
     return irregularVerbs
       .filter((verb) => {
-        // Pattern filter
         if (selectedGroup !== 'all' && verb.group !== selectedGroup) {
           return false;
         }
 
-        // Letter filter
         if (selectedLetter !== 'all' && !verb.infinitive.toUpperCase().startsWith(selectedLetter)) {
           return false;
         }
 
-        // Search query filter (matches infinitive, past, participle, translation, or variants)
         if (!q) return true;
         return (
           verb.infinitive.toLowerCase().includes(q) ||
@@ -65,25 +108,66 @@ export const IrregularVerbsView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
-      {/* Search & Filter Toolbar */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3.5">
+    <div className="space-y-6 animate-in fade-in duration-300">
+      {/* Page Header matching reference */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
+        <div className="flex items-start gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-verbs text-white flex items-center justify-center shadow-colored-violet shrink-0 ring-4 ring-white/80">
+            <BookOpen className="w-5 h-5 stroke-[2.3]" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#6938F5]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#6938F5]">
+                Módulo de Verbos
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
+              Verbos Irregulares
+            </h1>
+            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-1">
+              Todas as formas verbais, organizadas para consulta rápida com destaque cromático.
+            </p>
+          </div>
+        </div>
+
+        {/* Legend pills on large screen */}
+        <div className="hidden xl:flex items-center gap-2.5 bg-white/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/90 shadow-2xs text-xs font-bold">
+          <span className="flex items-center gap-1.5 text-[#6938F5]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#6938F5]" />
+            1. Base Form
+          </span>
+          <span className="text-[#E2D7F8]">•</span>
+          <span className="flex items-center gap-1.5 text-[#0A9B80]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#19D9B4]" />
+            2. Simple Past
+          </span>
+          <span className="text-[#E2D7F8]">•</span>
+          <span className="flex items-center gap-1.5 text-[#E04D1B]">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FF6534]" />
+            3. Past Participle
+          </span>
+        </div>
+      </div>
+
+      {/* Search & Filter Toolbar with Cozy Tinted Surface */}
+      <div className="bg-white/80 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-white/90 shadow-soft-card space-y-4">
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-          {/* Search Input */}
+          {/* Main Search Input */}
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6938F5]" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar verbo em inglês ou tradução (ex: speak, spoke, falar, trazer)..."
-              className="w-full pl-10 pr-10 py-2.5 text-sm bg-slate-50 hover:bg-slate-100/70 focus:bg-white rounded-xl border border-slate-200/90 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition text-slate-800 placeholder:text-slate-400"
+              placeholder="Buscar verbo em inglês ou tradução (ex: go, went, speak, quebrar)..."
+              className="w-full pl-11 pr-10 py-3 text-sm bg-white/85 backdrop-blur-md hover:border-[#6938F5]/40 focus:border-[#6938F5] focus:bg-white focus:ring-4 focus:ring-[#6938F5]/10 rounded-2xl border border-white/90 shadow-2xs outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
             />
             {search && (
               <button
                 type="button"
                 onClick={() => setSearch('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-md"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#52456F] hover:text-[#160F2E] rounded-lg"
                 title="Limpar pesquisa"
               >
                 <X className="w-4 h-4" />
@@ -91,27 +175,26 @@ export const IrregularVerbsView: React.FC = () => {
             )}
           </div>
 
-          {/* Action buttons: Documentation Modal toggle & Sort Order */}
-          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+          {/* Action buttons: Methodology info & Sort Order */}
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
             <button
               type="button"
               onClick={() => setShowCoverageInfo(!showCoverageInfo)}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border transition ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 text-xs font-bold rounded-2xl border transition active:scale-95 shadow-2xs ${
                 showCoverageInfo
-                  ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
-                  : 'bg-white text-slate-600 hover:text-slate-900 border-slate-200/90 hover:bg-slate-50'
+                  ? 'bg-[#EAE1FD] text-[#6938F5] border-white/90'
+                  : 'bg-white/80 hover:bg-white text-[#160F2E] border-white/90'
               }`}
-              title="Informações sobre cobertura e metodologia"
             >
-              <Info className="w-3.5 h-3.5" />
-              <span>Cobertura & Fontes</span>
+              <Info className="w-3.5 h-3.5 text-[#6938F5]" />
+              <span>Metodologia & Fontes</span>
             </button>
 
             <button
               type="button"
               onClick={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
-              className="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50 text-slate-700 transition"
-              title="Inverter ordenação"
+              className="px-3.5 py-2.5 text-xs font-bold rounded-2xl border border-white/90 bg-white/80 hover:bg-white text-[#160F2E] transition active:scale-95 shadow-2xs"
+              title="Alternar ordenação alfabética"
             >
               {sortOrder === 'asc' ? 'A → Z' : 'Z → A'}
             </button>
@@ -119,19 +202,20 @@ export const IrregularVerbsView: React.FC = () => {
         </div>
 
         {/* Morphological Pattern Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-          <span className="text-slate-400 flex items-center gap-1 pr-1 font-semibold shrink-0">
-            <Filter className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+          <span className="text-[#52456F] flex items-center gap-1.5 pr-1 font-bold shrink-0">
+            <Filter className="w-3.5 h-3.5 text-[#6938F5]" />
             Padrão:
           </span>
           {filterOptions.map((opt) => (
             <button
               key={opt.id}
+              type="button"
               onClick={() => setSelectedGroup(opt.id)}
-              className={`shrink-0 px-3 py-1.5 rounded-xl font-medium transition active:scale-95 ${
+              className={`shrink-0 px-3.5 py-2 rounded-xl font-bold transition active:scale-95 text-xs ${
                 selectedGroup === opt.id
-                  ? 'bg-indigo-600 text-white shadow-xs font-semibold'
-                  : 'bg-slate-100 hover:bg-slate-200/70 text-slate-600'
+                  ? 'bg-gradient-verbs text-white shadow-xs'
+                  : 'bg-[#EAE1FD]/80 hover:bg-[#DFD4FA] text-[#423363] hover:text-[#160F2E] border border-white/70'
               }`}
             >
               {opt.label}
@@ -140,13 +224,14 @@ export const IrregularVerbsView: React.FC = () => {
         </div>
 
         {/* Alphabet Jump Bar */}
-        <div className="flex items-center gap-1 overflow-x-auto pt-2 border-t border-slate-100 pb-0.5 scrollbar-none">
+        <div className="flex items-center gap-1 overflow-x-auto pt-2 border-t border-[#E2D7F8] pb-0.5 scrollbar-none">
           <button
+            type="button"
             onClick={() => setSelectedLetter('all')}
-            className={`text-xs px-2.5 py-1 rounded-lg font-semibold shrink-0 transition ${
+            className={`text-xs px-3 py-1.5 rounded-xl font-bold shrink-0 transition ${
               selectedLetter === 'all'
-                ? 'bg-slate-900 text-white shadow-2xs'
-                : 'text-slate-500 hover:bg-slate-100'
+                ? 'bg-[#160F2E] text-white shadow-2xs'
+                : 'text-[#52456F] hover:bg-white/80'
             }`}
           >
             Todas
@@ -154,11 +239,12 @@ export const IrregularVerbsView: React.FC = () => {
           {alphabetLetters.map((letter) => (
             <button
               key={letter}
+              type="button"
               onClick={() => setSelectedLetter(letter)}
               className={`w-7 h-7 flex items-center justify-center text-xs font-mono rounded-lg shrink-0 transition ${
                 selectedLetter === letter
-                  ? 'bg-indigo-600 text-white font-bold shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-100 font-medium'
+                  ? 'bg-[#6938F5] text-white font-bold shadow-2xs'
+                  : 'text-[#52456F] hover:bg-white/80 font-semibold'
               }`}
             >
               {letter}
@@ -169,60 +255,60 @@ export const IrregularVerbsView: React.FC = () => {
 
       {/* Coverage / Methodology Info Card */}
       {showCoverageInfo && (
-        <div className="bg-indigo-50/70 rounded-2xl border border-indigo-200/80 p-4 sm:p-5 text-xs text-slate-700 space-y-2.5 animate-in fade-in duration-200">
+        <div className="bg-white/85 backdrop-blur-xl rounded-3xl border border-white/90 p-5 sm:p-6 shadow-soft-card text-xs text-[#160F2E] space-y-3 animate-in fade-in duration-200">
           <div className="flex items-center justify-between">
-            <h4 className="font-bold text-sm text-indigo-950 flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-indigo-600" />
-              Metodologia de Curadoria dos Verbos Irregulares
+            <h4 className="font-extrabold text-sm text-[#160F2E] flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-[#6938F5]" />
+              Critérios Linguísticos e Fontes da Base
             </h4>
             <button
+              type="button"
               onClick={() => setShowCoverageInfo(false)}
-              className="text-slate-400 hover:text-slate-600 p-1"
+              className="text-[#52456F] hover:text-[#160F2E] p-1 rounded-lg"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
-          <p className="leading-relaxed">
-            Esta tabela foi elaborada a partir de fontes linguísticas de referência internacional (Oxford, Cambridge e Merriam-Webster). Ela abrange os verbos irregulares canônicos essenciais da língua inglesa moderna, que respondem por praticamente a totalidade das ocorrências do dia a dia, ambiente profissional e acadêmico.
+          <p className="text-[#52456F] leading-relaxed">
+            Esta tabela foi elaborada a partir das fontes linguísticas de referência internacional (Oxford, Cambridge e Merriam-Webster). Ela abrange os verbos irregulares canônicos essenciais da língua inglesa moderna, que respondem por praticamente a totalidade das ocorrências do dia a dia, ambiente profissional e acadêmico.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-medium text-slate-800">
-            <div className="bg-white/80 p-2.5 rounded-xl border border-indigo-100">
-              <strong>Variantes UK vs. US registradas:</strong> Inclui alternâncias consagradas como <em>burned/burnt</em>, <em>learned/learnt</em> e <em>got/gotten</em>.
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+            <div className="bg-white/70 p-3.5 rounded-2xl border border-white/80 space-y-1">
+              <strong className="text-[#160F2E] block font-bold">Variantes Britânicas vs. Americanas:</strong>
+              <p className="text-[#52456F]">
+                Alternâncias consagradas são explicitadas em notas (ex: <em>burned/burnt</em>, <em>learned/learnt</em> e <em>got/gotten</em>).
+              </p>
             </div>
-            <div className="bg-white/80 p-2.5 rounded-xl border border-indigo-100">
-              <strong>Formas arcaicas deliberadamente excluídas:</strong> Formas obsoletas ou raras (ex: <em>beseech/besought</em>) foram omitidas para manter o foco na comunicação real.
+            <div className="bg-white/70 p-3.5 rounded-2xl border border-white/80 space-y-1">
+              <strong className="text-[#160F2E] block font-bold">Identidade Visual Semântica:</strong>
+              <p className="text-[#52456F]">
+                <span className="text-[#6938F5] font-bold">Electric Violet</span> (Base Form), <span className="text-[#0A9B80] font-bold">Fresh Mint</span> (Simple Past) e <span className="text-[#E04D1B] font-bold">Tangerine</span> (Past Participle).
+              </p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Counter bar */}
-      <div className="flex items-center justify-between px-1 text-xs text-slate-500 font-medium">
+      {/* Results Counter Bar */}
+      <div className="flex items-center justify-between px-1 text-xs text-[#52456F] font-semibold">
         <span>
-          Exibindo <strong className="text-slate-800">{filteredVerbs.length}</strong> {filteredVerbs.length === 1 ? 'verbo' : 'verbos'}
+          Exibindo <strong className="text-[#160F2E]">{filteredVerbs.length}</strong> {filteredVerbs.length === 1 ? 'verbo irregular' : 'verbos irregulares'}
         </span>
-        <div className="hidden sm:flex items-center gap-4 text-[11px]">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 inline-block" />
-            Infinitive
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
-            Simple Past
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
-            Past Participle
-          </span>
-        </div>
+        <span className="flex items-center gap-1.5">
+          <HelpCircle className="w-3.5 h-3.5 text-[#6938F5]" />
+          Clique em qualquer linha ou card para ver o exemplo em contexto
+        </span>
       </div>
 
       {/* Empty State */}
       {filteredVerbs.length === 0 && (
-        <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-8 text-center space-y-2">
-          <p className="text-slate-800 font-semibold">Nenhum verbo corresponde à busca</p>
-          <p className="text-xs text-slate-500">
-            Tente pesquisar por outra palavra ou limpe os filtros de padrão e letra.
+        <div className="bg-white/85 backdrop-blur-xl rounded-3xl border border-dashed border-[#E2D7F8] p-10 text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-[#EAE1FD] text-[#6938F5] flex items-center justify-center mx-auto">
+            <Search className="w-6 h-6" />
+          </div>
+          <p className="text-base font-bold text-[#160F2E]">Nenhum verbo corresponde à busca</p>
+          <p className="text-xs text-[#52456F] max-w-sm mx-auto">
+            Experimente pesquisar com outro termo ou redefinir os filtros aplicados.
           </p>
           <button
             type="button"
@@ -231,86 +317,109 @@ export const IrregularVerbsView: React.FC = () => {
               setSelectedGroup('all');
               setSelectedLetter('all');
             }}
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 pt-2"
+            className="inline-flex items-center gap-2 text-xs font-bold text-white bg-gradient-brand px-4 py-2 rounded-xl shadow-xs"
           >
             Limpar todos os filtros
           </button>
         </div>
       )}
 
-      {/* DESKTOP & TABLET VIEW: High-end responsive table with distinct column color harmonies */}
-      <div className="hidden md:block bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+      {/* DESKTOP TABLE: Matching Reference "Verbos Irregulares (exemplo)" */}
+      <div className="hidden md:block bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 shadow-soft-card overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600 bg-slate-50/80">
-              <th className="py-3.5 px-4 bg-indigo-50/50 text-indigo-900 border-r border-slate-200/60">
-                1. Base Form (Infinitive)
+            <tr className="border-b border-[#E2D7F8] text-xs font-black uppercase tracking-wider">
+              {/* Form 1 Header: Solid Electric Violet */}
+              <th className="py-3.5 px-5 text-white bg-gradient-verbs border-r border-white/20 w-[24%]">
+                <div className="flex items-center gap-2">
+                  <span>Verbo base</span>
+                </div>
               </th>
-              <th className="py-3.5 px-4 bg-amber-50/50 text-amber-900 border-r border-slate-200/60">
-                2. Simple Past
+              {/* Form 2 Header: Fresh Mint */}
+              <th className="py-3.5 px-5 text-[#0A9B80] bg-[#DCF8F1] border-r border-white/80 w-[22%]">
+                Simple Past
               </th>
-              <th className="py-3.5 px-4 bg-emerald-50/50 text-emerald-900 border-r border-slate-200/60">
-                3. Past Participle
+              {/* Form 3 Header: Tangerine */}
+              <th className="py-3.5 px-5 text-[#E04D1B] bg-[#FFEAE1] border-r border-white/80 w-[22%]">
+                Past Participle
               </th>
-              <th className="py-3.5 px-4 text-slate-800">
-                Tradução (PT-BR)
+              {/* Translation: Soft Violet */}
+              <th className="py-3.5 px-5 text-[#6938F5] bg-[#EAE1FD] border-r border-white/80">
+                Tradução
               </th>
-              <th className="py-3.5 px-4 text-center w-24">
-                Detalhes
+              <th className="py-3.5 px-4 text-center w-16 bg-white/60 text-[#52456F]">
+                Ações
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 text-sm">
+          <tbody className="divide-y divide-white/80 text-sm">
             {filteredVerbs.map((verb) => {
               const isExpanded = expandedRowId === verb.id;
+              const isFav = favorites.has(verb.infinitive);
               return (
                 <React.Fragment key={verb.id}>
                   <tr
                     onClick={() => toggleExpand(verb.id)}
-                    className={`cursor-pointer transition-colors ${
-                      isExpanded ? 'bg-indigo-50/40' : 'hover:bg-slate-50/70'
+                    className={`cursor-pointer transition-colors duration-150 ${
+                      isExpanded ? 'bg-[#EAE1FD]/60' : 'hover:bg-white/90'
                     }`}
                   >
-                    {/* Base Form Column (Indigo Tint) */}
-                    <td className="py-3 px-4 font-bold text-indigo-950 bg-indigo-50/20 border-r border-slate-100">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="capitalize">{verb.infinitive}</span>
+                    {/* Base Form: With Favorite Star */}
+                    <td className="py-3.5 px-5 border-r border-white/80">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2.5">
+                          <button
+                            type="button"
+                            onClick={(e) => toggleFavorite(verb.infinitive, e)}
+                            className="text-[#52456F] hover:text-[#F52E91] transition"
+                            title={isFav ? 'Remover dos favoritos' : 'Favoritar'}
+                          >
+                            <Star className={`w-4 h-4 ${isFav ? 'fill-[#F52E91] text-[#F52E91]' : 'stroke-[1.8]'}`} />
+                          </button>
+                          <span className="font-extrabold text-[#160F2E] capitalize text-[15px]">
+                            {verb.infinitive}
+                          </span>
+                        </div>
                         <PronounceButton text={verb.infinitive} size="xs" />
                       </div>
                     </td>
 
-                    {/* Simple Past Column (Amber Tint) */}
-                    <td className="py-3 px-4 font-mono font-semibold text-amber-900 bg-amber-50/20 border-r border-slate-100">
-                      <div className="flex items-center justify-between gap-1">
-                        <span>{verb.pastSimple}</span>
+                    {/* Simple Past */}
+                    <td className="py-3.5 px-5 border-r border-white/80">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono font-bold text-[#0A9B80] text-[14px]">
+                          {verb.pastSimple}
+                        </span>
                         <PronounceButton text={verb.pastSimple.replace(/\([^)]*\)/g, '')} size="xs" />
                       </div>
                     </td>
 
-                    {/* Past Participle Column (Emerald Tint) */}
-                    <td className="py-3 px-4 font-mono font-semibold text-emerald-900 bg-emerald-50/20 border-r border-slate-100">
-                      <div className="flex items-center justify-between gap-1">
-                        <span>{verb.pastParticiple}</span>
+                    {/* Past Participle */}
+                    <td className="py-3.5 px-5 border-r border-white/80">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-mono font-bold text-[#E04D1B] text-[14px]">
+                          {verb.pastParticiple}
+                        </span>
                         <PronounceButton text={verb.pastParticiple.replace(/\([^)]*\)/g, '')} size="xs" />
                       </div>
                     </td>
 
-                    {/* Translation Column */}
-                    <td className="py-3 px-4 text-slate-700 font-medium">
-                      {verb.translation}
+                    {/* Translation & Variant Tag */}
+                    <td className="py-3.5 px-5 text-[#160F2E] font-medium border-r border-white/80">
+                      <span>{verb.translation}</span>
                       {verb.variants && (
-                        <span className="block text-[11px] text-amber-700 font-normal mt-0.5">
+                        <span className="block text-[11px] font-semibold text-[#FF6534] mt-0.5">
                           {verb.variants}
                         </span>
                       )}
                     </td>
 
-                    {/* Expand Trigger Button */}
-                    <td className="py-3 px-4 text-center">
+                    {/* Expand icon */}
+                    <td className="py-3.5 px-4 text-center">
                       <button
                         type="button"
-                        aria-label={`Expandir detalhes de ${verb.infinitive}`}
-                        className="p-1 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition"
+                        aria-label={`Ver exemplo de ${verb.infinitive}`}
+                        className="p-1 rounded-lg text-[#52456F] hover:text-[#6938F5] hover:bg-[#EAE1FD] transition"
                       >
                         {isExpanded ? (
                           <ChevronUp className="w-4 h-4" />
@@ -321,16 +430,17 @@ export const IrregularVerbsView: React.FC = () => {
                     </td>
                   </tr>
 
-                  {/* Expanded Row with Sentence Example */}
+                  {/* Expanded Example Row */}
                   {isExpanded && (
-                    <tr className="bg-slate-50/90 border-b border-indigo-100/70">
-                      <td colSpan={5} className="py-3 px-5">
-                        <div className="flex items-start justify-between gap-3 bg-white p-3.5 rounded-xl border border-indigo-100 shadow-2xs">
+                    <tr className="bg-gradient-to-r from-[#F6F1FF] to-[#EFF7FE] border-b border-[#E2D7F8]">
+                      <td colSpan={5} className="py-3 px-6">
+                        <div className="flex items-start justify-between gap-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-white/90 shadow-2xs">
                           <div className="space-y-1">
-                            <span className="text-[10px] uppercase font-bold tracking-wider text-indigo-600">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-[#6938F5] flex items-center gap-1.5">
+                              <Sparkles className="w-3.5 h-3.5 text-[#FFD447]" />
                               Exemplo de uso natural em inglês
                             </span>
-                            <p className="text-sm font-medium text-slate-800 italic">
+                            <p className="text-sm font-semibold text-[#160F2E] italic">
                               "{verb.example}"
                             </p>
                           </div>
@@ -346,87 +456,89 @@ export const IrregularVerbsView: React.FC = () => {
         </table>
       </div>
 
-      {/* MOBILE VIEW: Visual Cards with 3 Distinct Color Badges */}
+      {/* MOBILE & COMPACT VIEW: Semantic Form Badges on Cards */}
       <div className="md:hidden space-y-3">
         {filteredVerbs.map((verb) => {
           const isExpanded = expandedRowId === verb.id;
+          const isFav = favorites.has(verb.infinitive);
           return (
             <div
               key={verb.id}
-              className={`bg-white rounded-2xl border transition-all duration-150 p-4 ${
-                isExpanded
-                  ? 'border-indigo-300 shadow-md ring-2 ring-indigo-50'
-                  : 'border-slate-200/90 hover:border-slate-300 shadow-xs'
+              onClick={() => toggleExpand(verb.id)}
+              className={`bg-white/80 backdrop-blur-xl rounded-3xl border transition-all duration-150 p-4 shadow-soft-card cursor-pointer ${
+                isExpanded ? 'border-[#6938F5] ring-2 ring-[#6938F5]/15' : 'border-white/90'
               }`}
             >
-              {/* Header: Infinitive & Translation */}
+              {/* Header: Infinitive + Translation + Star */}
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-bold text-slate-900 capitalize">
+                  <button
+                    type="button"
+                    onClick={(e) => toggleFavorite(verb.infinitive, e)}
+                    className="text-[#52456F] hover:text-[#F52E91] transition p-0.5"
+                    title={isFav ? 'Remover dos favoritos' : 'Favoritar'}
+                  >
+                    <Star className={`w-4 h-4 ${isFav ? 'fill-[#F52E91] text-[#F52E91]' : 'stroke-[1.8]'}`} />
+                  </button>
+                  <h3 className="text-lg font-extrabold text-[#160F2E] capitalize">
                     {verb.infinitive}
                   </h3>
-                  <PronounceButton text={verb.infinitive} size="sm" />
+                  <PronounceButton text={verb.infinitive} size="xs" />
                 </div>
-                <span className="text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg font-semibold max-w-[150px] truncate">
+                <span className="text-xs text-[#160F2E] bg-white/85 border border-white/90 px-2.5 py-1 rounded-xl font-bold max-w-[160px] truncate shadow-2xs">
                   {verb.translation}
                 </span>
               </div>
 
-              {/* Three Verbal Forms Pills with Distinct Color Harmonies */}
+              {/* Two Column Semantic Grid for Past & Participle */}
               <div className="grid grid-cols-2 gap-2 mt-3">
-                {/* Past Simple */}
-                <div className="bg-amber-50/70 border border-amber-200/70 rounded-xl p-2.5">
-                  <div className="flex items-center justify-between text-[10px] uppercase font-bold text-amber-800">
+                {/* Simple Past: Fresh Mint */}
+                <div className="bg-[#DCF8F1] border border-[#B6F5E8] rounded-2xl p-2.5">
+                  <div className="flex items-center justify-between text-[10px] uppercase font-extrabold text-[#0A9B80]">
                     <span>Simple Past</span>
                     <PronounceButton text={verb.pastSimple.replace(/\([^)]*\)/g, '')} size="xs" />
                   </div>
-                  <p className="text-xs font-mono font-bold text-amber-950 mt-1">
+                  <p className="text-xs font-mono font-bold text-[#0A9B80] mt-1">
                     {verb.pastSimple}
                   </p>
                 </div>
 
-                {/* Past Participle */}
-                <div className="bg-emerald-50/70 border border-emerald-200/70 rounded-xl p-2.5">
-                  <div className="flex items-center justify-between text-[10px] uppercase font-bold text-emerald-800">
+                {/* Past Participle: Tangerine */}
+                <div className="bg-[#FFEAE1] border border-[#FFD9CA] rounded-2xl p-2.5">
+                  <div className="flex items-center justify-between text-[10px] uppercase font-extrabold text-[#E04D1B]">
                     <span>Past Participle</span>
                     <PronounceButton text={verb.pastParticiple.replace(/\([^)]*\)/g, '')} size="xs" />
                   </div>
-                  <p className="text-xs font-mono font-bold text-emerald-950 mt-1">
+                  <p className="text-xs font-mono font-bold text-[#E04D1B] mt-1">
                     {verb.pastParticiple}
                   </p>
                 </div>
               </div>
 
-              {/* Regional Variant Badge */}
+              {/* Variant Tag */}
               {verb.variants && (
-                <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-amber-800 bg-amber-50/80 border border-amber-200 px-2.5 py-1 rounded-lg">
-                  <Sparkles className="w-3 h-3 text-amber-600 shrink-0" />
+                <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-[#52456F] bg-white/80 border border-white/90 px-3 py-1 rounded-xl font-medium">
+                  <Sparkles className="w-3.5 h-3.5 text-[#FFD447] shrink-0" />
                   <span>{verb.variants}</span>
                 </div>
               )}
 
-              {/* Example Expand Section */}
-              <div className="mt-3 pt-2 border-t border-slate-100">
-                <button
-                  type="button"
-                  onClick={() => toggleExpand(verb.id)}
-                  className="w-full flex items-center justify-between text-xs text-slate-500 hover:text-indigo-600 font-semibold py-0.5"
-                >
-                  <span>Exemplo em contexto</span>
-                  {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                </button>
-
-                {isExpanded && (
-                  <div className="mt-2 p-3 rounded-xl bg-indigo-50/60 border border-indigo-100 space-y-1.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-xs italic font-medium text-slate-800">
-                        "{verb.example}"
-                      </p>
-                      <PronounceButton text={verb.example} size="xs" />
-                    </div>
-                  </div>
-                )}
+              {/* Collapsed Example Hint */}
+              <div className="mt-3 pt-2 border-t border-[#E2D7F8] flex items-center justify-between text-xs text-[#52456F] font-semibold">
+                <span>Exemplo em contexto</span>
+                {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-[#6938F5]" /> : <ChevronDown className="w-3.5 h-3.5" />}
               </div>
+
+              {isExpanded && (
+                <div className="mt-2 p-3 rounded-2xl bg-white/90 border border-white/90 space-y-1.5 animate-in fade-in shadow-2xs">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-xs italic font-bold text-[#160F2E]">
+                      "{verb.example}"
+                    </p>
+                    <PronounceButton text={verb.example} size="xs" />
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}
