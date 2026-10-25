@@ -4,7 +4,6 @@ import {
   BookOpen, 
   BookA, 
   Languages, 
-  Compass, 
   Wifi, 
   WifiOff, 
   Download 
@@ -12,6 +11,7 @@ import {
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { usePwaInstall } from '../hooks/usePwaInstall';
+import { WordPocketLogo } from './brand/WordPocketLogo';
 
 interface MobileNavProps {
   activeTab: TabType;
@@ -77,23 +77,16 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           <button 
             type="button"
             onClick={() => onTabChange('home')}
-            className="flex items-center gap-2.5 text-left active:scale-95 transition"
+            className="text-left active:scale-95 transition"
+            aria-label="Ir para a página inicial"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-brand flex items-center justify-center text-white shadow-colored-violet ring-2 ring-white/80">
-              <Compass className="w-4 h-4 stroke-[2.3]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1">
-                <span className="text-sm font-black text-[#160F2E]">Word</span>
-                <span className="text-sm font-black text-[#6938F5]">Pocket</span>
-                <span className="text-[9px] font-bold uppercase tracking-wider bg-white/80 text-[#6938F5] px-1.5 py-0.2 rounded-full ml-1 border border-white/90">
-                  PWA
-                </span>
-              </div>
-              <p className="text-[9px] text-[#52456F] font-semibold leading-none mt-0.5">
-                Consulta Rápida de Inglês
-              </p>
-            </div>
+            <WordPocketLogo
+              variant="horizontal"
+              size="sm"
+              badge="PWA"
+              showSubtitle
+              subtitleText="Consulta Rápida de Inglês"
+            />
           </button>
 
           {/* Right Status & Avatar Profile */}

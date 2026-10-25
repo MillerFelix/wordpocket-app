@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, SlidersHorizontal, Bell, X } from 'lucide-react';
+import { Search, Bell, X } from 'lucide-react';
 import { TabType } from '../types';
 
 interface TopHeaderProps {
@@ -37,16 +37,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         )}
       </div>
 
-      {/* Right Controls: Filter, Notifications, Avatar */}
+      {/* Right Controls: Notifications, Avatar */}
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          className="p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#52456F] hover:text-[#6938F5] border border-white/90 shadow-2xs transition"
-          title="Filtros e ordenação"
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-        </button>
-
         <button
           type="button"
           className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#52456F] hover:text-[#6938F5] border border-white/90 shadow-2xs transition"

@@ -26,7 +26,6 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   const [search, setSearch] = useState(initialSearch);
   const [selectedGroup, setSelectedGroup] = useState<VerbGroup | 'all'>('all');
   const [selectedLetter, setSelectedLetter] = useState<string>('all');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [showCoverageInfo, setShowCoverageInfo] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -43,10 +42,10 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
     }
   }, [initialSearch]);
 
-  // Reset pagination to page 1 whenever search query, filters, or sorting change
+  // Reset pagination to page 1 whenever search query or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, selectedGroup, selectedLetter, sortOrder]);
+  }, [search, selectedGroup, selectedLetter]);
 
   const alphabetLetters = useMemo(() => {
     const letters = new Set<string>();
@@ -59,30 +58,25 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   const filteredVerbs = useMemo(() => {
     const q = search.trim().toLowerCase();
 
-    return irregularVerbs
-      .filter((verb) => {
-        if (selectedGroup !== 'all' && verb.group !== selectedGroup) {
-          return false;
-        }
+    return irregularVerbs.filter((verb) => {
+      if (selectedGroup !== 'all' && verb.group !== selectedGroup) {
+        return false;
+      }
 
-        if (selectedLetter !== 'all' && !verb.infinitive.toUpperCase().startsWith(selectedLetter)) {
-          return false;
-        }
+      if (selectedLetter !== 'all' && !verb.infinitive.toUpperCase().startsWith(selectedLetter)) {
+        return false;
+      }
 
-        if (!q) return true;
-        return (
-          verb.infinitive.toLowerCase().includes(q) ||
-          verb.pastSimple.toLowerCase().includes(q) ||
-          verb.pastParticiple.toLowerCase().includes(q) ||
-          verb.translation.toLowerCase().includes(q) ||
-          (verb.variants && verb.variants.toLowerCase().includes(q))
-        );
-      })
-      .sort((a, b) => {
-        const comp = a.infinitive.localeCompare(b.infinitive);
-        return sortOrder === 'asc' ? comp : -comp;
-      });
-  }, [search, selectedGroup, selectedLetter, sortOrder]);
+      if (!q) return true;
+      return (
+        verb.infinitive.toLowerCase().includes(q) ||
+        verb.pastSimple.toLowerCase().includes(q) ||
+        verb.pastParticiple.toLowerCase().includes(q) ||
+        verb.translation.toLowerCase().includes(q) ||
+        (verb.variants && verb.variants.toLowerCase().includes(q))
+      );
+    });
+  }, [search, selectedGroup, selectedLetter]);
 
   // Pagination calculation
   const totalItems = filteredVerbs.length;
@@ -157,8 +151,6 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
         onSearchChange={setSearch}
         showCoverageInfo={showCoverageInfo}
         onToggleCoverageInfo={() => setShowCoverageInfo((prev) => !prev)}
-        sortOrder={sortOrder}
-        onToggleSortOrder={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
         selectedGroup={selectedGroup}
         onSelectGroup={setSelectedGroup}
         filterOptions={FILTER_OPTIONS}

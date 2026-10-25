@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Search, X, SlidersHorizontal } from 'lucide-react';
+import React from 'react';
+import { Search, X } from 'lucide-react';
 import { TabType, IrregularVerb, VocabWord } from '../../types';
 
 interface SearchResultsData {
@@ -21,40 +21,27 @@ export const HomeGlobalSearch: React.FC<HomeGlobalSearchProps> = ({
   searchResults,
   onNavigate
 }) => {
-  const [showFilterModal, setShowFilterModal] = useState(false);
-
   return (
     <div className="relative z-20">
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6938F5]" />
-          <input
-            type="text"
-            value={globalSearch}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Buscar palavra, verbo ou tradução..."
-            className="w-full pl-11 pr-10 py-3.5 text-sm bg-white/85 backdrop-blur-md hover:border-[#6938F5]/40 focus:border-[#6938F5] focus:bg-white focus:ring-4 focus:ring-[#6938F5]/10 rounded-2xl border border-white/90 shadow-soft-card outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
-          />
-          {globalSearch && (
-            <button
-              type="button"
-              onClick={() => onSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#52456F] hover:text-[#160F2E] rounded-lg transition"
-              title="Limpar busca"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setShowFilterModal(!showFilterModal)}
-          className="p-3.5 bg-white/85 hover:bg-white text-[#160F2E] hover:text-[#6938F5] rounded-2xl border border-white/90 shadow-soft-card transition active:scale-95"
-          title="Opções de busca e filtros"
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-        </button>
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6938F5]" />
+        <input
+          type="text"
+          value={globalSearch}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Buscar palavra, verbo ou tradução..."
+          className="w-full pl-11 pr-10 py-3.5 text-sm bg-white/85 backdrop-blur-md hover:border-[#6938F5]/40 focus:border-[#6938F5] focus:bg-white focus:ring-4 focus:ring-[#6938F5]/10 rounded-2xl border border-white/90 shadow-soft-card outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
+        />
+        {globalSearch && (
+          <button
+            type="button"
+            onClick={() => onSearchChange('')}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#52456F] hover:text-[#160F2E] rounded-lg transition"
+            title="Limpar busca"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Global Live Search Results Dropdown */}

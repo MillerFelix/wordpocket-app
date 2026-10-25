@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none">
+  <defs>
+    <linearGradient id="wpPulseH" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#26D9FF" />
+      <stop offset="48%" stop-color="#176BFF" />
+      <stop offset="100%" stop-color="#6545F5" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Left Symbol (48x48 icon) -->
+  <g transform="translate(6, 8) scale(0.09375)">
+    <path d="M144 72 H368 C424 72 456 104 456 160 V288 C456 344 424 376 368 376 H224 L144 440 C132 448 116 440 116 424 V376 C76 372 56 348 56 304 V160 C56 104 88 72 144 72 Z" fill="url(#wpPulseH)" />
+    <path d="M168 188 C206 172 242 184 251 202 C253 206 253 306 253 306 C242 290 206 278 168 294 C158 298 148 290 148 280 V202 C148 192 158 184 168 188 Z" fill="#FFFFFF" />
+    <path d="M344 188 C306 172 270 184 261 202 C259 206 259 306 259 306 C270 290 306 278 344 294 C354 298 364 290 364 280 V202 C364 192 354 184 344 188 Z" fill="#FFFFFF" fill-opacity="0.95" />
+    <circle cx="256" cy="164" r="16" fill="#FFFFFF" />
+  </g>
+
+  <!-- Typography: Word Pocket -->
+  <text x="64" y="40" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="28" letter-spacing="-0.03em" fill="#160F2E">Word</text>
+  <text x="146" y="40" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="900" font-size="28" letter-spacing="-0.03em" fill="url(#wpPulseH)">Pocket</text>
+  <text x="65" y="53" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-weight="700" font-size="9" letter-spacing="0.08em" text-transform="uppercase" fill="#6545F5" opacity="0.85">Smart English Guide</text>
+</svg>

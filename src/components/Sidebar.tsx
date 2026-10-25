@@ -11,12 +11,12 @@ import {
   Wifi, 
   WifiOff, 
   Sparkles, 
-  ArrowRight,
-  Compass
+  ArrowRight
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { usePwaInstall } from '../hooks/usePwaInstall';
+import { WordPocketLogo } from './brand/WordPocketLogo';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -108,27 +108,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Brand Logo */}
         <div 
           onClick={() => onTabChange('home')}
-          className="flex items-center gap-3 px-2 pt-1 cursor-pointer group"
+          className="px-2 pt-1 cursor-pointer group hover:opacity-95 transition"
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && onTabChange('home')}
         >
-          <div className="w-11 h-11 rounded-2xl bg-gradient-brand flex items-center justify-center text-white shadow-colored-violet ring-4 ring-white/80 group-hover:scale-105 transition-transform">
-            <Compass className="w-6 h-6 stroke-[2.3]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xl font-black tracking-tight text-[#160F2E]">
-                Word
-              </span>
-              <span className="text-xl font-black text-[#6938F5]">
-                Pocket
-              </span>
-            </div>
-            <p className="text-[11px] font-bold text-[#52456F] tracking-wide">
-              Estudo Inteligente de Inglês
-            </p>
-          </div>
+          <WordPocketLogo
+            variant="horizontal"
+            size="md"
+            showSubtitle
+            subtitleText="Estudo Inteligente de Inglês"
+            className="group-hover:scale-[1.02] transition-transform"
+          />
         </div>
 
         {/* Main Navigation Items */}

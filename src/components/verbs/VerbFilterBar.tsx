@@ -7,8 +7,6 @@ interface VerbFilterBarProps {
   onSearchChange: (value: string) => void;
   showCoverageInfo: boolean;
   onToggleCoverageInfo: () => void;
-  sortOrder: 'asc' | 'desc';
-  onToggleSortOrder: () => void;
   selectedGroup: VerbGroup | 'all';
   onSelectGroup: (group: VerbGroup | 'all') => void;
   filterOptions: { id: VerbGroup | 'all'; label: string }[];
@@ -22,8 +20,6 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
   onSearchChange,
   showCoverageInfo,
   onToggleCoverageInfo,
-  sortOrder,
-  onToggleSortOrder,
   selectedGroup,
   onSelectGroup,
   filterOptions,
@@ -56,8 +52,8 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
           )}
         </div>
 
-        {/* Action buttons: Methodology info & Sort Order */}
-        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+        {/* Action button: Methodology info */}
+        <div className="flex items-center shrink-0 self-end sm:self-auto">
           <button
             type="button"
             onClick={onToggleCoverageInfo}
@@ -69,15 +65,6 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
           >
             <Info className="w-3.5 h-3.5 text-[#6938F5]" />
             <span>Metodologia & Fontes</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={onToggleSortOrder}
-            className="px-3.5 py-2.5 text-xs font-bold rounded-2xl border border-white/90 bg-white/80 hover:bg-white text-[#160F2E] transition active:scale-95 shadow-2xs"
-            title="Alternar ordenação alfabética"
-          >
-            {sortOrder === 'asc' ? 'A → Z' : 'Z → A'}
           </button>
         </div>
       </div>
