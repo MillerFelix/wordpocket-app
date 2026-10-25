@@ -17,9 +17,74 @@ interface QuickTranslatorViewProps {
   initialText?: string;
 }
 
+type TranslationDirection = 'auto_pt' | 'en_pt' | 'pt_en';
+
+interface DirectionConfig {
+  sl: string;
+  tl: string;
+  label: string;
+  from: string;
+  to: string;
+}
+
+const DIRECTION_CONFIGS: Record<TranslationDirection, DirectionConfig> = {
+  auto_pt: { sl: 'auto', tl: 'pt', label: 'Detectar idioma → Português', from: 'Detectar idioma', to: 'Português' },
+  en_pt: { sl: 'en', tl: 'pt', label: 'Inglês → Português', from: 'Inglês', to: 'Português' },
+  pt_en: { sl: 'pt', tl: 'en', label: 'Português → Inglês', from: 'Português', to: 'Inglês' }
+};
+
+interface PhraseItem {
+  text: string;
+  label: string;
+}
+
+interface PhraseCategory {
+  group: string;
+  icon: React.ElementType;
+  color: string;
+  badgeBg: string;
+  phrases: PhraseItem[];
+}
+
+const PHRASE_CATEGORIES: PhraseCategory[] = [
+  {
+    group: 'Viagens & Aeroporto',
+    icon: Plane,
+    color: 'text-[#0FAF91]',
+    badgeBg: 'bg-[#E8FCF7] text-[#0FAF91]',
+    phrases: [
+      { text: 'Where is the baggage claim area?', label: 'Onde fica a restituição de bagagem?' },
+      { text: 'Could you please point me to gate 14B?', label: 'Onde fica o portão 14B?' },
+      { text: 'Is there a direct bus to the city center?', label: 'Há ônibus direto para o centro?' }
+    ]
+  },
+  {
+    group: 'Trabalho & Reuniões',
+    icon: Briefcase,
+    color: 'text-[#6938F5]',
+    badgeBg: 'bg-[#F3EFFF] text-[#6938F5]',
+    phrases: [
+      { text: 'Could we reschedule our sync for tomorrow morning?', label: 'Podemos remarcar a conversa?' },
+      { text: 'Please find the revised summary attached.', label: 'Segue o resumo revisado em anexo.' },
+      { text: 'I would like to clarify a couple of requirements.', label: 'Gostaria de esclarecer requisitos.' }
+    ]
+  },
+  {
+    group: 'Conversação Diária',
+    icon: Coffee,
+    color: 'text-[#FF6534]',
+    badgeBg: 'bg-[#FFF2ED] text-[#FF6534]',
+    phrases: [
+      { text: 'Could you say that once more, please?', label: 'Poderia repetir mais uma vez?' },
+      { text: 'How do native speakers typically express this?', label: 'Como nativos costumam dizer isso?' },
+      { text: 'I am practicing my English every single day.', label: 'Estou praticando meu inglês todo dia.' }
+    ]
+  }
+];
+
 export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initialText = '' }) => {
   const [text, setText] = useState(initialText);
-  const [direction, setDirection] = useState<'auto_pt' | 'en_pt' | 'pt_en'>('auto_pt');
+  const [direction, setDirection] = useState<TranslationDirection>('auto_pt');
   const [copiedNotice, setCopiedNotice] = useState(false);
 
   useEffect(() => {
@@ -28,14 +93,8 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
     }
   }, [initialText]);
 
-  const directionConfigs = {
-    auto_pt: { sl: 'auto', tl: 'pt', label: 'Detectar idioma → Português', from: 'Detectar idioma', to: 'Português' },
-    en_pt: { sl: 'en', tl: 'pt', label: 'Inglês → Português', from: 'Inglês', to: 'Português' },
-    pt_en: { sl: 'pt', tl: 'en', label: 'Português → Inglês', from: 'Português', to: 'Inglês' }
-  };
-
   const handleTranslate = () => {
-    const config = directionConfigs[direction];
+    const config = DIRECTION_CONFIGS[direction];
     const encoded = encodeURIComponent(text.trim());
     const url = `https://translate.google.com/?sl=${config.sl}&tl=${config.tl}&text=${encoded}&op=translate`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -48,7 +107,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
         setText(clipboardText);
       }
     } catch {
-      // Graceful fallback
+      // Graceful fallback for environments blocking clipboard read
     }
   };
 
@@ -58,45 +117,15 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
     setTimeout(() => setCopiedNotice(false), 2000);
   };
 
-  const phraseCategories = [
-    {
-      group: 'Viagens & Aeroporto',
-      icon: Plane,
-      color: 'text-[#0FAF91]',
-      badgeBg: 'bg-[#E8FCF7] text-[#0FAF91]',
-      phrases: [
-        { text: 'Where is the baggage claim area?', label: 'Onde fica a restituição de bagagem?' },
-        { text: 'Could you please point me to gate 14B?', label: 'Onde fica o portão 14B?' },
-        { text: 'Is there a direct bus to the city center?', label: 'Há ônibus direto para o centro?' }
-      ]
-    },
-    {
-      group: 'Trabalho & Reuniões',
-      icon: Briefcase,
-      color: 'text-[#6938F5]',
-      badgeBg: 'bg-[#F3EFFF] text-[#6938F5]',
-      phrases: [
-        { text: 'Could we reschedule our sync for tomorrow morning?', label: 'Podemos remarcar a conversa?' },
-        { text: 'Please find the revised summary attached.', label: 'Segue o resumo revisado em anexo.' },
-        { text: 'I would like to clarify a couple of requirements.', label: 'Gostaria de esclarecer requisitos.' }
-      ]
-    },
-    {
-      group: 'Conversação Diária',
-      icon: Coffee,
-      color: 'text-[#FF6534]',
-      badgeBg: 'bg-[#FFF2ED] text-[#FF6534]',
-      phrases: [
-        { text: 'Could you say that once more, please?', label: 'Poderia repetir mais uma vez?' },
-        { text: 'How do native speakers typically express this?', label: 'Como nativos costumam dizer isso?' },
-        { text: 'I am practicing my English every single day.', label: 'Estou praticando meu inglês todo dia.' }
-      ]
-    }
-  ];
+  const toggleDirection = () => {
+    setDirection((prev) =>
+      prev === 'en_pt' ? 'pt_en' : prev === 'pt_en' ? 'auto_pt' : 'en_pt'
+    );
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Page Header matching reference */}
+      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div className="flex items-start gap-3.5">
           <div className="w-11 h-11 rounded-2xl bg-gradient-translator text-white flex items-center justify-center shadow-colored-tangerine shrink-0 ring-4 ring-white/80">
@@ -125,7 +154,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
 
       {/* Responsive 2-column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Main Translator Workspace with Tangerine Accent */}
+        {/* Main Translator Workspace */}
         <div className="lg:col-span-7 bg-white/80 backdrop-blur-xl p-5 sm:p-7 rounded-3xl border border-white/90 shadow-soft-card space-y-5">
           {/* Header & Direction Switcher */}
           <div className="space-y-3 pb-3 border-b border-[#E2D7F8]">
@@ -141,17 +170,13 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
             {/* Language Selector Bar */}
             <div className="flex items-center justify-between gap-2 bg-gradient-to-r from-[#FFEAE1] to-[#FDE8F1] p-2 rounded-2xl border border-white/90 shadow-2xs">
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 font-bold text-xs text-[#160F2E] shadow-2xs border border-white/90">
-                <span>{directionConfigs[direction].from}</span>
+                <span>{DIRECTION_CONFIGS[direction].from}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-[#52456F]" />
               </div>
 
               <button
                 type="button"
-                onClick={() => {
-                  setDirection((prev) =>
-                    prev === 'en_pt' ? 'pt_en' : prev === 'pt_en' ? 'auto_pt' : 'en_pt'
-                  );
-                }}
+                onClick={toggleDirection}
                 className="p-2 rounded-xl bg-white/90 hover:bg-white text-[#6938F5] border border-white/90 shadow-2xs transition active:scale-90"
                 title="Alternar sentido do idioma"
               >
@@ -159,7 +184,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
               </button>
 
               <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 font-bold text-xs text-[#160F2E] shadow-2xs border border-white/90">
-                <span>{directionConfigs[direction].to}</span>
+                <span>{DIRECTION_CONFIGS[direction].to}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-[#52456F]" />
               </div>
             </div>
@@ -204,7 +229,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
             </div>
           </div>
 
-          {/* Primary Action Button with Gradient: Tangerine to Neon Pink */}
+          {/* Primary Action Button */}
           <div className="pt-2 space-y-2">
             <button
               type="button"
@@ -220,9 +245,8 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
           </div>
         </div>
 
-        {/* Companion Column (5 Cols on desktop): Quick Phrases & Privacy */}
+        {/* Companion Column: Quick Phrases & Privacy */}
         <div className="lg:col-span-5 space-y-5">
-          {/* Quick Phrases Card with Warm Tangerine Accent */}
           <div className="bg-white/80 backdrop-blur-xl p-5 sm:p-6 rounded-3xl border border-white/90 shadow-soft-card space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-[#160F2E] flex items-center gap-1.5">
@@ -237,7 +261,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
             </div>
 
             <div className="space-y-4">
-              {phraseCategories.map((cat, cIdx) => {
+              {PHRASE_CATEGORIES.map((cat, cIdx) => {
                 const CatIcon = cat.icon;
                 return (
                   <div key={cIdx} className="space-y-2">
@@ -271,7 +295,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
             </div>
           </div>
 
-          {/* Privacy & No-Backend Guarantee */}
+          {/* Privacy Guarantee */}
           <div className="flex items-start gap-3 p-4 bg-gradient-to-br from-[#EAE1FD]/60 via-white/70 to-[#DCF8F1]/60 backdrop-blur-md rounded-3xl border border-white/90 text-xs text-[#52456F] shadow-2xs">
             <ShieldCheck className="w-5 h-5 text-[#19D9B4] shrink-0 mt-0.5" />
             <div className="space-y-1">

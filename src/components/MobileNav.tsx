@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { 
   Home, 
   BookOpen, 
@@ -10,6 +10,8 @@ import {
   Download 
 } from 'lucide-react';
 import { TabType } from '../types';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { usePwaInstall } from '../hooks/usePwaInstall';
 
 interface MobileNavProps {
   activeTab: TabType;
@@ -18,60 +20,17 @@ interface MobileNavProps {
   vocabCount: number;
 }
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
-
 export const MobileNav: React.FC<MobileNavProps> = ({
   activeTab,
   onTabChange,
   verbCount: _verbCount,
   vocabCount: _vocabCount
 }) => {
-  const [isOnline, setIsOnline] = useState<boolean>(
-    typeof navigator !== 'undefined' ? navigator.onLine : true
-  );
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    const handleBeforeInstall = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setInstallPrompt(null);
-    };
-
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
+  const isOnline = useOnlineStatus();
+  const { canInstall, promptInstall } = usePwaInstall();
 
   const handleInstallClick = async () => {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    const choice = await installPrompt.userChoice;
-    if (choice.outcome === 'accepted') {
-      setIsInstalled(true);
-    }
-    setInstallPrompt(null);
+    await promptInstall();
   };
 
   const tabs = [
@@ -159,7 +118,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               )}
             </div>
 
-            {installPrompt && !isInstalled && (
+            {canInstall && (
               <button
                 type="button"
                 onClick={handleInstallClick}

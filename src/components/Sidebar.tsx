@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { 
   Home, 
   BookOpen, 
@@ -15,6 +15,8 @@ import {
   Compass
 } from 'lucide-react';
 import { TabType } from '../types';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { usePwaInstall } from '../hooks/usePwaInstall';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -23,61 +25,14 @@ interface SidebarProps {
   vocabCount: number;
 }
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
-
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onTabChange,
   verbCount,
   vocabCount
 }) => {
-  const [isOnline, setIsOnline] = useState<boolean>(
-    typeof navigator !== 'undefined' ? navigator.onLine : true
-  );
-  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    const handleBeforeInstall = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setInstallPrompt(null);
-    };
-
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    const choice = await installPrompt.userChoice;
-    if (choice.outcome === 'accepted') {
-      setIsInstalled(true);
-    }
-    setInstallPrompt(null);
-  };
+  const isOnline = useOnlineStatus();
+  const { canInstall, promptInstall } = usePwaInstall();
 
   const mainNavItems = [
     {
@@ -304,10 +259,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {installPrompt && !isInstalled && (
+        {canInstall && (
           <button
             type="button"
-            onClick={handleInstallClick}
+            onClick={promptInstall}
             className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-gradient-brand text-white text-xs font-bold shadow-colored-violet hover:opacity-95 active:scale-[0.98] transition"
           >
             <Download className="w-3.5 h-3.5" />

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Settings, ShieldCheck, Volume2, Smartphone } from 'lucide-react';
 
 export const SettingsView: React.FC = () => {

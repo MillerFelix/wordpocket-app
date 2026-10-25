@@ -1,47 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Star, BookOpen, BookA, ArrowRight, Trash2 } from 'lucide-react';
 import { TabType } from '../types';
 import { irregularVerbs } from '../data/irregularVerbs';
 import { vocabularyData } from '../data/vocabulary';
 import { PronounceButton } from './PronounceButton';
+import { useFavorites } from '../hooks/useFavorites';
 
 interface FavoritesViewProps {
   onNavigate: (tab: TabType, term?: string) => void;
 }
 
 export const FavoritesView: React.FC<FavoritesViewProps> = ({ onNavigate }) => {
-  const [favVerbs, setFavVerbs] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('wordpocket_fav_verbs') || localStorage.getItem('upword_fav_verbs');
-      return saved ? JSON.parse(saved) : ['go', 'be', 'begin'];
-    } catch {
-      return ['go', 'be', 'begin'];
-    }
-  });
+  const { favorites: favVerbsSet, removeFavorite: removeVerb } = useFavorites(
+    'wordpocket_fav_verbs',
+    ['go', 'be', 'begin'],
+    'upword_fav_verbs'
+  );
 
-  const [favVocab, setFavVocab] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('wordpocket_fav_vocab') || localStorage.getItem('upword_fav_vocab');
-      return saved ? JSON.parse(saved) : ['resilient', 'beautiful'];
-    } catch {
-      return ['resilient', 'beautiful'];
-    }
-  });
+  const { favorites: favVocabSet, removeFavorite: removeVocab } = useFavorites(
+    'wordpocket_fav_vocab',
+    ['resilient', 'beautiful'],
+    'upword_fav_vocab'
+  );
 
-  const removeVerb = (infinitive: string) => {
-    const next = favVerbs.filter((v) => v !== infinitive);
-    setFavVerbs(next);
-    localStorage.setItem('wordpocket_fav_verbs', JSON.stringify(next));
-  };
-
-  const removeVocab = (word: string) => {
-    const next = favVocab.filter((w) => w !== word);
-    setFavVocab(next);
-    localStorage.setItem('wordpocket_fav_vocab', JSON.stringify(next));
-  };
-
-  const verbsList = irregularVerbs.filter((v) => favVerbs.includes(v.infinitive));
-  const vocabList = vocabularyData.filter((w) => favVocab.includes(w.word));
+  const verbsList = irregularVerbs.filter((v) => favVerbsSet.has(v.infinitive));
+  const vocabList = vocabularyData.filter((w) => favVocabSet.has(w.word));
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
