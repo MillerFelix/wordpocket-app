@@ -63,7 +63,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
               {verb.pastSimple}
             </span>
             <div className="shrink-0">
-              <PronounceButton text={verb.pastSimple.replace(/\([^)]*\)/g, '')} size="xs" />
+              <PronounceButton text={verb.pastSimple} size="xs" />
             </div>
           </div>
         </td>
@@ -75,7 +75,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
               {verb.pastParticiple}
             </span>
             <div className="shrink-0">
-              <PronounceButton text={verb.pastParticiple.replace(/\([^)]*\)/g, '')} size="xs" />
+              <PronounceButton text={verb.pastParticiple} size="xs" />
             </div>
           </div>
         </td>

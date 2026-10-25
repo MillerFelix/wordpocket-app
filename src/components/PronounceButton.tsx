@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { speakEnglish, isSpeechSupported } from '../utils/speech';
+import { speakEnglish, isSpeechSupported, formatTextForSpeech } from '../utils/speech';
 
 interface PronounceButtonProps {
   text: string;
@@ -19,6 +19,7 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
   const [errorNotice, setErrorNotice] = useState<string | null>(null);
 
   const supported = isSpeechSupported();
+  const speechLabel = formatTextForSpeech(text);
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -55,9 +56,9 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
             ? errorNotice
             : !supported
             ? 'Síntese de voz não suportada'
-            : `Ouvir pronúncia de "${text}"`
+            : `Ouvir pronúncia de "${speechLabel}"`
         }
-        aria-label={`Ouvir pronúncia de ${text}`}
+        aria-label={`Ouvir pronúncia de ${speechLabel}`}
         className={`inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6938F5]/40 select-none ${
           sizeClasses[size]
         } ${

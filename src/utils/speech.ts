@@ -40,6 +40,56 @@ export function getEnglishVoice(): SpeechSynthesisVoice | null {
   return null;
 }
 
+/**
+ * Normalizes text for natural English speech synthesis:
+ * - Replaces alternative slashes (e.g. "was / were", "abode/abided") with natural "or"
+ * - Strips parenthetical phonetic annotations like (/rɛd/) or (UK)
+ * - Removes rogue quotes, IPA symbols, and non-verbal punctuation
+ */
+export function formatTextForSpeech(text: string): string {
+  if (!text) return '';
+
+  let formatted = text;
+
+  // 1. Remove parenthetical notes/phonetic guides like (/rɛd/), (US), (UK), (transitive)
+  formatted = formatted.replace(/\s*\([^)]*\)/g, ' ');
+
+  // 2. Remove isolated IPA phonetic guides containing special IPA characters
+  formatted = formatted.replace(/\/[^/\s]*[ɛɪʊʌəɒæɔːθðʃʒŋˈˌ][^/\s]*\//g, ' ');
+
+  // 3. Convert alternative word slashes to " or " (e.g. "was / were" -> "was or were", "abode/abided" -> "abode or abided")
+  if (formatted.includes('/')) {
+    const parts = formatted.split(/\s*\/\s*/).map(p => p.trim()).filter(Boolean);
+    if (parts.length > 2) {
+      formatted = parts.slice(0, -1).join(', ') + ' or ' + parts[parts.length - 1];
+    } else if (parts.length === 2) {
+      formatted = `${parts[0]} or ${parts[1]}`;
+    } else {
+      formatted = formatted.replace(/\s*\/\s*/g, ' or ');
+    }
+  }
+
+  // 4. Remove quotation marks that might be spoken as "quote" by some engines
+  formatted = formatted.replace(/["“”'‘’]/g, '');
+
+  // 5. Replace bullet points, en-dashes or em-dashes used as separators with commas
+  formatted = formatted.replace(/\s*[•–—]\s*/g, ', ');
+
+  // 6. Clean up symbols that could be verbalized literally (brackets, asterisks, hashes, backslashes, etc.)
+  formatted = formatted.replace(/[*#~_<>^{}[\]|\\]/g, ' ');
+
+  // 7. Remove any trailing or stray slashes
+  formatted = formatted.replace(/\//g, ' ');
+
+  // 8. Normalize spaces and multiple commas
+  formatted = formatted
+    .replace(/\s*,\s*,+/g, ', ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return formatted;
+}
+
 export function speakEnglish(text: string): SpeechResult {
   if (!isSpeechSupported()) {
     return {
@@ -48,9 +98,17 @@ export function speakEnglish(text: string): SpeechResult {
     };
   }
 
+  const cleanText = formatTextForSpeech(text);
+  if (!cleanText) {
+    return {
+      success: false,
+      message: 'Texto vazio para pronúncia.'
+    };
+  }
+
   try {
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
     
     const voice = getEnglishVoice();
     if (voice) {
