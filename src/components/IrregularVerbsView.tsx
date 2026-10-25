@@ -7,10 +7,13 @@ import { VerbFilterBar } from './verbs/VerbFilterBar';
 import { VerbCoverageModal } from './verbs/VerbCoverageModal';
 import { VerbTableRow } from './verbs/VerbTableRow';
 import { VerbMobileCard } from './verbs/VerbMobileCard';
+import { VerbPagination } from './verbs/VerbPagination';
 
 interface IrregularVerbsViewProps {
   initialSearch?: string;
 }
+
+const ITEMS_PER_PAGE = 25;
 
 const FILTER_OPTIONS: { id: VerbGroup | 'all'; label: string }[] = [
   { id: 'all', label: 'Todos os Verbos' },
@@ -27,6 +30,7 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [showCoverageInfo, setShowCoverageInfo] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const { isFavorite, toggleFavorite } = useFavorites(
     'wordpocket_fav_verbs',
@@ -39,6 +43,11 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
       setSearch(initialSearch);
     }
   }, [initialSearch]);
+
+  // Reset pagination to page 1 whenever search query, filters, or sorting change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedGroup, selectedLetter, sortOrder]);
 
   const alphabetLetters = useMemo(() => {
     const letters = new Set<string>();
@@ -76,6 +85,14 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
       });
   }, [search, selectedGroup, selectedLetter, sortOrder]);
 
+  // Pagination calculation
+  const totalItems = filteredVerbs.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const paginatedVerbs = filteredVerbs.slice(startIndex, endIndex);
+
   const toggleExpand = (id: string) => {
     setExpandedRowId((prev) => (prev === id ? null : id));
   };
@@ -84,6 +101,12 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
     setSearch('');
     setSelectedGroup('all');
     setSelectedLetter('all');
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    const clamped = Math.max(1, Math.min(newPage, totalPages));
+    setCurrentPage(clamped);
   };
 
   return (
@@ -105,7 +128,7 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
               Verbos Irregulares
             </h1>
             <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-1">
-              Todas as formas verbais, organizadas para consulta rápida com destaque cromático.
+              Catálogo completo com 200 verbos irregulares, paginação inteligente e destaque cromático.
             </p>
           </div>
         </div>
@@ -152,10 +175,20 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
       />
 
       {/* Results Counter Bar */}
-      <div className="flex items-center justify-between px-1 text-xs text-[#52456F] font-semibold">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1 text-xs text-[#52456F] font-semibold">
         <span>
-          Exibindo <strong className="text-[#160F2E]">{filteredVerbs.length}</strong>{' '}
-          {filteredVerbs.length === 1 ? 'verbo irregular' : 'verbos irregulares'}
+          Exibindo{' '}
+          {totalItems > 0 ? (
+            <>
+              <strong className="text-[#160F2E]">
+                {startIndex + 1}–{endIndex}
+              </strong>{' '}
+              de <strong className="text-[#160F2E]">{totalItems}</strong>{' '}
+              {totalItems === 1 ? 'verbo irregular' : 'verbos irregulares'}
+            </>
+          ) : (
+            <strong className="text-[#160F2E]">0 verbos irregulares</strong>
+          )}
         </span>
         <span className="flex items-center gap-1.5">
           <HelpCircle className="w-3.5 h-3.5 text-[#6938F5]" />
@@ -164,7 +197,7 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
       </div>
 
       {/* Empty State */}
-      {filteredVerbs.length === 0 && (
+      {totalItems === 0 && (
         <div className="bg-white/85 backdrop-blur-xl rounded-3xl border border-dashed border-[#E2D7F8] p-10 text-center space-y-3">
           <div className="w-12 h-12 rounded-2xl bg-[#EAE1FD] text-[#6938F5] flex items-center justify-center mx-auto">
             <Search className="w-6 h-6" />
@@ -184,61 +217,77 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
       )}
 
       {/* DESKTOP TABLE */}
-      <div className="hidden md:block bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 shadow-soft-card overflow-hidden">
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-[#E2D7F8] text-xs font-black uppercase tracking-wider">
-              {/* Form 1 Header: Solid Electric Violet */}
-              <th className="py-3.5 px-5 text-white bg-gradient-verbs border-r border-white/20 w-[24%]">
-                <div className="flex items-center gap-2">
-                  <span>Verbo base</span>
-                </div>
-              </th>
-              {/* Form 2 Header: Fresh Mint */}
-              <th className="py-3.5 px-5 text-[#0A9B80] bg-[#DCF8F1] border-r border-white/80 w-[22%]">
-                Simple Past
-              </th>
-              {/* Form 3 Header: Tangerine */}
-              <th className="py-3.5 px-5 text-[#E04D1B] bg-[#FFEAE1] border-r border-white/80 w-[22%]">
-                Past Participle
-              </th>
-              {/* Translation: Soft Violet */}
-              <th className="py-3.5 px-5 text-[#6938F5] bg-[#EAE1FD] border-r border-white/80">
-                Tradução
-              </th>
-              <th className="py-3.5 px-4 text-center w-16 bg-white/60 text-[#52456F]">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/80 text-sm">
-            {filteredVerbs.map((verb) => (
-              <VerbTableRow
-                key={verb.id}
-                verb={verb}
-                isExpanded={expandedRowId === verb.id}
-                isFavorite={isFavorite(verb.infinitive)}
-                onToggleExpand={toggleExpand}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {totalItems > 0 && (
+        <div className="hidden md:block bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 shadow-soft-card overflow-hidden">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-[#E2D7F8] text-xs font-black uppercase tracking-wider">
+                {/* Form 1 Header: Solid Electric Violet */}
+                <th className="py-3.5 px-5 text-white bg-gradient-verbs border-r border-white/20 w-[24%]">
+                  <div className="flex items-center gap-2">
+                    <span>Verbo base</span>
+                  </div>
+                </th>
+                {/* Form 2 Header: Fresh Mint */}
+                <th className="py-3.5 px-5 text-[#0A9B80] bg-[#DCF8F1] border-r border-white/80 w-[22%]">
+                  Simple Past
+                </th>
+                {/* Form 3 Header: Tangerine */}
+                <th className="py-3.5 px-5 text-[#E04D1B] bg-[#FFEAE1] border-r border-white/80 w-[22%]">
+                  Past Participle
+                </th>
+                {/* Translation: Soft Violet */}
+                <th className="py-3.5 px-5 text-[#6938F5] bg-[#EAE1FD] border-r border-white/80">
+                  Tradução
+                </th>
+                <th className="py-3.5 px-4 text-center w-16 bg-white/60 text-[#52456F]">
+                  Ações
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/80 text-sm">
+              {paginatedVerbs.map((verb) => (
+                <VerbTableRow
+                  key={verb.id}
+                  verb={verb}
+                  isExpanded={expandedRowId === verb.id}
+                  isFavorite={isFavorite(verb.infinitive)}
+                  onToggleExpand={toggleExpand}
+                  onToggleFavorite={toggleFavorite}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* MOBILE & COMPACT VIEW */}
-      <div className="md:hidden space-y-3">
-        {filteredVerbs.map((verb) => (
-          <VerbMobileCard
-            key={verb.id}
-            verb={verb}
-            isExpanded={expandedRowId === verb.id}
-            isFavorite={isFavorite(verb.infinitive)}
-            onToggleExpand={toggleExpand}
-            onToggleFavorite={toggleFavorite}
-          />
-        ))}
-      </div>
+      {totalItems > 0 && (
+        <div className="md:hidden space-y-3">
+          {paginatedVerbs.map((verb) => (
+            <VerbMobileCard
+              key={verb.id}
+              verb={verb}
+              isExpanded={expandedRowId === verb.id}
+              isFavorite={isFavorite(verb.infinitive)}
+              onToggleExpand={toggleExpand}
+              onToggleFavorite={toggleFavorite}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {totalItems > 0 && totalPages > 1 && (
+        <VerbPagination
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

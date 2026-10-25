@@ -2,6 +2,16 @@ import { IrregularVerb } from '../types';
 
 export const irregularVerbs: IrregularVerb[] = [
   {
+    id: 'abide',
+    infinitive: 'abide',
+    pastSimple: 'abode / abided',
+    pastParticiple: 'abode / abided',
+    variants: 'abided é comum no inglês moderno',
+    translation: 'cumprir, respeitar, tolerar',
+    example: 'They promised to abide by the company rules.',
+    group: 'past-same'
+  },
+  {
     id: 'arise',
     infinitive: 'arise',
     pastSimple: 'arose',
@@ -59,6 +69,15 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'vowel-change'
   },
   {
+    id: 'beget',
+    infinitive: 'beget',
+    pastSimple: 'begot',
+    pastParticiple: 'begotten',
+    translation: 'gerar, procriar, produzir',
+    example: 'Patience and practice beget mastery.',
+    group: 'en-ending'
+  },
+  {
     id: 'begin',
     infinitive: 'begin',
     pastSimple: 'began',
@@ -66,6 +85,15 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'começar, iniciar',
     example: 'The session began exactly on time.',
     group: 'vowel-change'
+  },
+  {
+    id: 'behold',
+    infinitive: 'behold',
+    pastSimple: 'beheld',
+    pastParticiple: 'beheld',
+    translation: 'contemplar, avistar, observar',
+    example: 'The travelers beheld a majestic mountain peak.',
+    group: 'past-same'
   },
   {
     id: 'bend',
@@ -77,6 +105,16 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'past-same'
   },
   {
+    id: 'beseech',
+    infinitive: 'beseech',
+    pastSimple: 'besought / beseeched',
+    pastParticiple: 'besought / beseeched',
+    variants: 'beseeched é regularizado na fala contemporânea',
+    translation: 'suplicar, implorar',
+    example: 'Citizens besought the council for immediate action.',
+    group: 'past-same'
+  },
+  {
     id: 'bet',
     infinitive: 'bet',
     pastSimple: 'bet / betted',
@@ -85,6 +123,16 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'apostar',
     example: 'I bet you will master this list in a week.',
     group: 'identical'
+  },
+  {
+    id: 'bid',
+    infinitive: 'bid',
+    pastSimple: 'bid / bade',
+    pastParticiple: 'bid / bidden',
+    variants: 'bid (leilão) | bade/bidden (saudar/ordenar)',
+    translation: 'oferecer lance, saudar, ordenar',
+    example: 'She bid the highest amount at the art auction.',
+    group: 'en-ending'
   },
   {
     id: 'bind',
@@ -224,12 +272,31 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'en-ending'
   },
   {
+    id: 'cleave',
+    infinitive: 'cleave',
+    pastSimple: 'cleft / cleaved',
+    pastParticiple: 'cleft / cloven',
+    translation: 'rachar, fender, cortar ao meio',
+    example: 'The axe cleaved the heavy wooden log in two.',
+    group: 'past-same'
+  },
+  {
     id: 'cling',
     infinitive: 'cling',
     pastSimple: 'clung',
     pastParticiple: 'clung',
     translation: 'agarrar-se, apegar-se',
     example: 'The child clung to her mother in the crowd.',
+    group: 'past-same'
+  },
+  {
+    id: 'clothe',
+    infinitive: 'clothe',
+    pastSimple: 'clothed / clad',
+    pastParticiple: 'clothed / clad',
+    variants: 'clad é frequente em sentido figurado ou poético',
+    translation: 'vestir, cobrir',
+    example: 'The distant hills were clad in morning fog.',
     group: 'past-same'
   },
   {
@@ -269,6 +336,16 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'identical'
   },
   {
+    id: 'dare',
+    infinitive: 'dare',
+    pastSimple: 'dared / durst',
+    pastParticiple: 'dared',
+    variants: 'durst é arcaico/literário',
+    translation: 'ousar, desafiar',
+    example: 'Nobody dared to question the decision.',
+    group: 'general'
+  },
+  {
     id: 'deal',
     infinitive: 'deal',
     pastSimple: 'dealt',
@@ -285,6 +362,16 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'cavar',
     example: 'Workers dug a trench for the fiber-optic line.',
     group: 'past-same'
+  },
+  {
+    id: 'disprove',
+    infinitive: 'disprove',
+    pastSimple: 'disproved',
+    pastParticiple: 'disproved / disproven',
+    variants: 'disproven é bastante utilizado nos EUA',
+    translation: 'refutar, desmentir',
+    example: 'The experiment disproved the previous theory.',
+    group: 'en-ending'
   },
   {
     id: 'dive',
@@ -343,6 +430,15 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'en-ending'
   },
   {
+    id: 'dwell',
+    infinitive: 'dwell',
+    pastSimple: 'dwelt / dwelled',
+    pastParticiple: 'dwelt / dwelled',
+    translation: 'residir, habitar, deter-se em',
+    example: 'Try not to dwell on past mistakes for too long.',
+    group: 'past-same'
+  },
+  {
     id: 'eat',
     infinitive: 'eat',
     pastSimple: 'ate',
@@ -397,6 +493,16 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'past-same'
   },
   {
+    id: 'fit',
+    infinitive: 'fit',
+    pastSimple: 'fit / fitted',
+    pastParticiple: 'fit / fitted',
+    variants: 'fit é predominante no inglês americano',
+    translation: 'caber, ajustar-se',
+    example: 'The antique key fit the door lock perfectly.',
+    group: 'identical'
+  },
+  {
     id: 'flee',
     infinitive: 'flee',
     pastSimple: 'fled',
@@ -424,6 +530,34 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'en-ending'
   },
   {
+    id: 'forecast',
+    infinitive: 'forecast',
+    pastSimple: 'forecast / forecasted',
+    pastParticiple: 'forecast / forecasted',
+    variants: 'forecast é a forma mais tradicional',
+    translation: 'prever, prognosticar',
+    example: 'Meteorologists forecast sunny weather for tomorrow.',
+    group: 'identical'
+  },
+  {
+    id: 'foresee',
+    infinitive: 'foresee',
+    pastSimple: 'foresaw',
+    pastParticiple: 'foreseen',
+    translation: 'prever, antever',
+    example: 'Nobody foresaw the rapid changes in tech.',
+    group: 'en-ending'
+  },
+  {
+    id: 'foretell',
+    infinitive: 'foretell',
+    pastSimple: 'foretold',
+    pastParticiple: 'foretold',
+    translation: 'predizer, profetizar',
+    example: 'Ancient records foretold the rise of great cities.',
+    group: 'past-same'
+  },
+  {
     id: 'forget',
     infinitive: 'forget',
     pastSimple: 'forgot',
@@ -440,6 +574,15 @@ export const irregularVerbs: IrregularVerb[] = [
     pastParticiple: 'forgiven',
     translation: 'perdoar',
     example: 'She forgave his honest mistake quickly.',
+    group: 'en-ending'
+  },
+  {
+    id: 'forsake',
+    infinitive: 'forsake',
+    pastSimple: 'forsook',
+    pastParticiple: 'forsaken',
+    translation: 'abandonar, renunciar a',
+    example: 'He pledged never to forsake his core values.',
     group: 'en-ending'
   },
   {
@@ -480,6 +623,15 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'en-ending'
   },
   {
+    id: 'grind',
+    infinitive: 'grind',
+    pastSimple: 'ground',
+    pastParticiple: 'ground',
+    translation: 'moer, triturar',
+    example: 'They ground fresh coffee beans every single morning.',
+    group: 'past-same'
+  },
+  {
     id: 'grow',
     infinitive: 'grow',
     pastSimple: 'grew',
@@ -515,6 +667,26 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'ouvir',
     example: 'I heard the announcement clearly over the speaker.',
     group: 'past-same'
+  },
+  {
+    id: 'heave',
+    infinitive: 'heave',
+    pastSimple: 'heaved / hove',
+    pastParticiple: 'heaved / hove',
+    variants: 'hove é náutico (ex: hove into view)',
+    translation: 'erguer com esforço, suspirar, puxar',
+    example: 'The crew heaved the cargo onto the deck.',
+    group: 'past-same'
+  },
+  {
+    id: 'hew',
+    infinitive: 'hew',
+    pastSimple: 'hewed',
+    pastParticiple: 'hewn / hewed',
+    variants: 'hewn é a forma culta mais comum do particípio',
+    translation: 'talhar, esculpir, cortar com machado',
+    example: 'The ancient steps were hewn directly from rock.',
+    group: 'en-ending'
   },
   {
     id: 'hide',
@@ -553,6 +725,33 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'identical'
   },
   {
+    id: 'inlay',
+    infinitive: 'inlay',
+    pastSimple: 'inlaid',
+    pastParticiple: 'inlaid',
+    translation: 'incrustar, embutir',
+    example: 'The artisan inlaid silver patterns into the table.',
+    group: 'past-same'
+  },
+  {
+    id: 'input',
+    infinitive: 'input',
+    pastSimple: 'input / inputted',
+    pastParticiple: 'input / inputted',
+    translation: 'inserir dados, alimentar sistema',
+    example: 'Please input your login credentials to continue.',
+    group: 'identical'
+  },
+  {
+    id: 'interweave',
+    infinitive: 'interweave',
+    pastSimple: 'interwove',
+    pastParticiple: 'interwoven',
+    translation: 'entrelaçar, entretecer',
+    example: 'The author interwove three different storylines.',
+    group: 'en-ending'
+  },
+  {
     id: 'keep',
     infinitive: 'keep',
     pastSimple: 'kept',
@@ -570,6 +769,16 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'ajoelhar-se',
     example: 'The gardener knelt to plant the new seeds.',
     group: 'past-same'
+  },
+  {
+    id: 'knit',
+    infinitive: 'knit',
+    pastSimple: 'knit / knitted',
+    pastParticiple: 'knit / knitted',
+    variants: 'knit e knitted são amplamente aceitos',
+    translation: 'tricotar, unir, consolidar',
+    example: 'Grandmother knit a soft wool scarf for winter.',
+    group: 'identical'
   },
   {
     id: 'know',
@@ -713,6 +922,24 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'past-same'
   },
   {
+    id: 'mislead',
+    infinitive: 'mislead',
+    pastSimple: 'misled',
+    pastParticiple: 'misled',
+    translation: 'induzir ao erro, despistar, enganar',
+    example: 'Biased data can easily mislead researchers.',
+    group: 'past-same'
+  },
+  {
+    id: 'mistake',
+    infinitive: 'mistake',
+    pastSimple: 'mistook',
+    pastParticiple: 'mistaken',
+    translation: 'confundir, errar, tomar por outro',
+    example: 'I mistook his friendly joke for criticism.',
+    group: 'en-ending'
+  },
+  {
     id: 'misunderstand',
     infinitive: 'misunderstand',
     pastSimple: 'misunderstood',
@@ -732,6 +959,60 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'en-ending'
   },
   {
+    id: 'offset',
+    infinitive: 'offset',
+    pastSimple: 'offset',
+    pastParticiple: 'offset',
+    translation: 'compensar, equilibrar, contrabalançar',
+    example: 'Higher productivity offset the increased expenses.',
+    group: 'identical'
+  },
+  {
+    id: 'outdo',
+    infinitive: 'outdo',
+    pastSimple: 'outdid',
+    pastParticiple: 'outdone',
+    translation: 'superar, fazer melhor que',
+    example: 'The team outdid themselves in the final sprint.',
+    group: 'en-ending'
+  },
+  {
+    id: 'outgrow',
+    infinitive: 'outgrow',
+    pastSimple: 'outgrew',
+    pastParticiple: 'outgrown',
+    translation: 'crescer além de, deixar para trás',
+    example: 'The startup quickly outgrew its original office.',
+    group: 'en-ending'
+  },
+  {
+    id: 'output',
+    infinitive: 'output',
+    pastSimple: 'output / outputted',
+    pastParticiple: 'output / outputted',
+    translation: 'produzir, emitir dados ou potência',
+    example: 'The solar panels output clean energy all day.',
+    group: 'identical'
+  },
+  {
+    id: 'outrun',
+    infinitive: 'outrun',
+    pastSimple: 'outran',
+    pastParticiple: 'outrun',
+    translation: 'correr mais rápido que, escapar de',
+    example: 'The sprinter outran all opponents in the final race.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'outsell',
+    infinitive: 'outsell',
+    pastSimple: 'outsold',
+    pastParticiple: 'outsold',
+    translation: 'vender mais do que',
+    example: 'The new textbook outsold all competing titles.',
+    group: 'past-same'
+  },
+  {
     id: 'overcome',
     infinitive: 'overcome',
     pastSimple: 'overcame',
@@ -741,12 +1022,112 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'vowel-change'
   },
   {
+    id: 'overeat',
+    infinitive: 'overeat',
+    pastSimple: 'overate',
+    pastParticiple: 'overeaten',
+    translation: 'comer em excesso',
+    example: 'We all overate during the holiday dinner.',
+    group: 'en-ending'
+  },
+  {
+    id: 'overhear',
+    infinitive: 'overhear',
+    pastSimple: 'overheard',
+    pastParticiple: 'overheard',
+    translation: 'ouvir por acaso, entreouvir',
+    example: 'She overheard an interesting conversation in line.',
+    group: 'past-same'
+  },
+  {
+    id: 'overlay',
+    infinitive: 'overlay',
+    pastSimple: 'overlaid',
+    pastParticiple: 'overlaid',
+    translation: 'sobrepor, cobrir superficialmente',
+    example: 'The software overlaid real-time traffic onto maps.',
+    group: 'past-same'
+  },
+  {
+    id: 'overpay',
+    infinitive: 'overpay',
+    pastSimple: 'overpaid',
+    pastParticiple: 'overpaid',
+    translation: 'pagar a mais, superfaturar',
+    example: 'The accounting team realized they had overpaid.',
+    group: 'past-same'
+  },
+  {
+    id: 'override',
+    infinitive: 'override',
+    pastSimple: 'overrode',
+    pastParticiple: 'overridden',
+    translation: 'anular, sobrepor-se a, prevalecer',
+    example: 'Administrators can override automated security rules.',
+    group: 'en-ending'
+  },
+  {
+    id: 'overrun',
+    infinitive: 'overrun',
+    pastSimple: 'overran',
+    pastParticiple: 'overrun',
+    translation: 'invadir, ultrapassar limite ou prazo',
+    example: 'The project overran the budget by five percent.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'oversee',
+    infinitive: 'oversee',
+    pastSimple: 'oversaw',
+    pastParticiple: 'overseen',
+    translation: 'supervisionar, vigiar, gerenciar',
+    example: 'She oversaw the international rollout of the app.',
+    group: 'en-ending'
+  },
+  {
+    id: 'oversleep',
+    infinitive: 'oversleep',
+    pastSimple: 'overslept',
+    pastParticiple: 'overslept',
+    translation: 'dormir demais, perder a hora',
+    example: 'I overslept because my alarm clock turned off.',
+    group: 'past-same'
+  },
+  {
+    id: 'overtake',
+    infinitive: 'overtake',
+    pastSimple: 'overtook',
+    pastParticiple: 'overtaken',
+    translation: 'ultrapassar, alcançar e superar',
+    example: 'Electric vehicles might overtake gas cars in sales.',
+    group: 'en-ending'
+  },
+  {
+    id: 'overthrow',
+    infinitive: 'overthrow',
+    pastSimple: 'overthrew',
+    pastParticiple: 'overthrown',
+    translation: 'derrubar, depor',
+    example: 'The coalition moved to overthrow the oppressive regime.',
+    group: 'en-ending'
+  },
+  {
     id: 'pay',
     infinitive: 'pay',
     pastSimple: 'paid',
     pastParticiple: 'paid',
     translation: 'pagar',
     example: 'She paid for the course using a digital card.',
+    group: 'past-same'
+  },
+  {
+    id: 'plead',
+    infinitive: 'plead',
+    pastSimple: 'pled / pleaded',
+    pastParticiple: 'pled / pleaded',
+    variants: 'pled é muito usado no judiciário dos EUA',
+    translation: 'suplicar, declarar-se em juízo',
+    example: 'The lawyer advised the client to plead not guilty.',
     group: 'past-same'
   },
   {
@@ -789,6 +1170,106 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'identical'
   },
   {
+    id: 'redo',
+    infinitive: 'redo',
+    pastSimple: 'redid',
+    pastParticiple: 'redone',
+    translation: 'refazer, remodelar',
+    example: 'We had to redo the styling to match our design tokens.',
+    group: 'en-ending'
+  },
+  {
+    id: 'remake',
+    infinitive: 'remake',
+    pastSimple: 'remade',
+    pastParticiple: 'remade',
+    translation: 'refazer, regravar obra',
+    example: 'The director remade the thriller with modern cameras.',
+    group: 'past-same'
+  },
+  {
+    id: 'repay',
+    infinitive: 'repay',
+    pastSimple: 'repaid',
+    pastParticiple: 'repaid',
+    translation: 'reembolsar, quitar, retribuir',
+    example: 'He repaid the student loan before the deadline.',
+    group: 'past-same'
+  },
+  {
+    id: 'rerun',
+    infinitive: 'rerun',
+    pastSimple: 'reran',
+    pastParticiple: 'rerun',
+    translation: 'reprisar, reexecutar',
+    example: 'The developer reran the integration test suite.',
+    group: 'vowel-change'
+  },
+  {
+    id: 'resell',
+    infinitive: 'resell',
+    pastSimple: 'resold',
+    pastParticiple: 'resold',
+    translation: 'revender',
+    example: 'She resold her textbooks to younger students.',
+    group: 'past-same'
+  },
+  {
+    id: 'reset',
+    infinitive: 'reset',
+    pastSimple: 'reset',
+    pastParticiple: 'reset',
+    translation: 'redefinir, reiniciar, restaurar',
+    example: 'Please reset your password using the security link.',
+    group: 'identical'
+  },
+  {
+    id: 'retake',
+    infinitive: 'retake',
+    pastSimple: 'retook',
+    pastParticiple: 'retaken',
+    translation: 'retomar, refazer exame ou foto',
+    example: 'Students can retake the test to boost their scores.',
+    group: 'en-ending'
+  },
+  {
+    id: 'retell',
+    infinitive: 'retell',
+    pastSimple: 'retold',
+    pastParticiple: 'retold',
+    translation: 'recontar, narrar novamente',
+    example: 'The documentary retold the story from new angles.',
+    group: 'past-same'
+  },
+  {
+    id: 'rewind',
+    infinitive: 'rewind',
+    pastSimple: 'rewound',
+    pastParticiple: 'rewound',
+    translation: 'rebobinar, retroceder',
+    example: 'He rewound the audio file to listen carefully.',
+    group: 'past-same'
+  },
+  {
+    id: 'rewrite',
+    infinitive: 'rewrite',
+    pastSimple: 'rewrote',
+    pastParticiple: 'rewritten',
+    translation: 'reescrever, redigir novamente',
+    example: 'The journalist rewrote the opening paragraphs.',
+    group: 'en-ending'
+  },
+  {
+    id: 'rid',
+    infinitive: 'rid',
+    pastSimple: 'rid / ridded',
+    pastParticiple: 'rid / ridded',
+    variants: 'to get rid of é a construção idiomática mais comum',
+    translation: 'livrar, desvencilhar-se',
+    example: 'They worked together to rid the park of litter.',
+    group: 'identical'
+  },
+  {
     id: 'ride',
     infinitive: 'ride',
     pastSimple: 'rode',
@@ -823,6 +1304,16 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'correr, gerenciar, executar',
     example: 'Tests ran smoothly on all platforms.',
     group: 'vowel-change'
+  },
+  {
+    id: 'saw',
+    infinitive: 'saw',
+    pastSimple: 'sawed',
+    pastParticiple: 'sawn / sawed',
+    variants: 'sawn é britânico tradicional',
+    translation: 'serrar',
+    example: 'The carpenter sawed the timber with great care.',
+    group: 'en-ending'
   },
   {
     id: 'say',
@@ -895,6 +1386,16 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'sacudir, tremer, apertar (mão)',
     example: 'They shook hands warmly after the deal.',
     group: 'en-ending'
+  },
+  {
+    id: 'shed',
+    infinitive: 'shed',
+    pastSimple: 'shed',
+    pastParticiple: 'shed',
+    variants: 'shed tears, shed light, shed skin',
+    translation: 'derramar, soltar, descartar',
+    example: 'The investigation shed light on the truth.',
+    group: 'identical'
   },
   {
     id: 'shine',
@@ -987,6 +1488,15 @@ export const irregularVerbs: IrregularVerb[] = [
     translation: 'deslizar, escorregar',
     example: 'He slid the drawer open without noise.',
     group: 'past-same'
+  },
+  {
+    id: 'slit',
+    infinitive: 'slit',
+    pastSimple: 'slit',
+    pastParticiple: 'slit',
+    translation: 'talhar, abrir fenda, rasgar',
+    example: 'She slit the package open with a utility knife.',
+    group: 'identical'
   },
   {
     id: 'smell',
@@ -1148,6 +1658,15 @@ export const irregularVerbs: IrregularVerb[] = [
     group: 'past-same'
   },
   {
+    id: 'sublet',
+    infinitive: 'sublet',
+    pastSimple: 'sublet',
+    pastParticiple: 'sublet',
+    translation: 'sublocar, subalugar',
+    example: 'He sublet his studio during the overseas term.',
+    group: 'identical'
+  },
+  {
     id: 'swear',
     infinitive: 'swear',
     pastSimple: 'swore',
@@ -1235,6 +1754,34 @@ export const irregularVerbs: IrregularVerb[] = [
     pastParticiple: 'thrown',
     translation: 'lançar, atirar, arremessar',
     example: 'He threw the ball right into the catcher’s mitt.',
+    group: 'en-ending'
+  },
+  {
+    id: 'thrust',
+    infinitive: 'thrust',
+    pastSimple: 'thrust',
+    pastParticiple: 'thrust',
+    translation: 'empurrar com força, impulsionar',
+    example: 'The jet engines thrust the plane into the clouds.',
+    group: 'identical'
+  },
+  {
+    id: 'tread',
+    infinitive: 'tread',
+    pastSimple: 'trod',
+    pastParticiple: 'trodden / trod',
+    variants: 'trodden é comum na voz passiva',
+    translation: 'pisar, trilhar, caminhar sobre',
+    example: 'Hikers must tread carefully on slippery rocks.',
+    group: 'en-ending'
+  },
+  {
+    id: 'undergo',
+    infinitive: 'undergo',
+    pastSimple: 'underwent',
+    pastParticiple: 'undergone',
+    translation: 'submeter-se a, passar por',
+    example: 'Patients undergo a comprehensive routine exam.',
     group: 'en-ending'
   },
   {
