@@ -33,9 +33,23 @@ export type ListeningActivityType =
   | 'natural_speech';     // Entenda o inglês natural
 
 /**
+ * Modalidades de atividades específicas para o pilar de Speaking (Fala e Produção Oral)
+ */
+export type SpeakingActivityType =
+  | 'listen_repeat'       // Ouça e imite
+  | 'sound_training'      // Treino de sons
+  | 'rapid_response'      // Respostas rápidas
+  | 'roleplay_situation';  // Fale em situações reais
+
+/**
  * Identificador universal do tipo de atividade (extensível aos 4 pilares)
  */
-export type ActivityType = WritingActivityType | ReadingActivityType | ListeningActivityType | string;
+export type ActivityType = 
+  | WritingActivityType 
+  | ReadingActivityType 
+  | ListeningActivityType 
+  | SpeakingActivityType 
+  | string;
 
 /**
  * Estrutura base para qualquer questão nos 4 pilares
@@ -192,12 +206,47 @@ export type WritingQuestion =
 export type ListeningQuestion = ReadingQuestion;
 
 /**
- * União universal de tipos de questões nos pilares
+ * Item ou turno de conversação para o pilar de Speaking (Fala e Produção Oral)
  */
-export type AnyQuestion = WritingQuestion | ReadingQuestion | ListeningQuestion;
+export interface SpeakingQuestion extends BaseQuestion {
+  type: 'speaking_item';
+  itemTitle?: string;
+  contextScenario?: string;
+  modelAudioText: string;
+  modelSpeaker?: string;
+  speechRate?: number;
+  targetPhrase?: string;
+  phoneticFocus?: string;
+  pronunciationTip?: string;
+  sampleResponses?: string[];
+  translation?: string;
+  perceptionQuestion?: {
+    questionText: string;
+    options: MultipleChoiceOption[];
+    correctOptionId: string;
+    audioText: string;
+    explanation: string;
+  };
+}
 
 /**
- * Contrato de uma atividade educacional padronizada (Writing, Reading, Listening, etc.)
+ * Informações contextuais e metas pedagógicas para práticas de Speaking
+ */
+export interface SpeakingPracticeInfo {
+  scenario?: string;
+  partnerRole?: string;
+  userRole?: string;
+  focusSound?: string;
+  checklist?: string[];
+}
+
+/**
+ * União universal de tipos de questões nos pilares
+ */
+export type AnyQuestion = WritingQuestion | ReadingQuestion | ListeningQuestion | SpeakingQuestion;
+
+/**
+ * Contrato de uma atividade educacional padronizada (Writing, Reading, Listening, Speaking)
  */
 export interface Activity<TQuestion = AnyQuestion> {
   id: string;
@@ -211,6 +260,7 @@ export interface Activity<TQuestion = AnyQuestion> {
   instructions: string;
   readingPassage?: ReadingPassage;
   listeningTrack?: ListeningTrack;
+  speakingInfo?: SpeakingPracticeInfo;
   questions: TQuestion[];
   maxScore: number;
   version: number;
@@ -262,4 +312,5 @@ export interface UserActivityResult {
   userAnswers: Record<string, string>;
   completedAt: string; // ISO 8601
   durationSeconds: number;
+  selfEvaluation?: Record<string, boolean>;
 }

@@ -54,32 +54,25 @@ describe('PracticeView & 4 English Skills Hub', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
   });
 
-  it('navigates to Speaking, Reading, and Writing areas correctly and tests Speaking difficulty selectors', () => {
+  it('navigates to Speaking, Reading, and Writing areas correctly and verifies Speaking activities hub', () => {
     render(<PracticeView />);
 
-    // Test Speaking (which has difficulty selectors)
+    // Test Speaking hub
     const speakingCard = screen.getByRole('button', { name: /Acessar área de prática de Speaking/i });
     fireEvent.click(speakingCard);
     expect(screen.getByRole('heading', { level: 1, name: /Speaking/i })).toBeInTheDocument();
     expect(screen.getByText(/Praticar a pronúncia, ritmo vocal e a produção oral/i)).toBeInTheDocument();
 
-    // Difficulty Selectors on Speaking
-    const facilBtn = screen.getByRole('button', { name: /Nível Fácil/i });
-    const medioBtn = screen.getByRole('button', { name: /Nível Médio/i });
-    const dificilBtn = screen.getByRole('button', { name: /Nível Difícil/i });
+    // Speaking Activities Hub controls
+    expect(screen.getByText('Atividades de Fala (Speaking)')).toBeInTheDocument();
+    expect(screen.getByText(/12 atividades disponíveis/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /A1 — Iniciante/i })).toBeInTheDocument();
 
-    expect(facilBtn).toBeInTheDocument();
-    expect(medioBtn).toBeInTheDocument();
-    expect(dificilBtn).toBeInTheDocument();
+    const a2Btn = screen.getByRole('button', { name: /A2 — Básico/i });
+    expect(a2Btn).toBeInTheDocument();
+    fireEvent.click(a2Btn);
 
-    // Default difficulty is Fácil
-    expect(facilBtn).toHaveAttribute('aria-pressed', 'true');
-
-    // Switch to Médio
-    fireEvent.click(medioBtn);
-    expect(medioBtn).toHaveAttribute('aria-pressed', 'true');
-    expect(facilBtn).toHaveAttribute('aria-pressed', 'false');
-
+    // Return to hub
     fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i }));
 
     // Test Reading

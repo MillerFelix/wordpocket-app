@@ -134,8 +134,8 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
     const speakingCard = screen.getByRole('button', { name: /Acessar área de prática de Speaking/i });
     fireEvent.click(speakingCard);
 
-    // Start practice exercise
-    const startPracticeBtn = screen.getByRole('button', { name: /Iniciar Prática/i });
+    // Start practice activity from Speaking hub
+    const startPracticeBtn = screen.getAllByRole('button', { name: /Iniciar/i })[0];
     fireEvent.click(startPracticeBtn);
 
     // Visitor Prompt Modal should appear
@@ -145,8 +145,8 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
     const continueBtn = screen.getByRole('button', { name: /Continuar praticando sem salvar/i });
     fireEvent.click(continueBtn);
 
-    // Exercise question runner is shown
-    expect(screen.getByText(/Questão 1 de/i)).toBeInTheDocument();
+    // Exercise runner is shown
+    expect(screen.getByText(/Turno 1 de/i)).toBeInTheDocument();
   });
 
   it('supports the full password reset flow from the login modal with validation and neutral message', async () => {

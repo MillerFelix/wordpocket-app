@@ -1,4 +1,4 @@
-import { Activity, ActivityGradingResult, QuestionGrading, WritingQuestion, ReadingQuestion } from '../types/activity';
+import { Activity, ActivityGradingResult, QuestionGrading, WritingQuestion, ReadingQuestion, SpeakingQuestion } from '../types/activity';
 
 /**
  * Normaliza textos para comparação determinística justa
@@ -194,7 +194,59 @@ function gradeMultipleChoice(
 }
 
 /**
- * Motor central de correção para qualquer atividade padronizada (Writing, Reading, etc.)
+ * Corrige ou avalia um item/turno do pilar de Speaking (Fala)
+ */
+function gradeSpeakingItem(
+  q: SpeakingQuestion,
+  userAnswer: string
+): QuestionGrading {
+  // Se o item contiver questão de percepção auditiva (ex: pares mínimos / identificação sonora)
+  if (q.perceptionQuestion) {
+    const cleanUser = (userAnswer || '').trim().toUpperCase();
+    const cleanExpected = (q.perceptionQuestion.correctOptionId || '').trim().toUpperCase();
+    const isMatch = cleanUser.length > 0 && cleanUser === cleanExpected;
+
+    const correctOption = q.perceptionQuestion.options.find((o) => o.id.toUpperCase() === cleanExpected);
+    const userOption = q.perceptionQuestion.options.find((o) => o.id.toUpperCase() === cleanUser);
+
+    const expectedStr = correctOption ? `(${correctOption.id}) ${correctOption.text}` : cleanExpected;
+    const userStr = userOption ? `(${userOption.id}) ${userOption.text}` : (userAnswer || 'Não respondida');
+
+    return {
+      questionId: q.id,
+      isCorrect: isMatch,
+      scorePercent: isMatch ? 100 : 0,
+      userAnswer: userStr,
+      expectedAnswer: expectedStr,
+      feedback: isMatch
+        ? 'Percepção correta! Você distinguiu com precisão o som e a palavra correspondente.'
+        : `Identificação incorreta. A opção correta era a (${cleanExpected}): "${correctOption?.text || ''}".`,
+      explanation: q.perceptionQuestion.explanation || q.explanation
+    };
+  }
+
+  // Para itens de produção oral (ouça e imite, resposta rápida, diálogo):
+  const cleanAns = (userAnswer || '').trim();
+  const isPracticed = cleanAns.length > 0 && cleanAns !== 'unpracticed';
+  const sample = q.targetPhrase || (q.sampleResponses && q.sampleResponses[0]) || '';
+
+  return {
+    questionId: q.id,
+    isCorrect: isPracticed,
+    scorePercent: isPracticed ? 100 : 0,
+    userAnswer: isPracticed
+      ? (cleanAns.startsWith('recorded:') ? 'Gravação e prática oral realizada' : cleanAns)
+      : 'Prática oral não executada',
+    expectedAnswer: sample,
+    feedback: isPracticed
+      ? 'Turno de fala concluído com sucesso! Compare sua pronúncia com o áudio nativo e revise as orientações.'
+      : 'Exercício não praticado. Ouça o modelo e grave sua voz para concluir.',
+    explanation: q.pronunciationTip || q.explanation
+  };
+}
+
+/**
+ * Motor central de correção para qualquer atividade padronizada (Writing, Reading, Listening, Speaking)
  */
 export function gradeActivity(
   activity: Activity,
@@ -214,6 +266,8 @@ export function gradeActivity(
         return gradeOpenPrompt(q as Extract<WritingQuestion, { type: 'open_prompt' }>, userAns);
       case 'multiple_choice':
         return gradeMultipleChoice(q as ReadingQuestion, userAns);
+      case 'speaking_item':
+        return gradeSpeakingItem(q as SpeakingQuestion, userAns);
       default:
         return {
           questionId: (q as any).id,
