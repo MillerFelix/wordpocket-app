@@ -202,6 +202,9 @@ describe('Reading Pillar & Extensible Activity Framework Tests', () => {
       const glossaryBtn = screen.getByRole('button', { name: /Glossário & Dicas/i });
       fireEvent.click(glossaryBtn);
       expect(screen.getByText(/dia útil/i)).toBeInTheDocument();
+      expect(screen.getByText('weekday')).toBeInTheDocument();
+      expect(screen.queryByText(/Toque no termo/i)).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /weekday/i })).not.toBeInTheDocument();
 
       // Answer question 1: select option B (6:30 AM)
       const optionB = screen.getByRole('radio', { name: /At 6:30 AM/i });

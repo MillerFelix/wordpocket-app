@@ -13,7 +13,6 @@ export const ReadingPassageView: React.FC<ReadingPassageViewProps> = ({
 }) => {
   const [showFullTranslation, setShowFullTranslation] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
-  const [activeWordNote, setActiveWordNote] = useState<string | null>(null);
 
   return (
     <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-5 sm:p-7 border border-white/90 shadow-soft-card space-y-4">
@@ -57,7 +56,7 @@ export const ReadingPassageView: React.FC<ReadingPassageViewProps> = ({
         </div>
       </div>
 
-      {/* Reading Assistance Actions: Interactive Glossary & Excerpt Translation */}
+      {/* Reading Assistance Actions: Informative Glossary & Excerpt Translation */}
       <div className="space-y-3 pt-1">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           {/* Glossary Toggle Button */}
@@ -98,39 +97,33 @@ export const ReadingPassageView: React.FC<ReadingPassageViewProps> = ({
           )}
         </div>
 
-        {/* Interactive Glossary Drawer */}
+        {/* Informative Glossary Drawer (Exclusively Informative, No Clickable Terms) */}
         {showGlossary && passage.glossary && (
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border border-blue-200/80 space-y-2 animate-in fade-in duration-200">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border border-blue-200/80 space-y-2.5 animate-in fade-in duration-200">
             <div className="flex items-center justify-between">
               <span className="text-xs font-extrabold text-[#176BFF]">
-                💡 Vocabulário-chave deste texto:
+                💡 Vocabulário & Dicas do Texto:
               </span>
-              <span className="text-[10px] text-[#52456F] font-semibold">
-                Toque no termo para detalhes
+              <span className="text-[11px] text-[#52456F] font-semibold">
+                {passage.glossary.length} termos explicados
               </span>
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {passage.glossary.map((item, idx) => {
-                const isSelected = activeWordNote === item.word;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActiveWordNote(isSelected ? null : item.word)}
-                    className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border ${
-                      isSelected
-                        ? 'bg-[#176BFF] text-white border-[#176BFF] shadow-2xs'
-                        : 'bg-white hover:bg-blue-50 text-[#160F2E] border-blue-200'
-                    }`}
-                  >
-                    <span>{item.word}</span>
-                    <span className={isSelected ? 'text-white/80' : 'text-[#52456F] font-normal'}>
-                      • {item.translation}
+              {passage.glossary.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="px-3 py-1.5 rounded-xl text-xs bg-white/95 border border-blue-200/80 text-[#160F2E] shadow-2xs inline-flex items-center gap-1.5 select-text"
+                >
+                  <span className="font-extrabold text-[#160F2E]">{item.word}</span>
+                  <span className="text-[#52456F] font-normal">• {item.translation}</span>
+                  {item.context && (
+                    <span className="text-[11px] text-slate-400 font-normal italic">
+                      ({item.context})
                     </span>
-                  </button>
-                );
-              })}
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         )}
