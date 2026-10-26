@@ -13,13 +13,12 @@ export interface TranslationResult {
 }
 
 /**
- * Translates text between English and Portuguese.
+ * Traduz texto entre inglês e português.
  *
- * Architecture:
- * 1. Checks local validated services (irregular verbs + vocabulary) for instant,
- *    100% offline-ready and verified linguistic results.
- * 2. For free-form phrases and sentences, queries the public Google Translate
- *    client endpoint (zero cost, no external API keys required).
+ * Estratégia:
+ * 1. Consulta bases locais validadas (verbos irregulares e vocabulário) para resposta
+ *    imediata, confiável e funcional offline.
+ * 2. Para frases livres ou termos não catalogados, consulta o endpoint público do Google Tradutor.
  */
 export async function translateText(
   text: string,
@@ -33,9 +32,8 @@ export async function translateText(
   const fromLang = direction === 'en_pt' ? 'en' : 'pt';
   const toLang = direction === 'en_pt' ? 'pt' : 'en';
 
-  // 1. Try local databases via services for instant, high-quality offline resolution
+  // 1. Resolução local em cache/dicionário para velocidade e suporte offline
   if (direction === 'en_pt') {
-    // Check irregular verbs
     const verbMatch = verbsService.findByAnyForm(query);
     if (verbMatch) {
       const { verb, matchedForm } = verbMatch;
@@ -56,7 +54,6 @@ export async function translateText(
       };
     }
 
-    // Check vocabulary dictionary
     const vocab = vocabularyService.getByWord(query);
     if (vocab) {
       return {
@@ -69,8 +66,7 @@ export async function translateText(
       };
     }
   } else {
-    // pt_en: Portuguese to English
-    // Check irregular verbs translations
+    // pt_en: Português para Inglês
     const verb = verbsService.findByTranslation(query);
     if (verb) {
       return {
@@ -83,7 +79,6 @@ export async function translateText(
       };
     }
 
-    // Check vocabulary translations
     const vocab = vocabularyService.findByTranslation(query);
     if (vocab) {
       return {
@@ -97,7 +92,7 @@ export async function translateText(
     }
   }
 
-  // 2. Query Google Translate public client endpoint
+  // 2. Consulta ao endpoint do Google Tradutor para frases gerais
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(query)}`;
     const response = await fetch(url);
@@ -135,7 +130,7 @@ export async function translateText(
     if (err instanceof Error && err.name === 'AbortError') {
       throw new Error('A consulta demorou muito para responder.');
     }
-    // Check if network failed and give clear friendly guidance
+    // Mensagem amigável para falha de conectividade ou rede offline
     if (err instanceof TypeError && err.message.toLowerCase().includes('fetch')) {
       throw new Error('Sem conexão à internet para traduzir novos termos no momento. Conecte-se para traduzir frases livres.');
     }

@@ -18,15 +18,13 @@ import { useAuth } from '../contexts/AuthContext';
 interface MobileNavProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
-  verbCount: number;
+  verbCount?: number;
   practiceCount?: number;
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   activeTab,
   onTabChange,
-  verbCount: _verbCount,
-  practiceCount: _practiceCount
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();

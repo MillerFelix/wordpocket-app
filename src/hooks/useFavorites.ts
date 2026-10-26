@@ -58,7 +58,7 @@ export function useFavorites(
       try {
         localStorage.setItem(storageKey, JSON.stringify(itemsList));
       } catch {
-        // Fallback for storage quota or privacy mode limitations
+        // Falha silenciosa caso o armazenamento local esteja bloqueado ou sem espaço
       }
 
       // Se autenticado, sincroniza com o Firestore em background sem bloquear a UI

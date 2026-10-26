@@ -30,7 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onTabChange,
   verbCount,
-  practiceCount: _practiceCount
+  practiceCount
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
@@ -62,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Praticar Inglês',
       subtitle: '4 Habilidades do idioma',
       icon: GraduationCap,
-      count: '4 Áreas',
+      count: practiceCount ? `${practiceCount} Lições` : '4 Áreas',
       color: 'text-[#176BFF]',
       activeBg: 'bg-[#E1ECFC] border border-white/90',
       activeText: 'text-[#176BFF]',

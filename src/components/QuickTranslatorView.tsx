@@ -5,16 +5,11 @@ import {
   Clipboard, 
   X, 
   Loader2, 
-  Copy, 
-  Check, 
-  ExternalLink, 
-  Sparkles,
-  AlertCircle,
-  RotateCcw,
-  BookOpen
+  Sparkles
 } from 'lucide-react';
 import { translateText, TranslationDirection, TranslationResult } from '../utils/translator';
-import { PronounceButton } from './PronounceButton';
+import { TranslationResultCard } from './translator/TranslationResultCard';
+import { TranslationErrorCard } from './translator/TranslationErrorCard';
 
 interface QuickTranslatorViewProps {
   initialText?: string;
@@ -29,14 +24,12 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
   const [copiedNotice, setCopiedNotice] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Sync initialText if passed from external navigation
   useEffect(() => {
     if (initialText) {
       setText(initialText);
     }
   }, [initialText]);
 
-  // Execute translation
   const handleTranslate = async (textToTranslate?: string) => {
     const query = (textToTranslate ?? text).trim();
     if (!query) {
@@ -62,7 +55,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
     }
   };
 
-  // Keyboard shortcut: Enter to submit translation, Shift+Enter for newline
+  // Enter traduz imediatamente; Shift+Enter permite quebra de linha
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -72,12 +65,11 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
     }
   };
 
-  // Invert language direction without losing entered content
+  // Inverte os idiomas e alterna o resultado existente com o texto de entrada
   const handleInvertDirection = () => {
     const nextDirection: TranslationDirection = direction === 'en_pt' ? 'pt_en' : 'en_pt';
     setDirection(nextDirection);
 
-    // If there is already an active translation result, swap input with result seamlessly
     if (result && result.translatedText) {
       const previousResult = result.translatedText;
       const previousSource = result.sourceText;
@@ -91,7 +83,6 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
       });
       setError(null);
     }
-    // If no result yet, typed text is preserved in the input field!
   };
 
   const handleCopyResult = async () => {
@@ -101,7 +92,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
       setCopiedNotice(true);
       setTimeout(() => setCopiedNotice(false), 2000);
     } catch {
-      // Graceful fallback
+      // Falha silenciosa caso a permissão do clipboard seja negada
     }
   };
 
@@ -113,7 +104,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
         textareaRef.current?.focus();
       }
     } catch {
-      // Graceful fallback if clipboard access is denied
+      // Falha silenciosa caso o navegador restrinja leitura da área de transferência
     }
   };
 
@@ -136,7 +127,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Page Header */}
+      {/* Cabeçalho */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div className="flex items-start gap-3.5">
           <div className="w-11 h-11 rounded-2xl bg-gradient-translator text-white flex items-center justify-center shadow-colored-tangerine shrink-0 ring-4 ring-white/80">
@@ -164,19 +155,16 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
         </div>
       </div>
 
-      {/* Centered, ergonomic workspace */}
+      {/* Área de trabalho centralizada */}
       <div className="max-w-3xl mx-auto space-y-4 sm:space-y-5">
-        {/* Main Card: Language Selector & Input */}
         <div className="bg-white/85 backdrop-blur-xl p-5 sm:p-7 rounded-3xl border border-white/90 shadow-soft-card space-y-4">
-          {/* Language Selector: Exclusively English <-> Portuguese */}
+          {/* Seletor de direção: Inglês ⇄ Português */}
           <div className="flex items-center justify-between gap-2 p-1.5 sm:p-2 rounded-2xl bg-[#FFEAE1]/70 border border-[#FFD2C2] shadow-2xs">
-            {/* Source Language Indicator */}
             <div className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white/95 text-[#160F2E] font-extrabold text-xs sm:text-sm border border-white shadow-2xs select-none">
               <span className={`w-2 h-2 rounded-full ${isEnToPt ? 'bg-[#176BFF]' : 'bg-[#0A9B80]'}`} />
               <span>{isEnToPt ? 'Inglês' : 'Português'}</span>
             </div>
 
-            {/* Central Invert Direction Button */}
             <button
               type="button"
               onClick={handleInvertDirection}
@@ -187,14 +175,13 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
               <ArrowRightLeft className="w-4 h-4 stroke-[2.4] group-hover:rotate-180 transition-transform duration-300" />
             </button>
 
-            {/* Target Language Indicator */}
             <div className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white/95 text-[#160F2E] font-extrabold text-xs sm:text-sm border border-white shadow-2xs select-none">
               <span className={`w-2 h-2 rounded-full ${isEnToPt ? 'bg-[#0A9B80]' : 'bg-[#176BFF]'}`} />
               <span>{isEnToPt ? 'Português' : 'Inglês'}</span>
             </div>
           </div>
 
-          {/* Text Input Area */}
+          {/* Campo de digitação */}
           <div className="space-y-2">
             <div className="relative">
               <textarea
@@ -212,7 +199,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
               />
             </div>
 
-            {/* Quick Actions Bar (Paste, Clear, Length) */}
+            {/* Ações rápidas (Colar, Limpar, Contador de caracteres) */}
             <div className="flex items-center justify-between text-xs pt-1 px-1">
               <div className="flex items-center gap-2">
                 <button
@@ -244,7 +231,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
             </div>
           </div>
 
-          {/* Primary Action Button: Traduzir */}
+          {/* Botão principal de tradução */}
           <div>
             <button
               type="button"
@@ -274,7 +261,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
           </div>
         </div>
 
-        {/* Translation Result Area — Visually distinct and on the same screen */}
+        {/* Estado de carregamento */}
         {isLoading && (
           <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 border border-white/90 shadow-soft-card animate-pulse space-y-3">
             <div className="flex items-center justify-between">
@@ -286,125 +273,27 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
           </div>
         )}
 
-        {/* Error State */}
+        {/* Card de erro */}
         {error && !isLoading && (
-          <div className="bg-[#FFF0F6]/90 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-[#FFD0E5] shadow-soft-card space-y-3 animate-in fade-in duration-200">
-            <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-[#F52E91] shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <h3 className="text-sm font-extrabold text-[#160F2E]">
-                  Não foi possível traduzir o termo
-                </h3>
-                <p className="text-xs text-[#52456F] leading-relaxed">
-                  {error}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2 pt-1 pl-8">
-              <button
-                type="button"
-                onClick={() => handleTranslate()}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-[#F52E91] text-xs font-bold border border-[#FFD0E5] shadow-2xs hover:bg-[#FFF0F6] transition"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Tentar novamente</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleOpenGoogleTranslate}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-[#52456F] text-xs font-bold border border-white/90 shadow-2xs hover:text-[#160F2E] transition"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                <span>Abrir no Google Tradutor</span>
-              </button>
-            </div>
-          </div>
+          <TranslationErrorCard
+            error={error}
+            onRetry={() => handleTranslate()}
+            onOpenGoogleTranslate={handleOpenGoogleTranslate}
+          />
         )}
 
-        {/* Successful Result Card */}
+        {/* Card com resultado traduzido */}
         {result && !isLoading && (
-          <div className="bg-white/95 backdrop-blur-2xl rounded-3xl p-5 sm:p-7 border border-[#FFD2C2] shadow-soft-card space-y-4 animate-in fade-in zoom-in-95 duration-200">
-            {/* Result Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#FFEAE1]">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0A9B80]" />
-                <span className="text-xs font-extrabold uppercase tracking-wider text-[#0A9B80]">
-                  Tradução em {isEnToPt ? 'Português' : 'Inglês'}
-                </span>
-                {result.source !== 'google' && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#DCF8F1] text-[#0A9B80] border border-[#B6F5E8]">
-                    <BookOpen className="w-3 h-3" />
-                    <span>Dicionário Local</span>
-                  </span>
-                )}
-              </div>
-
-              {/* Action buttons: Pronunciation and Copy */}
-              <div className="flex items-center gap-1.5">
-                <PronounceButton
-                  text={result.translatedText}
-                  lang={isEnToPt ? 'pt' : 'en'}
-                  size="sm"
-                  showLabel
-                  className="bg-[#FFEAE1] text-[#E04D1B] hover:bg-[#FFD2C2] border border-[#FFD2C2]"
-                />
-
-                <button
-                  type="button"
-                  onClick={handleCopyResult}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white hover:bg-[#FFEAE1]/50 text-[#52456F] hover:text-[#E04D1B] border border-slate-200 text-xs font-bold shadow-2xs transition active:scale-95"
-                  title="Copiar tradução"
-                >
-                  {copiedNotice ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-[#0A9B80]" />
-                      <span className="text-[#0A9B80]">Copiado!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      <span>Copiar</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Translated Output Text */}
-            <div className="space-y-2">
-              <p className="text-lg sm:text-2xl font-black text-[#160F2E] leading-relaxed break-words select-text">
-                {result.translatedText}
-              </p>
-
-              {/* Extra Linguistic Note (if found in verbs or vocabulary) */}
-              {result.extraInfo && (
-                <div className="p-3 rounded-2xl bg-[#FFEAE1]/50 border border-[#FFD2C2] text-xs text-[#52456F] font-medium leading-relaxed">
-                  💡 {result.extraInfo}
-                </div>
-              )}
-            </div>
-
-            {/* Footer with subtle link to official service */}
-            <div className="pt-2 flex items-center justify-between text-xs text-[#52456F]">
-              <span className="text-[11px]">
-                Original: <strong className="text-[#160F2E]">"{result.sourceText}"</strong>
-              </span>
-
-              <button
-                type="button"
-                onClick={handleOpenGoogleTranslate}
-                className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#52456F] hover:text-[#FF6534] transition hover:underline"
-              >
-                <span>Google Tradutor oficial</span>
-                <ExternalLink className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
+          <TranslationResultCard
+            result={result}
+            isEnToPt={isEnToPt}
+            copiedNotice={copiedNotice}
+            onCopyResult={handleCopyResult}
+            onOpenGoogleTranslate={handleOpenGoogleTranslate}
+          />
         )}
 
-        {/* Clean Empty Placeholder State */}
+        {/* Estado inicial vazio */}
         {!result && !isLoading && !error && (
           <div className="bg-white/60 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-white/80 text-center space-y-2 select-none shadow-2xs">
             <div className="w-10 h-10 rounded-2xl bg-[#FFEAE1] text-[#FF6534] flex items-center justify-center mx-auto mb-3 shadow-2xs">
