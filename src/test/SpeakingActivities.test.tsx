@@ -339,27 +339,39 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
   });
 
   describe('5. UI Hub, Activity Execution & Result View', () => {
-    it('allows filtering activities by level in SpeakingActivitiesHub', () => {
+    it('allows filtering activities by level in SpeakingActivitiesHub and supports pagination', () => {
       render(<SpeakingActivitiesHub onSelectActivity={vi.fn()} />);
 
       expect(screen.getByText('Atividades de Fala (Speaking)')).toBeInTheDocument();
       expect(screen.getByText(/45 atividades disponíveis/i)).toBeInTheDocument();
 
-      // Click A1 filter
+      // Click A1 filter (15 activities total: 8 on page 1, 7 on page 2)
       const a1Tab = screen.getByRole('button', { name: /A1 — Iniciante/i });
       fireEvent.click(a1Tab);
 
-      // Should show 15 cards
+      // Page 1 displays 8 cards
       const startButtons = screen.getAllByRole('button', { name: /Iniciar/i });
-      expect(startButtons.length).toBe(15);
+      expect(startButtons.length).toBe(8);
+      expect(screen.getByText(/1–8/)).toBeInTheDocument();
 
-      // Click B1 filter
+      // Navigate to page 2
+      const nextBtn = screen.getByRole('button', { name: /Próxima página/i });
+      fireEvent.click(nextBtn);
+
+      // Page 2 displays remaining 7 cards
+      const page2StartButtons = screen.getAllByRole('button', { name: /Iniciar/i });
+      expect(page2StartButtons.length).toBe(7);
+      expect(screen.getByText(/9–15/)).toBeInTheDocument();
+
+      // Click B1 filter: must reset back to page 1
       const b1Tab = screen.getByRole('button', { name: /B1 — Intermediário/i });
       fireEvent.click(b1Tab);
 
       const b1StartButtons = screen.getAllByRole('button', { name: /Iniciar/i });
-      expect(b1StartButtons.length).toBe(15);
+      expect(b1StartButtons.length).toBe(8);
+      expect(screen.getByText(/1–8/)).toBeInTheDocument();
     });
+
 
     it('navigates turns and completes an activity showing result summary and self-evaluation checklist', async () => {
       const act = SPEAKING_ACTIVITIES[0]; // listen_repeat

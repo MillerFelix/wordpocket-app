@@ -12,6 +12,9 @@ import {
 import { Activity, ActivityLevel, ListeningActivityType, ListeningQuestion, UserActivityResult } from '../../../types/activity';
 import { listeningService } from '../../../services/listeningService';
 import { useAuth } from '../../../contexts/AuthContext';
+import { Pagination } from '../../shared/Pagination';
+
+const ITEMS_PER_PAGE = 8;
 
 interface ListeningActivitiesHubProps {
   onSelectActivity: (activity: Activity<ListeningQuestion>) => void;
@@ -61,6 +64,7 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
   const { user } = useAuth();
   const [selectedFormat, setSelectedFormat] = useState<ListeningActivityType | 'all'>('all');
   const [latestResults, setLatestResults] = useState<Record<string, UserActivityResult>>({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Carrega os resultados das últimas tentativas concluídas
   useEffect(() => {
@@ -82,7 +86,20 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
     };
   }, [user?.uid]);
 
+  // Retorna à primeira página ao trocar de nível ou formato
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedLevel, selectedFormat]);
+
   const activities = listeningService.getActivities(selectedLevel, selectedFormat);
+
+  // Cálculo da paginação
+  const totalItems = activities.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const displayedActivities = activities.slice(startIndex, endIndex);
 
   const levelTabs: { id: ActivityLevel | 'all'; title: string; subtitle: string }[] = [
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
@@ -166,7 +183,7 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
 
       {/* Activities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {activities.map((activity) => {
+        {displayedActivities.map((activity) => {
           const cfg = FORMAT_CONFIG[activity.type as ListeningActivityType] || FORMAT_CONFIG.listen_identify;
           const FormatIcon = cfg.icon;
           const lastResult = latestResults[activity.id];
@@ -255,6 +272,23 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
           );
         })}
       </div>
+
+      {/* Pagination Controls */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+          }}
+          itemLabel="lições"
+          ariaLabel="Paginação das atividades de escuta"
+          accentColor="blue"
+        />
+      )}
 
       {activities.length === 0 && (
         <div className="p-8 rounded-3xl bg-white/80 border border-slate-200/80 text-center space-y-2">

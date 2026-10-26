@@ -183,9 +183,16 @@ describe('Reading Pillar & Extensible Activity Framework Tests', () => {
         />
       );
 
-      // Should show B1 activities
+      // Should show B1 activities on page 1
       expect(screen.getByText('A Cultura do Trabalho Remoto na Tecnologia')).toBeInTheDocument();
+      expect(screen.getByText(/1–8/)).toBeInTheDocument();
+
+      // Navigate to page 2 via pagination control
+      const nextBtn = screen.getByRole('button', { name: /Próxima página/i });
+      fireEvent.click(nextBtn);
+      expect(screen.getByText(/9–15/)).toBeInTheDocument();
     });
+
 
     it('runs a complete reading activity from passage reading to result screen and allows retry', async () => {
       const act: Activity<ReadingQuestion> = READING_ACTIVITIES[0]; // A1 (3 questions)

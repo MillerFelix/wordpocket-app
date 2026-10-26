@@ -7,11 +7,15 @@ import {
   Sparkles, 
   ArrowRight, 
   RotateCcw,
-  CheckCircle2
+  CheckCircle2,
+  Filter
 } from 'lucide-react';
 import { Activity, ActivityLevel, UserActivityResult, WritingActivityType } from '../../../types/activity';
 import { writingService } from '../../../services/writingService';
 import { useAuth } from '../../../contexts/AuthContext';
+import { Pagination } from '../../shared/Pagination';
+
+const ITEMS_PER_PAGE = 8;
 
 interface WritingActivitiesHubProps {
   onSelectActivity: (activity: Activity) => void;
@@ -52,17 +56,51 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
   onLevelChange
 }) => {
   const { user } = useAuth();
+  const [selectedFormat, setSelectedFormat] = useState<WritingActivityType | 'all'>('all');
   const [latestResults, setLatestResults] = useState<Record<string, UserActivityResult>>({});
   const [loadingResults, setLoadingResults] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  // Carrega imediatamente cache local e depois sincroniza resultados remotos
   useEffect(() => {
-    writingService.getLatestResults(user?.uid)
-      .then((res) => setLatestResults(res))
-      .catch(() => {})
-      .finally(() => setLoadingResults(false));
-  }, [user]);
+    let isMounted = true;
+    const fetchResults = async () => {
+      try {
+        const local = writingService.getLocalResults(user?.uid);
+        if (isMounted) {
+          setLatestResults(local);
+          setLoadingResults(false);
+        }
 
-  const activities = writingService.getActivities(selectedLevel);
+        const remote = await writingService.getLatestResults(user?.uid);
+        if (isMounted) {
+          setLatestResults(remote);
+          setLoadingResults(false);
+        }
+      } catch {
+        if (isMounted) setLoadingResults(false);
+      }
+    };
+    fetchResults();
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.uid]);
+
+  // Retorna à primeira página ao trocar de nível ou formato
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedLevel, selectedFormat]);
+
+  const activities = writingService.getActivities(selectedLevel, selectedFormat);
+
+  // Cálculo da paginação
+  const totalItems = activities.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const displayedActivities = activities.slice(startIndex, endIndex);
 
   const levelTabs: { id: ActivityLevel | 'all'; title: string; subtitle: string }[] = [
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
@@ -71,10 +109,18 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
     { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Trabalho & Condicionais' }
   ];
 
+  const formatFilters: { id: WritingActivityType | 'all'; label: string }[] = [
+    { id: 'all', label: 'Todos os formatos' },
+    { id: 'fill_blank', label: 'Complete a frase' },
+    { id: 'sentence_order', label: 'Organize as palavras' },
+    { id: 'find_fix_error', label: 'Corrija o erro' },
+    { id: 'open_prompt', label: 'Escreva sua resposta' }
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Level Filters Bar */}
-      <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-4 sm:p-5 border border-white/90 shadow-soft-card space-y-3">
+      {/* Level & Format Filters Bar */}
+      <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-white/90 shadow-soft-card space-y-4">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#FF5B26]" />
@@ -87,6 +133,7 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
           </span>
         </div>
 
+        {/* Level Tabs */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {levelTabs.map((tab) => {
             const isSelected = selectedLevel === tab.id;
@@ -111,11 +158,33 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
             );
           })}
         </div>
+
+        {/* Format Filter Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 scrollbar-none">
+          <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0 ml-1 mr-1" />
+          {formatFilters.map((fmt) => {
+            const isSelected = selectedFormat === fmt.id;
+            return (
+              <button
+                key={fmt.id}
+                type="button"
+                onClick={() => setSelectedFormat(fmt.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer shrink-0 border ${
+                  isSelected
+                    ? 'bg-[#FF5B26] text-white border-[#FF5B26] shadow-xs'
+                    : 'bg-white/80 hover:bg-white text-[#52456F] border-slate-200/80'
+                }`}
+              >
+                {fmt.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Activities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {activities.map((activity) => {
+        {displayedActivities.map((activity) => {
           const typeMeta = TYPE_CONFIG[activity.type as WritingActivityType] || TYPE_CONFIG.fill_blank;
           const TypeIcon = typeMeta.icon;
           const lastAttempt = latestResults[activity.id];
@@ -195,7 +264,7 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
                   ) : (
                     <>
                       <span>Iniciar</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </>
                   )}
                 </button>
@@ -204,6 +273,33 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
           );
         })}
       </div>
+
+      {/* Pagination Controls */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+          }}
+          itemLabel="lições"
+          ariaLabel="Paginação das atividades de escrita"
+          accentColor="orange"
+        />
+      )}
+
+      {activities.length === 0 && (
+        <div className="p-8 rounded-3xl bg-white/80 border border-slate-200/80 text-center space-y-2">
+          <PenTool className="w-8 h-8 text-slate-400 mx-auto" />
+          <h4 className="text-sm font-bold text-[#160F2E]">Nenhuma atividade encontrada</h4>
+          <p className="text-xs text-[#52456F]">
+            Tente selecionar outro nível ou formato de escrita nos filtros acima.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

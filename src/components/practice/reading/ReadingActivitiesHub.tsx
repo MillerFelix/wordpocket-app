@@ -12,6 +12,9 @@ import {
 import { Activity, ActivityLevel, ReadingActivityType, ReadingQuestion, UserActivityResult } from '../../../types/activity';
 import { readingService } from '../../../services/readingService';
 import { useAuth } from '../../../contexts/AuthContext';
+import { Pagination } from '../../shared/Pagination';
+
+const ITEMS_PER_PAGE = 8;
 
 interface ReadingActivitiesHubProps {
   onSelectActivity: (activity: Activity<ReadingQuestion>) => void;
@@ -61,6 +64,7 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
   const { user } = useAuth();
   const [selectedFormat, setSelectedFormat] = useState<ReadingActivityType | 'all'>('all');
   const [latestResults, setLatestResults] = useState<Record<string, UserActivityResult>>({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Carrega os resultados das últimas tentativas concluídas
   useEffect(() => {
@@ -82,7 +86,21 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
     };
   }, [user?.uid]);
 
+  // Retorna à primeira página ao trocar de nível ou formato
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedLevel, selectedFormat]);
+
   const activities = readingService.getActivities(selectedLevel, selectedFormat);
+
+  // Cálculo da paginação
+  const totalItems = activities.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const displayedActivities = activities.slice(startIndex, endIndex);
+
 
   const levelTabs: { id: ActivityLevel | 'all'; title: string; subtitle: string }[] = [
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
@@ -166,7 +184,7 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
 
       {/* Activities Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {activities.map((activity) => {
+        {displayedActivities.map((activity) => {
           const cfg = FORMAT_CONFIG[activity.type as ReadingActivityType] || FORMAT_CONFIG.read_comprehend;
           const FormatIcon = cfg.icon;
           const lastResult = latestResults[activity.id];
@@ -256,6 +274,23 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
         })}
       </div>
 
+      {/* Pagination Controls */}
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={safeCurrentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onPageChange={(page) => {
+            setCurrentPage(page);
+          }}
+          itemLabel="lições"
+          ariaLabel="Paginação das atividades de leitura"
+          accentColor="blue"
+        />
+      )}
+
       {activities.length === 0 && (
         <div className="p-8 rounded-3xl bg-white/80 border border-slate-200/80 text-center space-y-2">
           <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
@@ -265,6 +300,7 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
           </p>
         </div>
       )}
+
     </div>
   );
 };

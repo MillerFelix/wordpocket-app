@@ -377,9 +377,22 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
         />
       );
 
-      // Should show A2 activities
+      // Should show A2 activities on page 1 (8 cards)
       expect(screen.getByText('Relatando o Dia de Ontem')).toBeInTheDocument();
+      expect(screen.getByText(/1–8/)).toBeInTheDocument();
+
+      // Navigate to page 2: shows remaining 7 activities
+      const nextBtn = screen.getByRole('button', { name: /Próxima página/i });
+      fireEvent.click(nextBtn);
+      expect(screen.getByText(/9–15/)).toBeInTheDocument();
+
+      // Filter by format: resets to page 1
+      const fillBlankBtn = screen.getByRole('button', { name: /Complete a frase/i });
+      fireEvent.click(fillBlankBtn);
+      expect(screen.getByRole('navigation')).toHaveTextContent(/Página 1 de 1/);
     });
+
+
 
     it('runs a complete writing activity from start to result screen and allows retry', async () => {
       const act: Activity = WRITING_ACTIVITIES[0]; // A1 Complete a frase (3 questions)

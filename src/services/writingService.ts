@@ -1,4 +1,4 @@
-import { Activity, ActivityLevel, UserActivityResult } from '../types/activity';
+import { Activity, ActivityLevel, UserActivityResult, WritingActivityType } from '../types/activity';
 import { getWritingActivities, getWritingActivityById } from '../data/writingActivities';
 import { createPillarPersistenceService } from './activityPersistenceService';
 
@@ -11,11 +11,12 @@ const persistence = createPillarPersistenceService({
 
 export const writingService = {
   /**
-   * Retorna todas as atividades de escrita ou filtradas por nível
+   * Retorna todas as atividades de escrita ou filtradas por nível e formato
    */
-  getActivities(level?: ActivityLevel | 'all'): Activity[] {
-    return getWritingActivities(level);
+  getActivities(level?: ActivityLevel | 'all', format?: WritingActivityType | 'all'): Activity[] {
+    return getWritingActivities(level, format);
   },
+
 
   /**
    * Retorna uma atividade de escrita pelo ID

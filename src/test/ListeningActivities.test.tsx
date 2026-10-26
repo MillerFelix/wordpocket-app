@@ -260,7 +260,7 @@ describe('Listening Pillar & Audio Practice Framework Tests', () => {
       fireEvent.click(b1Filter);
       expect(onLevelChange).toHaveBeenCalledWith('b1');
 
-      // Re-render as B1 selected
+      // Re-render as B1 selected: page 1 shows first 8 activities
       rerender(
         <ListeningActivitiesHub
           selectedLevel="b1"
@@ -269,9 +269,17 @@ describe('Listening Pillar & Audio Practice Framework Tests', () => {
         />
       );
 
-      // Should show B1 activities
+      // Should show B1 activities on page 1
+      expect(screen.getByText('Reduções Modais: Would have, Could have, Should have')).toBeInTheDocument();
+      expect(screen.getByText(/1–8/)).toBeInTheDocument();
+
+      // Navigate to page 2 via pagination control: shows Anúncio de Aeroporto Internacional
+      const nextBtn = screen.getByRole('button', { name: /Próxima página/i });
+      fireEvent.click(nextBtn);
       expect(screen.getByText('Anúncio de Aeroporto Internacional')).toBeInTheDocument();
+      expect(screen.getByText(/9–15/)).toBeInTheDocument();
     });
+
 
     it('runs a complete listening activity from audio listening to result screen with revealed transcript and allows retry', async () => {
       const act: Activity<ListeningQuestion> = LISTENING_ACTIVITIES[0]; // A1 (3 questions)
