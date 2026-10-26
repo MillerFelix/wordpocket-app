@@ -103,7 +103,47 @@ export function formatTextForSpeech(text: string): string {
   return formatted;
 }
 
-export function speakEnglish(text: string): SpeechResult {
+export interface SpeakOptions {
+  rate?: number;
+  pitch?: number;
+  onStart?: () => void;
+  onEnd?: () => void;
+  onError?: (err: any) => void;
+}
+
+export function stopSpeech(): void {
+  if (isSpeechSupported()) {
+    try {
+      window.speechSynthesis.cancel();
+    } catch {}
+  }
+}
+
+export function pauseSpeech(): void {
+  if (isSpeechSupported()) {
+    try {
+      window.speechSynthesis.pause();
+    } catch {}
+  }
+}
+
+export function resumeSpeech(): void {
+  if (isSpeechSupported()) {
+    try {
+      window.speechSynthesis.resume();
+    } catch {}
+  }
+}
+
+export function isSpeaking(): boolean {
+  return isSpeechSupported() && window.speechSynthesis.speaking;
+}
+
+export function isPaused(): boolean {
+  return isSpeechSupported() && window.speechSynthesis.paused;
+}
+
+export function speakEnglish(text: string, options?: SpeakOptions): SpeechResult {
   if (!isSpeechSupported()) {
     return {
       success: false,
@@ -129,8 +169,18 @@ export function speakEnglish(text: string): SpeechResult {
     }
     
     utterance.lang = 'en-US';
-    utterance.rate = 0.9; // Clear articulation for language learners
-    utterance.pitch = 1.0;
+    utterance.rate = options?.rate ?? 0.9; // Articulação clara para estudantes
+    utterance.pitch = options?.pitch ?? 1.0;
+
+    if (options?.onStart) {
+      utterance.onstart = options.onStart;
+    }
+    if (options?.onEnd) {
+      utterance.onend = options.onEnd;
+    }
+    if (options?.onError) {
+      utterance.onerror = options.onError;
+    }
 
     window.speechSynthesis.speak(utterance);
     return { success: true };

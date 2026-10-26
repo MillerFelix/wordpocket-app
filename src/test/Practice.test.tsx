@@ -30,7 +30,7 @@ describe('PracticeView & 4 English Skills Hub', () => {
     expect(screen.getByText(/Seu histórico e evolução serão computados/i)).toBeInTheDocument();
   });
 
-  it('navigates to the Listening skill area, presents difficulty selectors and initial state', () => {
+  it('navigates to the Listening skill area and presents the Listening activities hub', () => {
     render(<PracticeView />);
 
     const listeningCard = screen.getByRole('button', { name: /Acessar área de prática de Listening/i });
@@ -39,9 +39,31 @@ describe('PracticeView & 4 English Skills Hub', () => {
     // Breadcrumb and Title
     expect(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: /Listening/i })).toBeInTheDocument();
-    expect(screen.getByText(/Compreensão do inglês falado/i)).toBeInTheDocument();
+    expect(screen.getByText(/Desenvolver a compreensão do inglês falado/i)).toBeInTheDocument();
 
-    // Difficulty Selectors
+    // Listening Activities Hub controls
+    expect(screen.getByText('Atividades de Escuta (Listening)')).toBeInTheDocument();
+    expect(screen.getByText(/12 atividades disponíveis/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /A1 — Iniciante/i })).toBeInTheDocument();
+
+    // Return back to hub
+    const backBtn = screen.getByRole('button', { name: /Voltar para Praticar Inglês/i });
+    fireEvent.click(backBtn);
+
+    // Hub is visible again
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+  });
+
+  it('navigates to Speaking, Reading, and Writing areas correctly and tests Speaking difficulty selectors', () => {
+    render(<PracticeView />);
+
+    // Test Speaking (which has difficulty selectors)
+    const speakingCard = screen.getByRole('button', { name: /Acessar área de prática de Speaking/i });
+    fireEvent.click(speakingCard);
+    expect(screen.getByRole('heading', { level: 1, name: /Speaking/i })).toBeInTheDocument();
+    expect(screen.getByText(/Praticar a pronúncia, ritmo vocal e a produção oral/i)).toBeInTheDocument();
+
+    // Difficulty Selectors on Speaking
     const facilBtn = screen.getByRole('button', { name: /Nível Fácil/i });
     const medioBtn = screen.getByRole('button', { name: /Nível Médio/i });
     const dificilBtn = screen.getByRole('button', { name: /Nível Difícil/i });
@@ -58,22 +80,6 @@ describe('PracticeView & 4 English Skills Hub', () => {
     expect(medioBtn).toHaveAttribute('aria-pressed', 'true');
     expect(facilBtn).toHaveAttribute('aria-pressed', 'false');
 
-    // Return back to hub
-    const backBtn = screen.getByRole('button', { name: /Voltar para Praticar Inglês/i });
-    fireEvent.click(backBtn);
-
-    // Hub is visible again
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
-  });
-
-  it('navigates to Speaking, Reading, and Writing areas correctly', () => {
-    render(<PracticeView />);
-
-    // Test Speaking
-    const speakingCard = screen.getByRole('button', { name: /Acessar área de prática de Speaking/i });
-    fireEvent.click(speakingCard);
-    expect(screen.getByRole('heading', { level: 1, name: /Speaking/i })).toBeInTheDocument();
-    expect(screen.getByText(/Praticar a pronúncia, ritmo vocal e a produção oral/i)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i }));
 
     // Test Reading

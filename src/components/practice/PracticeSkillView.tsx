@@ -20,7 +20,9 @@ import { WritingActivitiesHub } from './writing/WritingActivitiesHub';
 import { WritingActivityRunner } from './writing/WritingActivityRunner';
 import { ReadingActivitiesHub } from './reading/ReadingActivitiesHub';
 import { ReadingActivityRunner } from './reading/ReadingActivityRunner';
-import { ReadingQuestion } from '../../types/activity';
+import { ListeningActivitiesHub } from './listening/ListeningActivitiesHub';
+import { ListeningActivityRunner } from './listening/ListeningActivityRunner';
+import { ReadingQuestion, ListeningQuestion } from '../../types/activity';
 import { Play } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -48,6 +50,8 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
   const [writingLevel, setWritingLevel] = useState<ActivityLevel | 'all'>('all');
   const [activeReadingActivity, setActiveReadingActivity] = useState<Activity<ReadingQuestion> | null>(null);
   const [readingLevel, setReadingLevel] = useState<ActivityLevel | 'all'>('all');
+  const [activeListeningActivity, setActiveListeningActivity] = useState<Activity<ListeningQuestion> | null>(null);
+  const [listeningLevel, setListeningLevel] = useState<ActivityLevel | 'all'>('all');
   const { isVisitor, openVisitorPrompt } = useAuth();
   const Icon = SKILL_ICONS[skill.id];
   const otherSkills = practiceService.getAllSkills().filter((s) => s.id !== skill.id);
@@ -84,6 +88,17 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
         <ReadingActivityRunner
           activity={activeReadingActivity}
           onExit={() => setActiveReadingActivity(null)}
+        />
+      </div>
+    );
+  }
+
+  if (skill.id === 'listening' && activeListeningActivity) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-300">
+        <ListeningActivityRunner
+          activity={activeListeningActivity}
+          onExit={() => setActiveListeningActivity(null)}
         />
       </div>
     );
@@ -178,6 +193,20 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
               );
             }
             setActiveReadingActivity(activity);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      ) : skill.id === 'listening' ? (
+        <ListeningActivitiesHub
+          selectedLevel={listeningLevel}
+          onLevelChange={setListeningLevel}
+          onSelectActivity={(activity) => {
+            if (isVisitor) {
+              openVisitorPrompt(
+                'Você está prestes a iniciar uma atividade de Listening. Entre ou crie uma conta para salvar suas notas no seu perfil, ou continue sem salvar.'
+              );
+            }
+            setActiveListeningActivity(activity);
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         />
@@ -305,8 +334,8 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
               </button>
             </div>
 
-            {/* Interactive Audio Demonstration for Listening & Speaking */}
-            {(skill.id === 'listening' || skill.id === 'speaking') && (
+            {/* Interactive Audio Demonstration for Speaking */}
+            {skill.id === 'speaking' && (
               <div className="p-4 rounded-2xl bg-[#E1ECFC]/60 border border-[#BED7FA] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#52456F]">
                 <div className="space-y-0.5">
                   <strong className="text-[#160F2E] font-bold block">

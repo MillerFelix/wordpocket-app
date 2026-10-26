@@ -24,9 +24,18 @@ export type ReadingActivityType =
   | 'main_idea';         // Identifique a ideia principal
 
 /**
+ * Modalidades de atividades específicas para o pilar de Listening (Escuta)
+ */
+export type ListeningActivityType =
+  | 'listen_identify'     // Ouça e identifique
+  | 'listen_dialogue'     // Compreenda o diálogo
+  | 'real_life_situation' // Situações da vida real
+  | 'natural_speech';     // Entenda o inglês natural
+
+/**
  * Identificador universal do tipo de atividade (extensível aos 4 pilares)
  */
-export type ActivityType = WritingActivityType | ReadingActivityType | string;
+export type ActivityType = WritingActivityType | ReadingActivityType | ListeningActivityType | string;
 
 /**
  * Estrutura base para qualquer questão nos 4 pilares
@@ -145,6 +154,30 @@ export interface ReadingPassage {
 }
 
 /**
+ * Linha de diálogo entre interlocutores para áudios de conversas
+ */
+export interface DialogueLine {
+  speaker: string;
+  text: string;
+  translation?: string;
+}
+
+/**
+ * Estrutura da faixa e conteúdo falado para o pilar de Listening (Escuta)
+ */
+export interface ListeningTrack {
+  title?: string;
+  scenario?: string; // Ex: 'No restaurante', 'Check-in no aeroporto', 'Ligação profissional'
+  spokenText: string; // Texto contínuo falado pelo sintetizador ou gravação
+  dialogueLines?: DialogueLine[]; // Linhas de diálogo para conversas
+  speechRate?: number; // Ex: 0.85 (A1), 0.95 (A2), 1.05 (B1)
+  estimatedDurationSeconds?: number;
+  transcript?: string; // Transcrição integral revelada pedagogicamente ao final
+  transcriptTranslation?: string; // Tradução de apoio
+  audioUrl?: string; // URL opcional para áudio offline estático pré-gerado
+}
+
+/**
  * União de todas as questões suportadas pelo Writing
  */
 export type WritingQuestion = 
@@ -154,12 +187,17 @@ export type WritingQuestion =
   | OpenPromptQuestion;
 
 /**
- * União universal de tipos de questões nos pilares
+ * Questão de múltipla escolha para o pilar de Listening (reutiliza o modelo de ReadingQuestion)
  */
-export type AnyQuestion = WritingQuestion | ReadingQuestion;
+export type ListeningQuestion = ReadingQuestion;
 
 /**
- * Contrato de uma atividade educacional padronizada (Writing, Reading, etc.)
+ * União universal de tipos de questões nos pilares
+ */
+export type AnyQuestion = WritingQuestion | ReadingQuestion | ListeningQuestion;
+
+/**
+ * Contrato de uma atividade educacional padronizada (Writing, Reading, Listening, etc.)
  */
 export interface Activity<TQuestion = AnyQuestion> {
   id: string;
@@ -172,6 +210,7 @@ export interface Activity<TQuestion = AnyQuestion> {
   objective: string;
   instructions: string;
   readingPassage?: ReadingPassage;
+  listeningTrack?: ListeningTrack;
   questions: TQuestion[];
   maxScore: number;
   version: number;

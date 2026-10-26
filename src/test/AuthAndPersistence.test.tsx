@@ -130,9 +130,9 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
   it('prompts visitor when launching interactive practice exercise and lets visitor continue without saving', () => {
     render(<App initialTab="practice" />);
 
-    // Access Listening
-    const listeningCard = screen.getByRole('button', { name: /Acessar área de prática de Listening/i });
-    fireEvent.click(listeningCard);
+    // Access Speaking
+    const speakingCard = screen.getByRole('button', { name: /Acessar área de prática de Speaking/i });
+    fireEvent.click(speakingCard);
 
     // Start practice exercise
     const startPracticeBtn = screen.getByRole('button', { name: /Iniciar Prática/i });
