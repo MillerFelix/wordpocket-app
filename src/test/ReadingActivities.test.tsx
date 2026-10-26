@@ -249,5 +249,16 @@ describe('Reading Pillar & Extensible Activity Framework Tests', () => {
       // Should be back at question 1
       expect(screen.getByText(/Questão 1 de 3/i)).toBeInTheDocument();
     });
+
+    it('is strictly text-based and contains no audio, speech synthesis, or pronunciation buttons', () => {
+      const act: Activity<ReadingQuestion> = READING_ACTIVITIES[0];
+      render(<ReadingActivityRunner activity={act} onExit={vi.fn()} />);
+
+      // Verify no pronunciation or audio playback buttons exist in reading
+      expect(screen.queryByRole('button', { name: /ouvir/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /pronúncia/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /áudio/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /escutar/i })).not.toBeInTheDocument();
+    });
   });
 });

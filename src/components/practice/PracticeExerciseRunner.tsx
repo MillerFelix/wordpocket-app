@@ -190,8 +190,8 @@ export const PracticeExerciseRunner: React.FC<PracticeExerciseRunnerProps> = ({
             {currentQuestion.prompt}
           </h3>
 
-          {/* Audio Prompt if available */}
-          {currentQuestion.audioText && (
+          {/* Audio Prompt if available (exclusively for listening and speaking, never reading) */}
+          {skill.id !== 'reading' && currentQuestion.audioText && (
             <div className="p-3.5 rounded-2xl bg-[#E1ECFC]/70 border border-[#BED7FA] flex items-center justify-between gap-3">
               <span className="text-xs font-semibold text-[#160F2E]">
                 Clique para escutar o áudio nativo:

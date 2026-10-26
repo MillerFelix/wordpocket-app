@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpen, Clock, Tag, HelpCircle, Eye, EyeOff } from 'lucide-react';
 import { ReadingPassage } from '../../../types/activity';
-import { PronounceButton } from '../../PronounceButton';
 
 interface ReadingPassageViewProps {
   passage: ReadingPassage;
@@ -48,12 +47,6 @@ export const ReadingPassageView: React.FC<ReadingPassageViewProps> = ({
               <span>~{passage.estimatedReadTimeMinutes} min</span>
             </span>
           )}
-
-          <PronounceButton
-            text={passage.content.slice(0, 180)}
-            size="sm"
-            className="border border-slate-200"
-          />
         </div>
       </div>
 
