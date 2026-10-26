@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  User as UserIcon, 
   Mail, 
   Calendar, 
   CloudCheck, 
@@ -15,13 +14,16 @@ import {
   TrendingUp,
   Edit2,
   Check,
-  X
+  X,
+  Camera
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserSkillProgress } from '../../services/progressService';
 import { SkillProgress } from '../../types/progress';
 import { PracticeSkillId, TabType } from '../../types';
 import { LoadingIndicator } from '../shared/LoadingIndicator';
+import { getAvatarById } from '../../data/avatars';
+import { AvatarPickerModal } from './AvatarPickerModal';
 
 interface UserProfileViewProps {
   onNavigate: (tab: TabType) => void;
@@ -42,12 +44,15 @@ const SKILL_COLORS: Record<PracticeSkillId, { bg: string; text: string; badge: s
 };
 
 export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) => {
-  const { user, profile, signOut, openOnboarding, openAuthModal, isVisitor, updateProfileData } = useAuth();
+  const { user, profile, signOut, openOnboarding, openAuthModal, isVisitor, updateProfileData, avatarId, updateAvatar } = useAuth();
   const [skillProgress, setSkillProgress] = useState<Record<PracticeSkillId, SkillProgress> | null>(null);
   const [loadingProgress, setLoadingProgress] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState('');
   const [savingName, setSavingName] = useState(false);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+
+  const currentAvatar = getAvatarById(avatarId);
 
   useEffect(() => {
     if (user) {
@@ -86,20 +91,56 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
   if (isVisitor || !user) {
     return (
       <div className="space-y-6 max-w-2xl mx-auto py-8 animate-in fade-in duration-300 text-center">
-        <div className="w-16 h-16 rounded-3xl bg-[#E1ECFC] text-[#176BFF] flex items-center justify-center mx-auto shadow-sm">
-          <UserIcon className="w-8 h-8" />
+        {/* Interactive Avatar for Visitor */}
+        <div className="relative inline-block mx-auto">
+          <button
+            type="button"
+            onClick={() => setIsAvatarModalOpen(true)}
+            className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-3xl p-1 bg-gradient-brand shadow-lg hover:scale-105 transition cursor-pointer group focus:outline-none focus:ring-4 focus:ring-[#176BFF]/30"
+            title="Clique para escolher seu avatar"
+            aria-label={`Avatar atual: ${currentAvatar.name}. Clique para trocar.`}
+          >
+            <div className="w-full h-full rounded-[20px] overflow-hidden bg-slate-100 ring-2 ring-white relative">
+              <img
+                src={currentAvatar.image}
+                alt={currentAvatar.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+              />
+              <div className="absolute inset-0 bg-[#160F2E]/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[10px] font-extrabold gap-0.5">
+                <Camera className="w-4 h-4" />
+                <span>Trocar</span>
+              </div>
+            </div>
+            <span
+              className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#176BFF] text-white ring-2 ring-white flex items-center justify-center shadow-xs"
+              title="Trocar avatar"
+            >
+              <Camera className="w-3.5 h-3.5" />
+            </span>
+          </button>
         </div>
 
         <div className="space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#E1ECFC] text-[#176BFF] text-xs font-bold border border-[#BED7FA]">
+            <span>Avatar: {currentAvatar.name}</span>
+          </div>
           <h1 className="text-2xl font-black text-[#160F2E]">
             Modo Visitante Ativo
           </h1>
           <p className="text-xs sm:text-sm text-[#52456F] max-w-md mx-auto">
-            Você está navegando como visitante. Crie uma conta gratuita ou faça login para ter acesso ao seu perfil pessoal e sincronizar seu histórico.
+            Você está navegando como visitante com o avatar <strong>{currentAvatar.name}</strong>. Crie uma conta gratuita para salvar seu histórico e personalizar seu perfil completo.
           </p>
         </div>
 
-        <div className="pt-2">
+        <div className="pt-2 flex items-center justify-center gap-3 flex-wrap">
+          <button
+            type="button"
+            onClick={() => setIsAvatarModalOpen(true)}
+            className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-white hover:bg-slate-50 text-[#176BFF] font-bold text-sm border border-[#BED7FA] shadow-xs transition cursor-pointer"
+          >
+            <Camera className="w-4 h-4" />
+            <span>Escolher outro Avatar</span>
+          </button>
           <button
             type="button"
             onClick={() => openAuthModal('signup')}
@@ -109,11 +150,18 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
+
+        <AvatarPickerModal
+          isOpen={isAvatarModalOpen}
+          currentAvatarId={avatarId}
+          onConfirm={async (newId) => {
+            await updateAvatar(newId);
+          }}
+          onClose={() => setIsAvatarModalOpen(false)}
+        />
       </div>
     );
   }
-
-  const initialLetter = (profile?.displayName || user.displayName || 'Estudante').charAt(0).toUpperCase();
 
   const formattedJoinDate = profile?.createdAt
     ? new Date(profile.createdAt).toLocaleDateString('pt-BR', {
@@ -133,12 +181,34 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
       <div className="relative overflow-hidden rounded-3xl bg-white/85 backdrop-blur-xl p-6 sm:p-8 border border-white/90 shadow-soft-card">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 z-10 relative">
           <div className="flex items-center gap-4 sm:gap-5">
-            {/* User Avatar */}
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-brand p-1 shadow-md shrink-0">
-              <div className="w-full h-full rounded-[20px] bg-white flex items-center justify-center font-black text-2xl sm:text-3xl text-[#176BFF]">
-                {initialLetter}
-              </div>
-              <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#19D9B4] ring-2 ring-white" title="Conta Conectada" />
+            {/* User Avatar with interactive change trigger */}
+            <div className="relative group shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsAvatarModalOpen(true)}
+                className="relative w-18 h-18 sm:w-22 sm:h-22 rounded-3xl p-1 bg-gradient-brand shadow-lg hover:shadow-xl hover:scale-102 transition-all cursor-pointer group focus:outline-none focus:ring-4 focus:ring-[#176BFF]/30"
+                title="Clique para trocar seu avatar"
+                aria-label={`Avatar atual: ${currentAvatar.name}. Clique para trocar.`}
+              >
+                <div className="w-full h-full rounded-[20px] overflow-hidden bg-slate-100 ring-2 ring-white relative">
+                  <img
+                    src={currentAvatar.image}
+                    alt={currentAvatar.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  />
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-[#160F2E]/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[10px] font-extrabold gap-0.5">
+                    <Camera className="w-4 h-4" />
+                    <span>Trocar</span>
+                  </div>
+                </div>
+                <span
+                  className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#176BFF] text-white ring-2 ring-white flex items-center justify-center shadow-xs group-hover:bg-[#1253C7] transition"
+                  title="Trocar avatar"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                </span>
+              </button>
             </div>
 
             {/* User Details */}
@@ -197,6 +267,15 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
                       <CloudCheck className="w-3 h-3 text-[#176BFF]" />
                       <span>Sincronizado</span>
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsAvatarModalOpen(true)}
+                      className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 hover:bg-slate-200 text-[#52456F] hover:text-[#176BFF] text-[10px] font-bold border border-slate-200 transition cursor-pointer"
+                      title="Clique para trocar seu avatar"
+                    >
+                      <Camera className="w-3 h-3 text-[#176BFF]" />
+                      <span>{currentAvatar.name}</span>
+                    </button>
                   </>
                 )}
               </div>
@@ -343,6 +422,15 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
           </button>
         </div>
       </div>
+
+      <AvatarPickerModal
+        isOpen={isAvatarModalOpen}
+        currentAvatarId={avatarId}
+        onConfirm={async (newId) => {
+          await updateAvatar(newId);
+        }}
+        onClose={() => setIsAvatarModalOpen(false)}
+      />
     </div>
   );
 };

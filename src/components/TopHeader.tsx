@@ -3,6 +3,7 @@ import { Bell, Wifi, WifiOff, LogIn } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { useAuth } from '../contexts/AuthContext';
+import { getAvatarById } from '../data/avatars';
 
 interface TopHeaderProps {
   activeTab?: TabType;
@@ -92,11 +93,10 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   onNavigate
 }) => {
   const isOnline = useOnlineStatus();
-  const { user, profile, openAuthModal } = useAuth();
+  const { user, profile, openAuthModal, avatarId } = useAuth();
   const currentTabInfo = TAB_TITLES[activeTab] || TAB_TITLES.home;
   const currentTabTheme = TAB_THEMES[activeTab] || TAB_THEMES.home;
-
-  const initialLetter = (profile?.displayName || user?.displayName || 'Estudante').charAt(0).toUpperCase();
+  const currentAvatar = getAvatarById(avatarId);
 
   return (
     <header className="hidden lg:flex items-center justify-between py-3.5 px-8 border-b border-white/80 bg-[#F0F6FF]/75 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(23,107,255,0.06)]">
@@ -158,20 +158,24 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onNavigate('profile')}
               className="flex items-center gap-2.5 cursor-pointer group"
-              title="Acessar Perfil"
+              title={`Acessar Perfil (${currentAvatar.name})`}
             >
-              <div className="relative w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 shadow-xs group-hover:scale-105 transition-transform">
-                <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-black text-sm text-[#176BFF]">
-                  {initialLetter}
+              <div className="relative w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <div className="w-full h-full rounded-[14px] overflow-hidden bg-white ring-1 ring-white">
+                  <img
+                    src={currentAvatar.image}
+                    alt={currentAvatar.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#26D9FF] ring-2 ring-white" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#19D9B4] ring-2 ring-white" />
               </div>
               <div className="hidden xl:block text-left">
                 <p className="text-xs font-extrabold text-[#160F2E] leading-tight group-hover:text-[#176BFF] transition">
                   {profile?.displayName || user.displayName || 'Estudante'}
                 </p>
                 <p className="text-[10px] font-semibold text-[#52456F]">
-                  Conta Conectada
+                  {currentAvatar.name}
                 </p>
               </div>
             </div>

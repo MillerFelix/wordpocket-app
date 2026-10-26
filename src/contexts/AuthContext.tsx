@@ -20,6 +20,7 @@ import {
   clearLocalFavoritesOnLogout 
 } from '../services/favoritesSyncService';
 import { AuthMode, UserProfile } from '../types/auth';
+import { DEFAULT_AVATAR_ID, getStoredVisitorAvatar, setStoredVisitorAvatar } from '../data/avatars';
 
 export interface AuthContextType {
   user: User | null;
@@ -36,6 +37,8 @@ export interface AuthContextType {
   signOut: () => Promise<void>;
   sendPasswordReset: (email: string) => Promise<void>;
   updateProfileData: (data: Partial<UserProfile>) => Promise<void>;
+  avatarId: string;
+  updateAvatar: (avatarId: string) => Promise<void>;
   completeOnboarding: () => Promise<void>;
   // Auth Modal State
   isAuthModalOpen: boolean;
@@ -255,6 +258,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     closeOnboarding();
   };
 
+  const [visitorAvatar, setVisitorAvatar] = useState<string>(() => getStoredVisitorAvatar());
+
+  const avatarId = user
+    ? (profile?.avatarId || visitorAvatar || DEFAULT_AVATAR_ID)
+    : (visitorAvatar || DEFAULT_AVATAR_ID);
+
+  const updateAvatar = useCallback(async (newAvatarId: string) => {
+    setStoredVisitorAvatar(newAvatarId);
+    setVisitorAvatar(newAvatarId);
+    if (user) {
+      await updateProfileData({ avatarId: newAvatarId });
+    }
+  }, [user, updateProfileData]);
+
   const isVisitor = !user;
 
   const value: AuthContextType = {
@@ -271,6 +288,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     signOut,
     sendPasswordReset,
     updateProfileData,
+    avatarId,
+    updateAvatar,
     completeOnboarding,
     isAuthModalOpen,
     authModalMode,
@@ -302,6 +321,8 @@ const defaultAuthContext: AuthContextType = {
   signOut: async () => {},
   sendPasswordReset: async () => {},
   updateProfileData: async () => {},
+  avatarId: DEFAULT_AVATAR_ID,
+  updateAvatar: async () => {},
   completeOnboarding: async () => {},
   isAuthModalOpen: false,
   authModalMode: 'login',

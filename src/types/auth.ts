@@ -7,6 +7,7 @@ export interface UserProfile {
   email: string;
   displayName: string;
   photoURL?: string | null;
+  avatarId?: string;
   createdAt: string; // ISO 8601 string
   lastLoginAt: string; // ISO 8601 string
   onboardingCompleted: boolean;

@@ -2,6 +2,7 @@ import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firest
 import { User } from 'firebase/auth';
 import { db, isFirebaseConfigured } from './firebase';
 import { UserProfile } from '../types/auth';
+import { DEFAULT_AVATAR_ID, getStoredVisitorAvatar } from '../data/avatars';
 
 /**
  * Busca o documento de perfil do usuário no Firestore
@@ -58,9 +59,12 @@ export async function createOrUpdateProfile(
     const shouldUpdateName = !!candidateName && candidateName !== existing.displayName;
     const resolvedName = shouldUpdateName ? candidateName : (existing.displayName || 'Estudante');
 
+    const resolvedAvatarId = existing.avatarId || getStoredVisitorAvatar() || DEFAULT_AVATAR_ID;
+
     const updatedProfile: UserProfile = {
       ...existing,
       displayName: resolvedName,
+      avatarId: resolvedAvatarId,
       lastLoginAt: nowIso
     };
 
@@ -75,6 +79,7 @@ export async function createOrUpdateProfile(
         const userRef = doc(db, 'users', user.uid);
         const updates: Record<string, unknown> = {
           lastLoginAt: nowIso,
+          avatarId: resolvedAvatarId,
           updatedAtServer: serverTimestamp()
         };
         if (shouldUpdateName) {
@@ -92,12 +97,14 @@ export async function createOrUpdateProfile(
   const resolvedDisplayName = cleanExplicitName || cleanAuthName || 'Estudante';
   const email = user.email || '';
   const photoURL = user.photoURL || null;
+  const initialAvatarId = getStoredVisitorAvatar() || DEFAULT_AVATAR_ID;
 
   const newProfile: UserProfile = {
     uid: user.uid,
     email,
     displayName: resolvedDisplayName,
     photoURL,
+    avatarId: initialAvatarId,
     createdAt: nowIso,
     lastLoginAt: nowIso,
     onboardingCompleted: false,

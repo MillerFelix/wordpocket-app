@@ -14,6 +14,7 @@ import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { usePwaInstall } from '../hooks/usePwaInstall';
 import { WordPocketLogo } from './brand/WordPocketLogo';
 import { useAuth } from '../contexts/AuthContext';
+import { getAvatarById } from '../data/avatars';
 
 interface MobileNavProps {
   activeTab: TabType;
@@ -28,8 +29,8 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
-  const { user, profile, openAuthModal } = useAuth();
-  const initialLetter = (profile?.displayName || user?.displayName || 'Estudante').charAt(0).toUpperCase();
+  const { user, openAuthModal, avatarId } = useAuth();
+  const currentAvatar = getAvatarById(avatarId);
 
   const handleInstallClick = async () => {
     await promptInstall();
@@ -126,13 +127,17 @@ export const MobileNav: React.FC<MobileNavProps> = ({
             {user ? (
               <div 
                 onClick={() => onTabChange('profile')}
-                className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs active:scale-95 transition"
-                title="Acessar Perfil"
+                className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-[#6545F5] p-0.5 cursor-pointer shadow-xs active:scale-95 transition shrink-0"
+                title={`Acessar Perfil (${currentAvatar.name})`}
               >
-                <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-extrabold text-[11px] text-[#176BFF]">
-                  {initialLetter}
+                <div className="w-full h-full rounded-full overflow-hidden bg-white ring-1 ring-white">
+                  <img
+                    src={currentAvatar.image}
+                    alt={currentAvatar.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#26D9FF] ring-1 ring-white" />
+                <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#19D9B4] ring-1 ring-white" />
               </div>
             ) : (
               <button
