@@ -18,12 +18,34 @@ export const SentenceOrderQuestionView: React.FC<SentenceOrderQuestionViewProps>
   // Mantém os índices dos itens selecionados para preservar a ordem e suportar palavras repetidas
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
 
-  // Sincroniza estado inicial caso o valor já exista
+  // Sincroniza estado inicial e restaura seleção caso o valor já exista (ex: ao voltar à questão)
   useEffect(() => {
     if (!value) {
       setSelectedIndices([]);
+      return;
     }
-  }, [question.id, value]);
+
+    const currentAssembled = selectedIndices.map((i) => question.scrambledWords[i]).join(' ');
+    if (currentAssembled !== value) {
+      const wordsInValue = value.trim().split(/\s+/).filter(Boolean);
+      const used = new Set<number>();
+      const recoveredIndices: number[] = [];
+
+      for (const w of wordsInValue) {
+        const foundIdx = question.scrambledWords.findIndex(
+          (sw, idx) => !used.has(idx) && sw.toLowerCase() === w.toLowerCase()
+        );
+        if (foundIdx !== -1) {
+          used.add(foundIdx);
+          recoveredIndices.push(foundIdx);
+        }
+      }
+
+      if (recoveredIndices.length === wordsInValue.length) {
+        setSelectedIndices(recoveredIndices);
+      }
+    }
+  }, [question.id, value, question.scrambledWords]);
 
   const handleSelectWord = (index: number) => {
     if (disabled || selectedIndices.includes(index)) return;

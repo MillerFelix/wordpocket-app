@@ -37,7 +37,7 @@ export const VoiceRecorderCard: React.FC<VoiceRecorderCardProps> = ({
   const [recognizedText, setRecognizedText] = useState<string | null>(null);
 
   const ownAudioRef = useRef<HTMLAudioElement | null>(null);
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export const VoiceRecorderCard: React.FC<VoiceRecorderCardProps> = ({
         audioRecorder.cancel();
       }
     };
-  }, []);
+  }, [isRecording]);
 
   // Limpa estados ao trocar de questão
   useEffect(() => {
@@ -121,9 +121,10 @@ export const VoiceRecorderCard: React.FC<VoiceRecorderCardProps> = ({
       timerRef.current = setInterval(() => {
         setRecordSeconds((prev) => prev + 1);
       }, 1000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsRecording(false);
-      setMicError(err.message || 'Erro ao acessar o microfone.');
+      const message = err instanceof Error ? err.message : 'Erro ao acessar o microfone.';
+      setMicError(message);
     }
   };
 
@@ -138,8 +139,9 @@ export const VoiceRecorderCard: React.FC<VoiceRecorderCardProps> = ({
         setRecognizedText(result.recognizedText);
       }
       onRecordingComplete(result.audioUrl, result.recognizedText);
-    } catch (err: any) {
-      setMicError(err.message || 'Erro ao finalizar a gravação.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Erro ao finalizar a gravação.';
+      setMicError(message);
     }
   };
 

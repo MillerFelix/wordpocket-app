@@ -1,44 +1,150 @@
-import { Activity, ActivityGradingResult, QuestionGrading, WritingQuestion, ReadingQuestion, SpeakingQuestion } from '../types/activity';
+import { Activity, ActivityGradingResult, QuestionGrading, WritingQuestion, ReadingQuestion, SpeakingQuestion, AnyQuestion } from '../types/activity';
 
 /**
- * Normaliza textos para comparação determinística justa
- * (remove pontuação periférica desnecessária, múltiplos espaços e converte para minúsculas)
+ * Normaliza variações de apóstrofos e aspas para formas canônicas ASCII.
+ * Suporta apóstrofo padrão, aspas curvas do iOS/macOS/Android, acento agudo e crase.
+ */
+export function normalizeApostrophes(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/[\u2018\u2019\u02BC\u02BB\u00B4`]/g, "'")
+    .replace(/[\u201C\u201D"]/g, '"');
+}
+
+/**
+ * Normaliza textos para comparação determinística justa:
+ * - Converte variações de apóstrofos para apóstrofo simples (')
+ * - Converte para minúsculas
+ * - Remove pontuação periférica (pontos, vírgulas, interrogações, exclamações, aspas no início ou fim)
+ * - Colapsa espaços múltiplos e remove espaços extras nas bordas
  */
 export function normalizeText(text: string): string {
-  return text
+  if (!text) return '';
+  return normalizeApostrophes(text)
     .trim()
     .toLowerCase()
-    .replace(/[.,!?;:]+$/, '') // remove pontuação final
-    .replace(/\s+/g, ' ');
+    .replace(/^[.,!?;:"'–—\s]+|[.,!?;:"'–—\s]+$/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 /**
- * Remove apóstrofos e contrações equivalentes para flexibilizar correção
- * ex: "don't" <-> "do not", "i'm" <-> "i am"
+ * Normaliza uma sentença inteira preservando a ordem das palavras,
+ * mas tolerando variações de pontuação interna como vírgulas e dois-pontos.
  */
-export function normalizeContractions(text: string): string {
+export function normalizeSentence(text: string): string {
+  if (!text) return '';
   return normalizeText(text)
-    .replace(/’/g, "'")
-    .replace(/n't\b/g, ' not')
-    .replace(/'m\b/g, ' am')
-    .replace(/'re\b/g, ' are')
-    .replace(/'s\b/g, ' is')
-    .replace(/'ll\b/g, ' will')
-    .replace(/'ve\b/g, ' have')
-    .replace(/'d\b/g, ' would');
+    .replace(/[.,!?;:"'–—]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
+
+/**
+ * Expande contrações do inglês para sua forma canônica completa
+ * de forma rigorosa e bidirecional (ex: "don't" <-> "do not", "i'm" <-> "i am",
+ * "can't" <-> "can not", "won't" <-> "will not", e formas isoladas como "'m" -> "am").
+ */
+export function expandContractions(text: string): string {
+  if (!text) return '';
+  let s = normalizeText(text);
+
+  // 1. Formas contraídas isoladas (respostas de lacuna como "'m", "'s", "'re", etc.)
+  if (s === "'m") return 'am';
+  if (s === "'s") return 'is';
+  if (s === "'re") return 'are';
+  if (s === "'ve") return 'have';
+  if (s === "'ll") return 'will';
+  if (s === "'d") return 'would';
+
+  // 2. Formas irregulares ou que diferem da regra geral de "n't"
+  s = s
+    .replace(/\bcannot\b/g, 'can not')
+    .replace(/\bcan't\b/g, 'can not')
+    .replace(/\bwon't\b/g, 'will not')
+    .replace(/\bshan't\b/g, 'shall not')
+    .replace(/\blet's\b/g, 'let us');
+
+  // 3. Negações regulares terminadas em n't
+  s = s.replace(/\b([a-z]+)n't\b/g, '$1 not');
+
+  // 4. Pronomes ou sujeitos com contrações de verbos auxiliares
+  s = s
+    .replace(/\b([a-z]+)'m\b/g, '$1 am')
+    .replace(/\b([a-z]+)'re\b/g, '$1 are')
+    .replace(/\b([a-z]+)'ll\b/g, '$1 will')
+    .replace(/\b([a-z]+)'ve\b/g, '$1 have')
+    .replace(/\b([a-z]+)'d\b/g, '$1 would')
+    // Contração 's após pronomes e advérbios interrogativos/demonstrativos
+    .replace(/\b(it|he|she|that|there|what|who|where|here)'s\b/g, '$1 is');
+
+  return s.replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Mantido para compatibilidade retroativa com código existente
+ */
+export const normalizeContractions = expandContractions;
 
 /**
  * Corrige uma questão do tipo Complete a Frase (Fill in the blank)
+ * Suporta:
+ * - Correspondência exata da lacuna (ex: "bought", "children")
+ * - Formas contraídas e expandidas (ex: "'m" <-> "am", "'s" <-> "is")
+ * - Inclusão do pronome precedente (ex: usuário digita "I am" ou "I'm" em vez de apenas "am")
+ * - Digitação da sentença inteira com a lacuna preenchida
+ * - Espaços e pontuações periféricas toleradas
  */
 function gradeFillBlank(
   q: Extract<WritingQuestion, { type: 'fill_blank' }>,
   userAnswer: string
 ): QuestionGrading {
   const cleanUser = normalizeText(userAnswer || '');
-  const isMatch = q.expectedAnswers.some((ans) => {
-    return normalizeText(ans) === cleanUser || normalizeContractions(ans) === normalizeContractions(cleanUser);
-  });
+  const cleanUserExpanded = expandContractions(cleanUser);
+
+  // 1. Respostas alternativas esperadas diretamente na lacuna
+  const candidateExpected = [...q.expectedAnswers];
+
+  // 2. Se o usuário digitou a frase completa preenchida
+  // Ex: "Hello! I am a software student from Brazil."
+  const parts = q.sentenceWithBlank.split('___');
+  const fullSentenceExpected = q.expectedAnswers.map((ans) =>
+    normalizeSentence(`${parts[0]}${ans}${parts[1] || ''}`)
+  );
+
+  // 3. Se a frase tiver sujeito imediatamente anterior à lacuna (ex: "I ___", "She ___")
+  // e o estudante repetir o pronome (ex: "I am", "I'm", "She is", "She's")
+  const precedingWords = parts[0].trim().split(/\s+/);
+  const immediateSubject = precedingWords[precedingWords.length - 1]; // ex: "I" ou "She"
+  const candidateWithSubject = immediateSubject
+    ? q.expectedAnswers.map((ans) => normalizeText(`${immediateSubject} ${ans}`))
+    : [];
+
+  const isMatch = cleanUser.length > 0 && (
+    candidateExpected.some((ans) => {
+      const cleanAns = normalizeText(ans);
+      const cleanAnsExpanded = expandContractions(cleanAns);
+      return (
+        cleanAns === cleanUser ||
+        cleanAnsExpanded === cleanUserExpanded ||
+        cleanAnsExpanded === cleanUser ||
+        cleanAns === cleanUserExpanded
+      );
+    }) ||
+    fullSentenceExpected.some((fullExp) => {
+      const cleanFullUser = normalizeSentence(userAnswer || '');
+      return (
+        fullExp === cleanFullUser ||
+        expandContractions(fullExp) === expandContractions(cleanFullUser)
+      );
+    }) ||
+    candidateWithSubject.some((subjAns) => {
+      return (
+        subjAns === cleanUser ||
+        expandContractions(subjAns) === cleanUserExpanded
+      );
+    })
+  );
 
   return {
     questionId: q.id,
@@ -55,16 +161,24 @@ function gradeFillBlank(
 
 /**
  * Corrige uma questão do tipo Organize as Palavras (Sentence Order)
+ * Preserva estritamente a ordem sintática das palavras enquanto tolera
+ * variações pontuais em pontuação como vírgulas e pontos finais.
  */
 function gradeSentenceOrder(
   q: Extract<WritingQuestion, { type: 'sentence_order' }>,
   userAnswer: string
 ): QuestionGrading {
-  const cleanUser = normalizeText(userAnswer || '');
+  const cleanUser = normalizeSentence(userAnswer || '');
+  const cleanUserExpanded = expandContractions(cleanUser);
   const accepted = [q.expectedSentence, ...(q.acceptedSentences || [])];
 
-  const isMatch = accepted.some((sentence) => {
-    return normalizeText(sentence) === cleanUser || normalizeContractions(sentence) === normalizeContractions(cleanUser);
+  const isMatch = cleanUser.length > 0 && accepted.some((sentence) => {
+    const cleanExp = normalizeSentence(sentence);
+    const cleanExpExpanded = expandContractions(cleanExp);
+    return (
+      cleanExp === cleanUser ||
+      cleanExpExpanded === cleanUserExpanded
+    );
   });
 
   return {
@@ -82,17 +196,46 @@ function gradeSentenceOrder(
 
 /**
  * Corrige uma questão do tipo Corrija o Erro (Find and Fix Error)
+ * Suporta:
+ * - A palavra/termo corrigido isolado (ex: "children")
+ * - Variações alternativas cadastradas (ex: "plan" para "intend")
+ * - A sentença completa com a substituição do erro aplicada
  */
 function gradeFindFixError(
   q: Extract<WritingQuestion, { type: 'find_fix_error' }>,
   userAnswer: string
 ): QuestionGrading {
   const cleanUser = normalizeText(userAnswer || '');
-  const accepted = [q.correction, ...(q.acceptedCorrections || [])];
+  const cleanUserExpanded = expandContractions(cleanUser);
+  const cleanUserSentence = normalizeSentence(userAnswer || '');
+  const cleanUserSentenceExpanded = expandContractions(cleanUserSentence);
 
-  const isMatch = accepted.some((c) => {
-    return normalizeText(c) === cleanUser || normalizeContractions(c) === normalizeContractions(cleanUser);
-  });
+  const acceptedCorrections = [q.correction, ...(q.acceptedCorrections || [])];
+
+  // Frases completas corrigidas aceitas
+  const fullCorrectedSentences = q.errorWord
+    ? acceptedCorrections.map((corr) => {
+        const regex = new RegExp(`\\b${q.errorWord}\\b`, 'i');
+        return normalizeSentence(q.sentenceWithError.replace(regex, corr));
+      })
+    : [];
+
+  const isMatch = cleanUser.length > 0 && (
+    acceptedCorrections.some((c) => {
+      const cleanCorr = normalizeText(c);
+      const cleanCorrExpanded = expandContractions(cleanCorr);
+      return (
+        cleanCorr === cleanUser ||
+        cleanCorrExpanded === cleanUserExpanded
+      );
+    }) ||
+    fullCorrectedSentences.some((fullExp) => {
+      return (
+        fullExp === cleanUserSentence ||
+        expandContractions(fullExp) === cleanUserSentenceExpanded
+      );
+    })
+  );
 
   return {
     questionId: q.id,
@@ -115,15 +258,28 @@ function gradeOpenPrompt(
   q: Extract<WritingQuestion, { type: 'open_prompt' }>,
   userAnswer: string
 ): QuestionGrading {
-  const cleanUser = normalizeContractions(userAnswer || '');
+  const cleanUser = expandContractions(userAnswer || '');
   const words = cleanUser.split(/\s+/).filter(Boolean);
   const minWords = q.minWords || 3;
 
-  if (words.length < minWords) {
+  if (words.length === 0) {
     return {
       questionId: q.id,
       isCorrect: false,
-      scorePercent: 30,
+      scorePercent: 0,
+      userAnswer: '',
+      expectedAnswer: q.sampleAnswer,
+      feedback: 'Nenhuma resposta foi inserida.',
+      explanation: q.explanation
+    };
+  }
+
+  if (words.length < minWords) {
+    const partialScore = Math.min(30, Math.round((words.length / minWords) * 30));
+    return {
+      questionId: q.id,
+      isCorrect: false,
+      scorePercent: partialScore,
       userAnswer: (userAnswer || '').trim(),
       expectedAnswer: q.sampleAnswer,
       feedback: `Sua resposta foi muito curta (mínimo sugerido: ${minWords} palavras). Tente elaborar um pouco mais.`,
@@ -252,7 +408,7 @@ export function gradeActivity(
   activity: Activity,
   answers: Record<string, string>
 ): ActivityGradingResult {
-  const questionsGrading: QuestionGrading[] = activity.questions.map((q) => {
+  const questionsGrading: QuestionGrading[] = activity.questions.map((q: AnyQuestion) => {
     const userAns = answers[q.id] || '';
 
     switch (q.type) {
@@ -270,7 +426,7 @@ export function gradeActivity(
         return gradeSpeakingItem(q as SpeakingQuestion, userAns);
       default:
         return {
-          questionId: (q as any).id,
+          questionId: q.id,
           isCorrect: false,
           scorePercent: 0,
           userAnswer: userAns,
@@ -306,6 +462,9 @@ export function gradeActivity(
 export const activityGradingService = {
   gradeActivity,
   normalizeText,
+  normalizeSentence,
+  normalizeApostrophes,
+  expandContractions,
   normalizeContractions
 };
 

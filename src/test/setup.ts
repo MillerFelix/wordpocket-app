@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 
 // Mock window.speechSynthesis & SpeechSynthesisUtterance
 if (typeof window !== 'undefined') {
+  window.scrollTo = () => {};
   window.speechSynthesis = {
     speak: () => {},
     cancel: () => {},

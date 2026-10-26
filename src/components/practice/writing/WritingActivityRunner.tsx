@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  CheckCircle2, 
-  HelpCircle,
-  Sparkles
-} from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Activity, ActivityGradingResult } from '../../../types/activity';
 import { FillBlankQuestionView } from './FillBlankQuestionView';
 import { SentenceOrderQuestionView } from './SentenceOrderQuestionView';
@@ -14,6 +8,9 @@ import { OpenPromptQuestionView } from './OpenPromptQuestionView';
 import { WritingResultView } from './WritingResultView';
 import { writingService } from '../../../services/writingService';
 import { useAuth } from '../../../contexts/AuthContext';
+import { ActivityExitConfirmModal } from '../shared/ActivityExitConfirmModal';
+import { ActivityProgressBar } from '../shared/ActivityProgressBar';
+import { ActivityNavigationFooter } from '../shared/ActivityNavigationFooter';
 
 interface WritingActivityRunnerProps {
   activity: Activity;
@@ -125,35 +122,11 @@ export const WritingActivityRunner: React.FC<WritingActivityRunnerProps> = ({
       </div>
 
       {/* Confirmation Modal when exiting midway */}
-      {showExitConfirm && (
-        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium space-y-3 animate-in fade-in">
-          <div className="flex items-start gap-2.5">
-            <HelpCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <strong className="font-bold text-sm block">Deseja realmente sair?</strong>
-              <p>
-                Tentativas incompletas <strong>não sobrescrevem</strong> seu último resultado válido salvo. Suas respostas atuais não serão registradas.
-              </p>
-            </div>
-          </div>
-          <div className="flex justify-end gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => setShowExitConfirm(false)}
-              className="px-3 py-1.5 rounded-xl bg-white border border-amber-200 font-bold text-xs text-amber-900 hover:bg-amber-100 transition cursor-pointer"
-            >
-              Continuar Atividade
-            </button>
-            <button
-              type="button"
-              onClick={onExit}
-              className="px-3 py-1.5 rounded-xl bg-amber-600 text-white font-bold text-xs hover:bg-amber-700 transition cursor-pointer"
-            >
-              Confirmar Saída
-            </button>
-          </div>
-        </div>
-      )}
+      <ActivityExitConfirmModal
+        isOpen={showExitConfirm}
+        onCancel={() => setShowExitConfirm(false)}
+        onConfirm={onExit}
+      />
 
       {/* Main Activity Card */}
       <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/90 shadow-soft-card space-y-6">
@@ -168,24 +141,11 @@ export const WritingActivityRunner: React.FC<WritingActivityRunnerProps> = ({
         </div>
 
         {/* Progress and Question Counter */}
-        <div className="space-y-2 pb-4 border-b border-slate-100">
-          <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-[#E04D1B] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#FF5B26]" />
-              <span>Questão {currentIndex + 1} de {totalQuestions}</span>
-            </span>
-            <span className="text-[#52456F]">
-              {answeredCount} de {totalQuestions} preenchidas
-            </span>
-          </div>
-
-          <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-[#FF7A4D] to-[#FF5B26] transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-        </div>
+        <ActivityProgressBar
+          currentIndex={currentIndex}
+          totalQuestions={totalQuestions}
+          answeredCount={answeredCount}
+        />
 
         {/* Dynamic Question Component based on Type */}
         <div className="min-h-[220px]">
@@ -223,46 +183,14 @@ export const WritingActivityRunner: React.FC<WritingActivityRunnerProps> = ({
         </div>
 
         {/* Bottom Navigation Buttons */}
-        <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-          <button
-            type="button"
-            disabled={isFirst}
-            onClick={handlePrev}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#160F2E] font-bold text-xs transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Anterior</span>
-          </button>
-
-          <div className="flex items-center gap-2">
-            {!isLast ? (
-              <button
-                type="button"
-                onClick={handleNext}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-brand text-white font-extrabold text-xs sm:text-sm shadow-colored-blue hover:opacity-95 transition cursor-pointer"
-              >
-                <span>Próxima Questão</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                disabled={submitting}
-                onClick={handleFinish}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-to-r from-[#FF5B26] to-[#E04D1B] text-white font-black text-xs sm:text-sm shadow-colored-tangerine hover:opacity-95 transition active:scale-95 cursor-pointer disabled:opacity-50"
-              >
-                {submitting ? (
-                  <span>Calculando nota...</span>
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Concluir e Ver Nota</span>
-                  </>
-                )}
-              </button>
-            )}
-          </div>
-        </div>
+        <ActivityNavigationFooter
+          isFirst={isFirst}
+          isLast={isLast}
+          submitting={submitting}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onFinish={handleFinish}
+        />
       </div>
     </div>
   );

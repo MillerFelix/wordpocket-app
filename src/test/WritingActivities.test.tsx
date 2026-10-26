@@ -82,12 +82,77 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
       expect(resultWrong.correctCount).toBe(0);
     });
 
-    it('grades "sentence_order" questions deterministically with punctuation tolerance', () => {
+    it('correctly handles case insensitivity and extra spaces in fill_blank answers', () => {
+      const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a1-fill-intro')!;
+      
+      const answersMixedCaseAndSpaces: Record<string, string> = {
+        'w-a1-fb-1': '   AM   ',
+        'w-a1-fb-2': 'Is  ',
+        'w-a1-fb-3': '  aRe '
+      };
+
+      const result = activityGradingService.gradeActivity(act, answersMixedCaseAndSpaces);
+      expect(result.score).toBe(100);
+      expect(result.correctCount).toBe(3);
+      expect(result.questionsGrading[0].isCorrect).toBe(true);
+      expect(result.questionsGrading[1].isCorrect).toBe(true);
+      expect(result.questionsGrading[2].isCorrect).toBe(true);
+    });
+
+    it('handles trailing punctuation and space-before-punctuation in fill_blank', () => {
+      const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a2-fill-past')!;
+      
+      const answersWithPunctuation: Record<string, string> = {
+        'w-a2-fb-1': 'bought .',  // Trailing period with space before
+        'w-a2-fb-2': 'went!',      // Trailing exclamation
+        'w-a2-fb-3': '"wrote"'     // In quotes
+      };
+
+      const result = activityGradingService.gradeActivity(act, answersWithPunctuation);
+      expect(result.score).toBe(100);
+      expect(result.correctCount).toBe(3);
+    });
+
+    it('handles curly apostrophe variations and expanded/contracted forms in fill_blank', () => {
+      const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a1-fill-intro')!;
+      
+      // Curly apostrophe ’m (iOS/Mac keyboard default)
+      const answersCurly: Record<string, string> = {
+        'w-a1-fb-1': '’m',
+        'w-a1-fb-2': '’s',
+        'w-a1-fb-3': 'are'
+      };
+      const resultCurly = activityGradingService.gradeActivity(act, answersCurly);
+      expect(resultCurly.questionsGrading[0].isCorrect).toBe(true);
+      expect(resultCurly.questionsGrading[1].isCorrect).toBe(true);
+
+      // Pronoun repetition (e.g. typing "I am" or "I'm" into "Hello! I ___ a software student")
+      const answersWithSubject: Record<string, string> = {
+        'w-a1-fb-1': 'I am',
+        'w-a1-fb-2': 'She is',
+        'w-a1-fb-3': 'are'
+      };
+      const resultWithSubject = activityGradingService.gradeActivity(act, answersWithSubject);
+      expect(resultWithSubject.questionsGrading[0].isCorrect).toBe(true);
+      expect(resultWithSubject.questionsGrading[1].isCorrect).toBe(true);
+
+      // Typing the complete sentence in the blank field
+      const answersFullSentence: Record<string, string> = {
+        'w-a1-fb-1': 'Hello! I am a software student from Brazil.',
+        'w-a1-fb-2': 'This is Sarah. She is from Canada.',
+        'w-a1-fb-3': 'Where are you from?'
+      };
+      const resultFullSentence = activityGradingService.gradeActivity(act, answersFullSentence);
+      expect(resultFullSentence.score).toBe(100);
+      expect(resultFullSentence.correctCount).toBe(3);
+    });
+
+    it('grades "sentence_order" questions deterministically with punctuation tolerance and whitespace normalization', () => {
       const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a1-order-routine')!;
       
       const answers: Record<string, string> = {
-        'w-a1-so-1': 'I have breakfast every morning',
-        'w-a1-so-2': 'He works in an office',
+        'w-a1-so-1': '  I   have   breakfast   every   morning  ',
+        'w-a1-so-2': 'He works in an office.',
         'w-a1-so-3': 'We study English together at night'
       };
 
@@ -95,7 +160,7 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
       expect(result.score).toBe(100);
       expect(result.correctCount).toBe(3);
 
-      // Inverted order (wrong)
+      // Inverted order (wrong) - word order MUST NOT be compromised
       const wrongAnswers: Record<string, string> = {
         'w-a1-so-1': 'breakfast every morning I have',
         'w-a1-so-2': 'office an in works He',
@@ -103,23 +168,90 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
       };
       const resultWrong = activityGradingService.gradeActivity(act, wrongAnswers);
       expect(resultWrong.score).toBe(0);
+      expect(resultWrong.correctCount).toBe(0);
     });
 
-    it('grades "find_fix_error" questions accurately', () => {
-      const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a1-error-plural')!;
+    it('grades "sentence_order" accepting valid alternatives with or without internal commas', () => {
+      const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-b1-order-cond')!;
       
-      const answers: Record<string, string> = {
-        'w-a1-fe-1': 'children',
-        'w-a1-fe-2': 'an',
+      // w-b1-so-1: "If I had more free time I would travel more often" with comma
+      const answersWithComma: Record<string, string> = {
+        'w-b1-so-1': 'If I had more free time, I would travel more often',
+        'w-b1-so-2': 'If I were you, I would accept the opportunity'
+      };
+
+      const resultWithComma = activityGradingService.gradeActivity(act, answersWithComma);
+      expect(resultWithComma.score).toBe(100);
+      expect(resultWithComma.correctCount).toBe(2);
+
+      // Inverted conditional clause order (accepted alternative)
+      const answersInvertedClause: Record<string, string> = {
+        'w-b1-so-1': 'I would travel more often if I had more free time',
+        'w-b1-so-2': 'If I were you I would accept the opportunity'
+      };
+
+      const resultInverted = activityGradingService.gradeActivity(act, answersInvertedClause);
+      expect(resultInverted.score).toBe(100);
+      expect(resultInverted.correctCount).toBe(2);
+
+      // Wrong syntax: incomplete or random order must be rejected
+      const answersWrongOrder: Record<string, string> = {
+        'w-b1-so-1': 'time more free had I if travel often more would I',
+        'w-b1-so-2': 'accept opportunity the would I you were I if'
+      };
+      const resultWrong = activityGradingService.gradeActivity(act, answersWrongOrder);
+      expect(resultWrong.score).toBe(0);
+      expect(resultWrong.correctCount).toBe(0);
+    });
+
+    it('grades "find_fix_error" accepting isolated word, accepted alternatives, and full corrected sentence', () => {
+      const actA1 = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a1-error-plural')!;
+      
+      // 1. Direct word correction with case and whitespace tolerance
+      const answersWord: Record<string, string> = {
+        'w-a1-fe-1': '  Children  ',
+        'w-a1-fe-2': 'an.',
         'w-a1-fe-3': 'lives'
       };
 
-      const result = activityGradingService.gradeActivity(act, answers);
-      expect(result.score).toBe(100);
-      expect(result.correctCount).toBe(3);
+      const resultWord = activityGradingService.gradeActivity(actA1, answersWord);
+      expect(resultWord.score).toBe(100);
+      expect(resultWord.correctCount).toBe(3);
+
+      // 2. Typing the entire corrected sentence
+      const answersFullSentence: Record<string, string> = {
+        'w-a1-fe-1': 'They have two children playing in the garden.',
+        'w-a1-fe-2': 'I would like an apple for dessert.',
+        'w-a1-fe-3': 'My sister lives in Rio de Janeiro.'
+      };
+
+      const resultFull = activityGradingService.gradeActivity(actA1, answersFullSentence);
+      expect(resultFull.score).toBe(100);
+      expect(resultFull.correctCount).toBe(3);
+
+      // 3. Registered alternatives in B1 activity (intend vs plan, did vs performed/conducted)
+      const actB1 = WRITING_ACTIVITIES.find((a) => a.id === 'writing-b1-error-work')!;
+      const answersAlternatives: Record<string, string> = {
+        'w-b1-fe-1': 'plan',        // Alternative for "intend"
+        'w-b1-fe-2': 'conducted'   // Alternative for "did"
+      };
+
+      const resultAlt = activityGradingService.gradeActivity(actB1, answersAlternatives);
+      expect(resultAlt.score).toBe(100);
+      expect(resultAlt.correctCount).toBe(2);
+
+      // 4. Incorrect responses: the error itself ("childs") or unrelated words must be rejected
+      const answersErrors: Record<string, string> = {
+        'w-a1-fe-1': 'childs',   // The error word itself!
+        'w-a1-fe-2': 'a',        // The error word itself!
+        'w-a1-fe-3': 'living'    // Wrong form
+      };
+      const resultErrors = activityGradingService.gradeActivity(actA1, answersErrors);
+      expect(resultErrors.score).toBe(0);
+      expect(resultErrors.correctCount).toBe(0);
     });
 
-    it('grades "open_prompt" questions non-literally with contextual feedback', () => {
+    it('grades "open_prompt" questions non-literally with contextual feedback and rejects empty inputs', () => {
       const act = WRITING_ACTIVITIES.find((a) => a.id === 'writing-a1-open-intro')!;
       
       const answersGood: Record<string, string> = {
@@ -130,6 +262,16 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
       const resultGood = activityGradingService.gradeActivity(act, answersGood);
       expect(resultGood.score).toBeGreaterThanOrEqual(75);
       expect(resultGood.questionsGrading[0].isCorrect).toBe(true);
+
+      // Empty input
+      const answersEmpty: Record<string, string> = {
+        'w-a1-op-1': '   ',
+        'w-a1-op-2': ''
+      };
+      const resultEmpty = activityGradingService.gradeActivity(act, answersEmpty);
+      expect(resultEmpty.score).toBe(0);
+      expect(resultEmpty.questionsGrading[0].isCorrect).toBe(false);
+      expect(resultEmpty.questionsGrading[0].feedback).toContain('Nenhuma resposta');
 
       // Too short
       const answersShort: Record<string, string> = {

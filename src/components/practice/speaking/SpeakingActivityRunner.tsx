@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { 
   ArrowLeft, 
-  ArrowRight, 
-  CheckCircle2, 
-  HelpCircle, 
   Sparkles,
   Mic
 } from 'lucide-react';
@@ -15,6 +12,8 @@ import { speakingService } from '../../../services/speakingService';
 import { useAuth } from '../../../contexts/AuthContext';
 import { stopSpeech } from '../../../utils/speech';
 import { audioRecorder } from '../../../utils/audioRecorder';
+import { ActivityExitConfirmModal } from '../shared/ActivityExitConfirmModal';
+import { ActivityNavigationFooter } from '../shared/ActivityNavigationFooter';
 
 interface SpeakingActivityRunnerProps {
   activity: Activity<SpeakingQuestion>;
@@ -172,35 +171,13 @@ export const SpeakingActivityRunner: React.FC<SpeakingActivityRunnerProps> = ({
       </div>
 
       {/* Confirmation Modal when exiting midway */}
-      {showExitConfirm && (
-        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium space-y-3 animate-in fade-in">
-          <div className="flex items-start gap-2.5">
-            <HelpCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <strong className="font-bold text-sm block">Deseja realmente sair?</strong>
-              <p>
-                Tentativas incompletas <strong>não sobrescrevem</strong> seu último resultado válido salvo. Suas gravações atuais não serão registradas.
-              </p>
-            </div>
-          </div>
-          <div className="flex justify-end gap-2 pt-1">
-            <button
-              type="button"
-              onClick={() => setShowExitConfirm(false)}
-              className="px-3 py-1.5 rounded-xl bg-white border border-amber-200 font-bold text-xs text-amber-900 hover:bg-amber-100 transition cursor-pointer"
-            >
-              Continuar Treino
-            </button>
-            <button
-              type="button"
-              onClick={handleExitCleanly}
-              className="px-3 py-1.5 rounded-xl bg-amber-600 text-white font-bold text-xs hover:bg-amber-700 transition cursor-pointer"
-            >
-              Confirmar Saída
-            </button>
-          </div>
-        </div>
-      )}
+      <ActivityExitConfirmModal
+        isOpen={showExitConfirm}
+        onCancel={() => setShowExitConfirm(false)}
+        onConfirm={handleExitCleanly}
+        continueLabel="Continuar Treino"
+        warningDescription="Tentativas incompletas não sobrescrevem seu último resultado válido salvo. Suas gravações atuais não serão registradas."
+      />
 
       {/* Activity Context & Turn Banner */}
       <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-white/90 shadow-soft-card space-y-3">
@@ -260,40 +237,20 @@ export const SpeakingActivityRunner: React.FC<SpeakingActivityRunnerProps> = ({
       />
 
       {/* Bottom Actions: Previous / Next / Finish */}
-      <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-4 border border-white/90 shadow-soft-card flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={handlePrev}
-          disabled={isFirst}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#160F2E] font-bold text-xs transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Turno Anterior</span>
-        </button>
-
-        <div className="flex items-center gap-2">
-          {!isLast ? (
-            <button
-              type="button"
-              onClick={handleNext}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-brand text-white font-extrabold text-xs sm:text-sm shadow-colored-blue hover:opacity-95 transition cursor-pointer"
-            >
-              <span>Próximo Turno</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={handleFinish}
-              disabled={submitting}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-gradient-brand text-white font-black text-xs sm:text-sm shadow-colored-blue hover:opacity-95 transition active:scale-95 cursor-pointer disabled:opacity-50"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>{submitting ? 'Avaliando...' : 'Concluir e Ver Resumo'}</span>
-            </button>
-          )}
-        </div>
-      </div>
+      {/* Bottom Actions: Previous / Next / Finish */}
+      <ActivityNavigationFooter
+        isFirst={isFirst}
+        isLast={isLast}
+        submitting={submitting}
+        onPrev={handlePrev}
+        onNext={handleNext}
+        onFinish={handleFinish}
+        previousLabel="Turno Anterior"
+        nextLabel="Próximo Turno"
+        finishLabel="Concluir e Ver Resumo"
+        finishButtonClass="bg-gradient-brand shadow-colored-blue"
+        containerClass="bg-white/90 backdrop-blur-xl rounded-2xl p-4 border border-white/90 shadow-soft-card flex items-center justify-between gap-3"
+      />
     </div>
   );
 };
