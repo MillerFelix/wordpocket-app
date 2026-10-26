@@ -3,9 +3,9 @@ import { PracticeSkillId } from './index';
 export type { PracticeSkillId };
 
 /**
- * Níveis de proficiência pedagógica do CEFR adotados no Word Pocket
+ * Níveis de proficiência pedagógica do CEFR adotados no Word Pocket (A1 a C2)
  */
-export type ActivityLevel = 'a1' | 'a2' | 'b1';
+export type ActivityLevel = 'a1' | 'a2' | 'b1' | 'b2' | 'c1' | 'c2';
 
 /**
  * Modalidades de atividades específicas para o pilar de Writing (Escrita)
@@ -100,11 +100,13 @@ export interface FindFixErrorQuestion extends BaseQuestion {
   sentenceWithError: string;
   /** Palavra ou trecho incorreto que deve ser substituído */
   errorWord?: string;
+  incorrectPart?: string;
   /** Correção esperada da palavra ou frase completa */
-  correction: string;
+  correction?: string;
+  correctForm?: string;
   /** Variações válidas aceitas */
   acceptedCorrections?: string[];
-  explanationPt: string;
+  explanationPt?: string;
 }
 
 /**
@@ -113,17 +115,20 @@ export interface FindFixErrorQuestion extends BaseQuestion {
 export interface OpenPromptQuestion extends BaseQuestion {
   type: 'open_prompt';
   /** Cenário situacional cotidiano */
-  contextScenario: string;
+  contextScenario?: string;
   /** Pergunta ou comando a ser respondido em inglês */
-  promptQuestion: string;
+  promptQuestion?: string;
   /** Palavras-chave sugeridas para guiar o estudante */
-  suggestedKeywords: string[];
+  suggestedKeywords?: string[];
   /** Mínimo de palavras esperado */
   minWords?: number;
   /** Exemplo modelo de resposta */
-  sampleAnswer: string;
+  sampleAnswer?: string;
+  modelAnswer?: string;
+  acceptedAnswers?: string[];
+  hint?: string;
   /** Critérios de correção flexíveis */
-  evaluationCriteria: {
+  evaluationCriteria?: {
     requiredKeywords?: string[];
     keyPatterns?: string[];
     minLength?: number;

@@ -74,17 +74,23 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
   });
 
   describe('1. Activity Content & Structure Validation', () => {
-    it('contains 45 speaking activities evenly distributed across A1, A2, and B1', () => {
+    it('contains 90 speaking activities evenly distributed across A1, A2, B1, B2, C1, and C2', () => {
       const all = speakingService.getActivities();
-      expect(all.length).toBe(45);
+      expect(all.length).toBe(90);
 
       const a1 = speakingService.getActivities('a1');
       const a2 = speakingService.getActivities('a2');
       const b1 = speakingService.getActivities('b1');
+      const b2 = speakingService.getActivities('b2');
+      const c1 = speakingService.getActivities('c1');
+      const c2 = speakingService.getActivities('c2');
 
       expect(a1.length).toBe(15);
       expect(a2.length).toBe(15);
       expect(b1.length).toBe(15);
+      expect(b2.length).toBe(15);
+      expect(c1.length).toBe(15);
+      expect(c2.length).toBe(15);
     });
 
     it('covers all 4 speaking formats with complete instructional and pedagogical metadata', () => {
@@ -115,7 +121,7 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
 
     it('validates sound_training activities have deterministic perception questions with minimal pairs', () => {
       const soundActs = SPEAKING_ACTIVITIES.filter((act) => act.type === 'sound_training');
-      expect(soundActs.length).toBe(12);
+      expect(soundActs.length).toBe(24);
 
       soundActs.forEach((act) => {
         act.questions.forEach((q) => {
@@ -131,7 +137,7 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
       const conversationalActs = SPEAKING_ACTIVITIES.filter(
         (act) => act.type === 'rapid_response' || act.type === 'roleplay_situation'
       );
-      expect(conversationalActs.length).toBe(21);
+      expect(conversationalActs.length).toBe(42);
 
       conversationalActs.forEach((act) => {
         act.questions.forEach((q) => {
@@ -343,7 +349,7 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
       render(<SpeakingActivitiesHub onSelectActivity={vi.fn()} />);
 
       expect(screen.getByText('Atividades de Fala (Speaking)')).toBeInTheDocument();
-      expect(screen.getByText(/45 atividades disponíveis/i)).toBeInTheDocument();
+      expect(screen.getByText(/90 atividades disponíveis/i)).toBeInTheDocument();
 
       // Click A1 filter (15 activities total: 8 on page 1, 7 on page 2)
       const a1Tab = screen.getByRole('button', { name: /A1 — Iniciante/i });

@@ -106,7 +106,10 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
     { id: 'a1', title: 'A1 — Iniciante', subtitle: 'Rotina & Cotidiano' },
     { id: 'a2', title: 'A2 — Básico', subtitle: 'Viagens & Avisos' },
-    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Trabalho & Análises' }
+    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Trabalho & Opinião' },
+    { id: 'b2', title: 'B2 — Intermediário Sup.', subtitle: 'Artigos & Argumentos' },
+    { id: 'c1', title: 'C1 — Avançado', subtitle: 'Sentidos Implícitos' },
+    { id: 'c2', title: 'C2 — Proficiência', subtitle: 'Precisão & Estilo' }
   ];
 
   const formatFilters: { id: ReadingActivityType | 'all'; label: string }[] = [
@@ -134,7 +137,7 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
         </div>
 
         {/* Level Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
           {levelTabs.map((lvl) => {
             const isSelected = selectedLevel === lvl.id;
             return (

@@ -27,20 +27,32 @@ export const OpenPromptQuestionView: React.FC<OpenPromptQuestionViewProps> = ({
           <span>Escreva sua Resposta</span>
         </div>
         <h3 className="text-base sm:text-lg font-extrabold text-[#160F2E]">
-          {question.promptQuestion}
+          {question.promptQuestion || question.prompt}
         </h3>
       </div>
 
       {/* Cenário Contextual */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#E6D9FB]/30 via-[#FFEAE1]/50 to-white border border-[#FFD2C2] space-y-1.5 shadow-2xs">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-[#6545F5]">
-          <MessageSquare className="w-3.5 h-3.5" />
-          <span>Situação do Dia a Dia</span>
+      {question.contextScenario && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#E6D9FB]/30 via-[#FFEAE1]/50 to-white border border-[#FFD2C2] space-y-1.5 shadow-2xs">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#6545F5]">
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>Situação do Dia a Dia</span>
+          </div>
+          <p className="text-xs sm:text-sm text-[#160F2E] font-medium leading-relaxed">
+            {question.contextScenario}
+          </p>
         </div>
-        <p className="text-xs sm:text-sm text-[#160F2E] font-medium leading-relaxed">
-          {question.contextScenario}
-        </p>
-      </div>
+      )}
+
+      {/* Dica opcional */}
+      {question.hint && (
+        <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200/70 text-xs text-amber-900 font-medium flex items-start gap-2 shadow-2xs">
+          <span className="text-base leading-none">💡</span>
+          <div>
+            <strong className="font-bold">Dica:</strong> {question.hint}
+          </div>
+        </div>
+      )}
 
       {/* Sugestões de Vocabulário / Palavras-chave */}
       {question.suggestedKeywords && question.suggestedKeywords.length > 0 && (

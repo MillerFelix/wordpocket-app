@@ -210,12 +210,14 @@ function gradeFindFixError(
   const cleanUserSentence = normalizeSentence(userAnswer || '');
   const cleanUserSentenceExpanded = expandContractions(cleanUserSentence);
 
-  const acceptedCorrections = [q.correction, ...(q.acceptedCorrections || [])];
+  const baseCorrection = q.correction || q.correctForm || '';
+  const acceptedCorrections = [baseCorrection, ...(q.acceptedCorrections || [])].filter(Boolean);
 
+  const targetError = q.errorWord || q.incorrectPart;
   // Frases completas corrigidas aceitas
-  const fullCorrectedSentences = q.errorWord
+  const fullCorrectedSentences = targetError
     ? acceptedCorrections.map((corr) => {
-        const regex = new RegExp(`\\b${q.errorWord}\\b`, 'i');
+        const regex = new RegExp(`\\b${targetError}\\b`, 'i');
         return normalizeSentence(q.sentenceWithError.replace(regex, corr));
       })
     : [];
@@ -242,11 +244,11 @@ function gradeFindFixError(
     isCorrect: isMatch,
     scorePercent: isMatch ? 100 : 0,
     userAnswer: (userAnswer || '').trim(),
-    expectedAnswer: q.correction,
+    expectedAnswer: baseCorrection,
     feedback: isMatch
       ? 'Muito bem! Erro identificado e corrigido com precisão.'
-      : `Correção não identificada. A forma correta era "${q.correction}".`,
-    explanation: q.explanation
+      : `Correção não identificada. A forma correta era "${baseCorrection}".`,
+    explanation: q.explanation || q.explanationPt || ''
   };
 }
 
@@ -262,13 +264,15 @@ function gradeOpenPrompt(
   const words = cleanUser.split(/\s+/).filter(Boolean);
   const minWords = q.minWords || 3;
 
+  const expectedSample = q.sampleAnswer || q.modelAnswer || '';
+
   if (words.length === 0) {
     return {
       questionId: q.id,
       isCorrect: false,
       scorePercent: 0,
       userAnswer: '',
-      expectedAnswer: q.sampleAnswer,
+      expectedAnswer: expectedSample,
       feedback: 'Nenhuma resposta foi inserida.',
       explanation: q.explanation
     };
@@ -281,7 +285,7 @@ function gradeOpenPrompt(
       isCorrect: false,
       scorePercent: partialScore,
       userAnswer: (userAnswer || '').trim(),
-      expectedAnswer: q.sampleAnswer,
+      expectedAnswer: expectedSample,
       feedback: `Sua resposta foi muito curta (mínimo sugerido: ${minWords} palavras). Tente elaborar um pouco mais.`,
       explanation: q.explanation
     };
@@ -313,7 +317,7 @@ function gradeOpenPrompt(
     isCorrect: scorePercent >= 60,
     scorePercent,
     userAnswer: (userAnswer || '').trim(),
-    expectedAnswer: q.sampleAnswer,
+    expectedAnswer: expectedSample,
     feedback,
     explanation: q.explanation
   };

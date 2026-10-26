@@ -14,17 +14,23 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
   });
 
   describe('1. Activity Content & Structure Validation', () => {
-    it('contains 45 high-quality activities evenly distributed across A1, A2, and B1', () => {
+    it('contains 90 high-quality activities evenly distributed across A1, A2, B1, B2, C1, and C2', () => {
       const all = writingService.getActivities();
-      expect(all.length).toBe(45);
+      expect(all.length).toBe(90);
 
       const a1 = writingService.getActivities('a1');
       const a2 = writingService.getActivities('a2');
       const b1 = writingService.getActivities('b1');
+      const b2 = writingService.getActivities('b2');
+      const c1 = writingService.getActivities('c1');
+      const c2 = writingService.getActivities('c2');
 
       expect(a1.length).toBe(15);
       expect(a2.length).toBe(15);
       expect(b1.length).toBe(15);
+      expect(b2.length).toBe(15);
+      expect(c1.length).toBe(15);
+      expect(c2.length).toBe(15);
     });
 
     it('covers all 4 writing activity mechanics with structured data and learning objectives', () => {
@@ -42,7 +48,11 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
         expect(act.objective).toBeTruthy();
         expect(act.instructions).toBeTruthy();
         expect(act.maxScore).toBe(100);
-        expect(act.questions.length).toBeGreaterThanOrEqual(2);
+        if (act.type === 'open_prompt') {
+          expect(act.questions.length).toBeGreaterThanOrEqual(1);
+        } else {
+          expect(act.questions.length).toBeGreaterThanOrEqual(2);
+        }
       });
     });
   });
@@ -360,7 +370,7 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
       );
 
       // Should show summary badge and activities
-      expect(screen.getByText(/45 atividades/i)).toBeInTheDocument();
+      expect(screen.getByText(/90 atividades/i)).toBeInTheDocument();
       expect(screen.getByText('Construindo Frases de Rotina')).toBeInTheDocument();
 
       // Click level A2 filter

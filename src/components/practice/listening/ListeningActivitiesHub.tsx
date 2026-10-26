@@ -105,7 +105,10 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
     { id: 'a1', title: 'A1 — Iniciante', subtitle: 'Sons & Cotidiano' },
     { id: 'a2', title: 'A2 — Básico', subtitle: 'Diálogos & Viagens' },
-    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Inglês Natural & Carreira' }
+    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Inglês Natural' },
+    { id: 'b2', title: 'B2 — Intermediário Sup.', subtitle: 'Autonomia & Argumentos' },
+    { id: 'c1', title: 'C1 — Avançado', subtitle: 'Nuances & Implícitos' },
+    { id: 'c2', title: 'C2 — Proficiência', subtitle: 'Precisão & Maestria' }
   ];
 
   const formatFilters: { id: ListeningActivityType | 'all'; label: string }[] = [
@@ -133,7 +136,7 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
         </div>
 
         {/* Level Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
           {levelTabs.map((lvl) => {
             const isSelected = selectedLevel === lvl.id;
             return (

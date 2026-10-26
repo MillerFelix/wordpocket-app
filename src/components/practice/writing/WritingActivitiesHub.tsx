@@ -106,7 +106,10 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
     { id: 'a1', title: 'A1 — Iniciante', subtitle: 'Apresentações & Rotina' },
     { id: 'a2', title: 'A2 — Básico', subtitle: 'Passado & Viagens' },
-    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Trabalho & Condicionais' }
+    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Trabalho & Planos' },
+    { id: 'b2', title: 'B2 — Intermediário Sup.', subtitle: 'Coesão & Argumentos' },
+    { id: 'c1', title: 'C1 — Avançado', subtitle: 'Registros & Precisão' },
+    { id: 'c2', title: 'C2 — Proficiência', subtitle: 'Estilo & Reformulação' }
   ];
 
   const formatFilters: { id: WritingActivityType | 'all'; label: string }[] = [
@@ -134,7 +137,7 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
         </div>
 
         {/* Level Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
           {levelTabs.map((tab) => {
             const isSelected = selectedLevel === tab.id;
             return (

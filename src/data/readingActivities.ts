@@ -2,11 +2,17 @@ import { Activity, ReadingQuestion } from '../types/activity';
 import { READING_A1 } from './activities/readingA1';
 import { READING_A2 } from './activities/readingA2';
 import { READING_B1 } from './activities/readingB1';
+import { READING_B2 } from './activities/readingB2';
+import { READING_C1 } from './activities/readingC1';
+import { READING_C2 } from './activities/readingC2';
 
 export const READING_ACTIVITIES: Activity<ReadingQuestion>[] = [
   ...READING_A1,
   ...READING_A2,
-  ...READING_B1
+  ...READING_B1,
+  ...READING_B2,
+  ...READING_C1,
+  ...READING_C2
 ];
 
 export function getReadingActivities(level?: string, type?: string): Activity<ReadingQuestion>[] {

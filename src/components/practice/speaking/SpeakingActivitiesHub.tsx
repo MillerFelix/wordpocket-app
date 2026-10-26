@@ -113,9 +113,12 @@ export const SpeakingActivitiesHub: React.FC<SpeakingActivitiesHubProps> = ({
 
   const levelTabs: { id: ActivityLevel | 'all'; title: string; subtitle: string }[] = [
     { id: 'all', title: 'Todas', subtitle: 'Todos os níveis' },
-    { id: 'a1', title: 'A1 — Iniciante', subtitle: 'Sons Básicos & Saudações' },
-    { id: 'a2', title: 'A2 — Básico', subtitle: 'Diálogos & Informações' },
-    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Opiniões & Carreira' }
+    { id: 'a1', title: 'A1 — Iniciante', subtitle: 'Sons & Saudações' },
+    { id: 'a2', title: 'A2 — Básico', subtitle: 'Diálogos & Rotina' },
+    { id: 'b1', title: 'B1 — Intermediário', subtitle: 'Opiniões & Fluência' },
+    { id: 'b2', title: 'B2 — Intermediário Sup.', subtitle: 'Espontaneidade' },
+    { id: 'c1', title: 'C1 — Avançado', subtitle: 'Articulação & Ênfase' },
+    { id: 'c2', title: 'C2 — Proficiência', subtitle: 'Flexibilidade & Ritmo' }
   ];
 
   const formatFilters: { id: SpeakingActivityType | 'all'; label: string }[] = [
@@ -143,7 +146,7 @@ export const SpeakingActivitiesHub: React.FC<SpeakingActivitiesHubProps> = ({
         </div>
 
         {/* Level Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
           {levelTabs.map((lvl) => {
             const isSelected = selectedLevel === lvl.id;
             return (
