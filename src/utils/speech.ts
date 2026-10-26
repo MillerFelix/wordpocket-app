@@ -23,26 +23,41 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   }
 }
 
+export function getEnglishVoices(): SpeechSynthesisVoice[] {
+  if (!isSpeechSupported()) return [];
+  let voices: SpeechSynthesisVoice[] = [];
+  try {
+    voices = window.speechSynthesis.getVoices();
+  } catch {}
+  if (!voices || voices.length === 0) {
+    voices = cachedVoices;
+  }
+  return voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+}
+
 export function getEnglishVoice(): SpeechSynthesisVoice | null {
-  if (!isSpeechSupported()) return null;
-  const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
+  const englishVoices = getEnglishVoices();
+  if (englishVoices.length === 0) return null;
   
   // Prefer US English, then GB English, then any English
-  const usVoice = voices.find(v => v.lang === 'en-US');
+  const usVoice = englishVoices.find(v => v.lang === 'en-US');
   if (usVoice) return usVoice;
 
-  const gbVoice = voices.find(v => v.lang === 'en-GB');
+  const gbVoice = englishVoices.find(v => v.lang === 'en-GB');
   if (gbVoice) return gbVoice;
 
-  const anyEnglish = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
-  if (anyEnglish) return anyEnglish;
-
-  return null;
+  return englishVoices[0];
 }
 
 export function getPortugueseVoice(): SpeechSynthesisVoice | null {
   if (!isSpeechSupported()) return null;
-  const voices = cachedVoices.length > 0 ? cachedVoices : window.speechSynthesis.getVoices();
+  let voices: SpeechSynthesisVoice[] = [];
+  try {
+    voices = window.speechSynthesis.getVoices();
+  } catch {}
+  if (!voices || voices.length === 0) {
+    voices = cachedVoices;
+  }
   
   const ptBr = voices.find(v => v.lang === 'pt-BR');
   if (ptBr) return ptBr;
@@ -51,6 +66,185 @@ export function getPortugueseVoice(): SpeechSynthesisVoice | null {
   if (anyPt) return anyPt;
 
   return null;
+}
+
+const FEMALE_VOICE_NAMES = /\b(zira|susan|hazel|samantha|victoria|karen|catherine|linda|heather|jenny|aria|zoe|helena|fiona|moira|veena|tessa|female|woman)\b/i;
+const MALE_VOICE_NAMES = /\b(david|mark|george|alex|daniel|fred|guy|christopher|brian|oliver|arthur|male|man)\b/i;
+
+export function classifyVoiceGender(voice: SpeechSynthesisVoice): 'male' | 'female' | 'unknown' {
+  const name = voice.name || '';
+  if (FEMALE_VOICE_NAMES.test(name)) return 'female';
+  if (MALE_VOICE_NAMES.test(name)) return 'male';
+  return 'unknown';
+}
+
+export interface VoiceProfile {
+  speaker: string;
+  voice: SpeechSynthesisVoice | null;
+  pitch: number;
+  rate: number;
+  gender: 'male' | 'female';
+  isDistinctNativeVoice: boolean;
+}
+
+const FEMALE_SPEAKER_NAMES = new Set([
+  'sarah', 'rachel', 'laura', 'emma', 'anna', 'linda', 'lucy', 'mary', 'jessica', 
+  'woman', 'girl', 'female', 'pharmacist'
+]);
+const MALE_SPEAKER_NAMES = new Set([
+  'mark', 'daniel', 'kevin', 'lucas', 'john', 'david', 'alex', 'peter', 
+  'barista', 'customer', 'man', 'boy', 'male'
+]);
+
+export function inferSpeakerGender(speakerName: string, explicitGender?: 'male' | 'female'): 'male' | 'female' {
+  if (explicitGender) return explicitGender;
+  const normalized = speakerName.trim().toLowerCase();
+  if (FEMALE_SPEAKER_NAMES.has(normalized)) return 'female';
+  if (MALE_SPEAKER_NAMES.has(normalized)) return 'male';
+  return 'female';
+}
+
+/**
+ * Aloca de forma consistente e estável perfis de voz para cada personagem de um diálogo.
+ * Se o navegador possuir vozes nativas distintas (masculina e feminina), usa vozes reais diferentes.
+ * Se o navegador possuir apenas 1 voz em inglês instalada, aplica modulação acústica precisa de tom (pitch)
+ * e ritmo (rate) para garantir que os interlocutores soem claramente como pessoas distintas.
+ */
+export function allocateDialogueVoices(
+  dialogueLines: Array<{ speaker: string; gender?: 'male' | 'female'; speechRate?: number; pitch?: number }>
+): Map<string, VoiceProfile> {
+  const profiles = new Map<string, VoiceProfile>();
+  const englishVoices = getEnglishVoices();
+
+  const femaleVoices = englishVoices.filter(v => classifyVoiceGender(v) === 'female');
+  const maleVoices = englishVoices.filter(v => classifyVoiceGender(v) === 'male');
+  const otherVoices = englishVoices.filter(v => classifyVoiceGender(v) === 'unknown');
+
+  const usedVoiceNames = new Set<string>();
+
+  // Identifica falantes únicos mantendo a ordem de aparição
+  const uniqueSpeakers: string[] = [];
+  for (const line of dialogueLines) {
+    if (!uniqueSpeakers.includes(line.speaker)) {
+      uniqueSpeakers.push(line.speaker);
+    }
+  }
+
+  uniqueSpeakers.forEach((speakerName, index) => {
+    // Acha primeira ocorrência para inspecionar metadados explícitos de gênero
+    const sampleLine = dialogueLines.find(l => l.speaker === speakerName);
+    const targetGender = inferSpeakerGender(speakerName, sampleLine?.gender);
+
+    let chosenVoice: SpeechSynthesisVoice | null = null;
+    let isDistinct = false;
+
+    if (targetGender === 'female') {
+      const available = femaleVoices.find(v => !usedVoiceNames.has(v.name));
+      if (available) {
+        chosenVoice = available;
+        usedVoiceNames.add(available.name);
+        isDistinct = true;
+      }
+    } else {
+      const available = maleVoices.find(v => !usedVoiceNames.has(v.name));
+      if (available) {
+        chosenVoice = available;
+        usedVoiceNames.add(available.name);
+        isDistinct = true;
+      }
+    }
+
+    // Se não encontrou do gênero específico, busca nas outras vozes inglesas disponíveis
+    if (!chosenVoice) {
+      const availableOther = otherVoices.find(v => !usedVoiceNames.has(v.name));
+      if (availableOther) {
+        chosenVoice = availableOther;
+        usedVoiceNames.add(availableOther.name);
+        isDistinct = true;
+      } else if (englishVoices.length > 0) {
+        // Reutiliza voz disponível
+        chosenVoice = englishVoices[index % englishVoices.length];
+      }
+    }
+
+    // Modulação de pitch e rate:
+    // Mesmo que haja voz nativa, refinamos pitch para expressividade e clareza pedagógica.
+    // Se não houver vozes distintas no navegador, a modulação é ainda mais nítida para evitar que pareça a mesma pessoa.
+    let basePitch = 1.0;
+    let baseRate = sampleLine?.speechRate ?? 0.92;
+
+    if (targetGender === 'female') {
+      basePitch = isDistinct ? (sampleLine?.pitch ?? 1.06) : (sampleLine?.pitch ?? 1.15);
+      baseRate = sampleLine?.speechRate ?? 0.94;
+    } else {
+      basePitch = isDistinct ? (sampleLine?.pitch ?? 0.94) : (sampleLine?.pitch ?? 0.86);
+      baseRate = sampleLine?.speechRate ?? 0.89;
+    }
+
+    // Se houver mais de 2 interlocutores do mesmo gênero, ajusta ligeiramente o tom para que o 3º falante seja distinto
+    if (index >= 2) {
+      basePitch += ((index - 1) % 2 === 0 ? 0.08 : -0.08);
+    }
+
+    profiles.set(speakerName, {
+      speaker: speakerName,
+      voice: chosenVoice,
+      pitch: Math.min(1.4, Math.max(0.7, basePitch)),
+      rate: Math.min(1.4, Math.max(0.6, baseRate)),
+      gender: targetGender,
+      isDistinctNativeVoice: isDistinct
+    });
+  });
+
+  return profiles;
+}
+
+/**
+ * Remove prefixos de interlocutor ("Sarah:", "Mark: ", "Person A:") e direções de cena entre colchetes
+ * para que o sintetizador nunca narre os nomes dos personagens em voz alta.
+ */
+export function cleanSpokenLine(text: string, speakerName?: string): string {
+  if (!text) return '';
+  let cleaned = text.trim();
+
+  // 1. Remove qualquer prefixo no formato "Nome:", "Speaker 1:", "Pessoa A:"
+  cleaned = cleaned.replace(/^(?:[A-Za-z0-9_\s]{1,25}):\s*/, '');
+  if (speakerName) {
+    const escaped = speakerName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    cleaned = cleaned.replace(new RegExp(`^${escaped}\\s*:\\s*`, 'i'), '');
+  }
+
+  // 2. Remove notas e direções de cena como [laughs], (chuckles), [clears throat]
+  cleaned = cleaned.replace(/\[[^\]]*\]/g, ' ');
+  cleaned = cleaned.replace(/\([^)]*\)/g, ' ');
+
+  // 3. Normaliza texto usando formatTextForSpeech
+  return formatTextForSpeech(cleaned);
+}
+
+export function getDialogueVoicesCapability(): {
+  totalEnglishVoices: number;
+  hasDistinctNativeVoices: boolean;
+  strategyDescription: string;
+  summary: string;
+} {
+  const voices = getEnglishVoices();
+  const females = voices.filter(v => classifyVoiceGender(v) === 'female');
+  const males = voices.filter(v => classifyVoiceGender(v) === 'male');
+  const hasDistinct = (females.length > 0 && males.length > 0) || voices.length >= 2;
+
+  const desc = hasDistinct
+    ? `${voices.length} vozes em inglês detectadas (vozes nativas distintas ativas)`
+    : voices.length === 1
+    ? '1 voz em inglês detectada (modulação acústica ativa por tom e frequência)'
+    : 'Síntese de voz padrão ativa';
+
+  return {
+    totalEnglishVoices: voices.length,
+    hasDistinctNativeVoices: hasDistinct,
+    strategyDescription: desc,
+    summary: desc
+  };
 }
 
 /**
@@ -111,7 +305,15 @@ export interface SpeakOptions {
   onError?: (err: any) => void;
 }
 
+let globalActiveDialogueController: DialoguePlaybackController | null = null;
+
 export function stopSpeech(): void {
+  if (globalActiveDialogueController) {
+    try {
+      globalActiveDialogueController.stop();
+    } catch {}
+    globalActiveDialogueController = null;
+  }
   if (isSpeechSupported()) {
     try {
       window.speechSynthesis.cancel();
@@ -120,6 +322,12 @@ export function stopSpeech(): void {
 }
 
 export function pauseSpeech(): void {
+  if (globalActiveDialogueController) {
+    try {
+      globalActiveDialogueController.pause();
+    } catch {}
+    return;
+  }
   if (isSpeechSupported()) {
     try {
       window.speechSynthesis.pause();
@@ -128,6 +336,12 @@ export function pauseSpeech(): void {
 }
 
 export function resumeSpeech(): void {
+  if (globalActiveDialogueController) {
+    try {
+      globalActiveDialogueController.resume();
+    } catch {}
+    return;
+  }
   if (isSpeechSupported()) {
     try {
       window.speechSynthesis.resume();
@@ -231,4 +445,214 @@ export function speakPortuguese(text: string): SpeechResult {
 
 export function speakText(text: string, lang: 'en' | 'pt' = 'en'): SpeechResult {
   return lang === 'pt' ? speakPortuguese(text) : speakEnglish(text);
+}
+
+export interface DialoguePlaybackController {
+  pause: () => void;
+  resume: () => void;
+  stop: () => void;
+  isPlaying: () => boolean;
+  isPaused: () => boolean;
+  getCurrentIndex: () => number;
+}
+
+export interface PlayDialogueOptions {
+  speedMultiplier?: number;
+  pauseBetweenLinesMs?: number;
+  onLineStart?: (index: number, line: { speaker: string; text: string; gender?: 'male' | 'female' }, profile: VoiceProfile) => void;
+  onLineEnd?: (index: number, line: { speaker: string; text: string }) => void;
+  onComplete?: () => void;
+  onError?: (err: unknown) => void;
+}
+
+export function speakDialogueLine(
+  line: { speaker: string; text: string; gender?: 'male' | 'female'; speechRate?: number; pitch?: number },
+  profile?: VoiceProfile,
+  options?: SpeakOptions
+): SpeechResult {
+  if (!isSpeechSupported()) {
+    return {
+      success: false,
+      message: 'Síntese de voz não é suportada neste navegador ou dispositivo.'
+    };
+  }
+
+  const cleanText = cleanSpokenLine(line.text, line.speaker);
+  if (!cleanText) {
+    return { success: false, message: 'Texto vazio para pronúncia.' };
+  }
+
+  // Se não foi passado profile pronto, aloca um perfil consistente
+  const activeProfile = profile || allocateDialogueVoices([line]).get(line.speaker)!;
+
+  try {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    if (activeProfile.voice) {
+      utterance.voice = activeProfile.voice;
+      utterance.lang = activeProfile.voice.lang || 'en-US';
+    } else {
+      const fallbackVoice = getEnglishVoice();
+      if (fallbackVoice) {
+        utterance.voice = fallbackVoice;
+      }
+      utterance.lang = 'en-US';
+    }
+
+    const rateMult = options?.rate ?? 1.0;
+    utterance.rate = Math.min(1.5, Math.max(0.6, activeProfile.rate * rateMult));
+    utterance.pitch = options?.pitch ?? activeProfile.pitch;
+
+    if (options?.onStart) utterance.onstart = options.onStart;
+    if (options?.onEnd) utterance.onend = options.onEnd;
+    if (options?.onError) utterance.onerror = options.onError;
+
+    window.speechSynthesis.speak(utterance);
+    return { success: true };
+  } catch {
+    return {
+      success: false,
+      message: 'Não foi possível reproduzir a fala do diálogo.'
+    };
+  }
+}
+
+export function playDialogueSequence(
+  dialogueLines: Array<{ speaker: string; text: string; gender?: 'male' | 'female'; speechRate?: number; pitch?: number }>,
+  options?: PlayDialogueOptions
+): DialoguePlaybackController {
+  let isCancelled = false;
+  let isPausedState = false;
+  let currentIndex = 0;
+  let pauseTimer: ReturnType<typeof setTimeout> | null = null;
+
+  const speed = options?.speedMultiplier ?? 1.0;
+  const pauseGap = Math.max(250, (options?.pauseBetweenLinesMs ?? 480) / speed);
+
+  const voiceMap = allocateDialogueVoices(dialogueLines);
+
+  const cleanup = () => {
+    isCancelled = true;
+    if (pauseTimer) {
+      clearTimeout(pauseTimer);
+      pauseTimer = null;
+    }
+    try {
+      window.speechSynthesis.cancel();
+    } catch {}
+  };
+
+  const playLine = (index: number) => {
+    if (isCancelled) return;
+    if (index >= dialogueLines.length) {
+      if (globalActiveDialogueController === controller) {
+        globalActiveDialogueController = null;
+      }
+      options?.onComplete?.();
+      return;
+    }
+
+    currentIndex = index;
+    const line = dialogueLines[index];
+    const profile = voiceMap.get(line.speaker)!;
+    const cleanText = cleanSpokenLine(line.text, line.speaker);
+
+    if (!cleanText) {
+      playLine(index + 1);
+      return;
+    }
+
+    try {
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+
+      if (profile.voice) {
+        utterance.voice = profile.voice;
+        utterance.lang = profile.voice.lang || 'en-US';
+      } else {
+        const fallbackVoice = getEnglishVoice();
+        if (fallbackVoice) utterance.voice = fallbackVoice;
+        utterance.lang = 'en-US';
+      }
+
+      utterance.pitch = profile.pitch;
+      utterance.rate = Math.min(1.5, Math.max(0.6, profile.rate * speed));
+
+      utterance.onstart = () => {
+        if (!isCancelled) {
+          options?.onLineStart?.(index, line, profile);
+        }
+      };
+
+      utterance.onend = () => {
+        if (isCancelled) return;
+        options?.onLineEnd?.(index, line);
+
+        // Intervalo conversacional natural entre interlocutores
+        pauseTimer = setTimeout(() => {
+          if (!isCancelled) {
+            playLine(index + 1);
+          }
+        }, pauseGap);
+      };
+
+      utterance.onerror = (e: any) => {
+        if (isCancelled || e?.error === 'interrupted' || e?.error === 'canceled') {
+          return;
+        }
+        options?.onError?.(e);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      if (!isCancelled) {
+        options?.onError?.(err);
+      }
+    }
+  };
+
+  // Inicia cancelando qualquer fala anterior
+  try {
+    window.speechSynthesis.cancel();
+  } catch {}
+
+  const controller: DialoguePlaybackController = {
+    pause: () => {
+      isPausedState = true;
+      if (pauseTimer) {
+        clearTimeout(pauseTimer);
+        pauseTimer = null;
+      }
+      try {
+        window.speechSynthesis.pause();
+      } catch {}
+    },
+    resume: () => {
+      isPausedState = false;
+      if (window.speechSynthesis.paused) {
+        try {
+          window.speechSynthesis.resume();
+        } catch {}
+      } else if (!window.speechSynthesis.speaking && currentIndex < dialogueLines.length) {
+        // Se pausou no meio do gap entre falas
+        playLine(currentIndex);
+      }
+    },
+    stop: () => {
+      cleanup();
+      if (globalActiveDialogueController === controller) {
+        globalActiveDialogueController = null;
+      }
+    },
+    isPlaying: () => !isCancelled && !isPausedState && (window.speechSynthesis.speaking || pauseTimer !== null),
+    isPaused: () => isPausedState,
+    getCurrentIndex: () => currentIndex
+  };
+
+  globalActiveDialogueController = controller;
+
+  // Dispara primeira fala
+  playLine(0);
+
+  return controller;
 }

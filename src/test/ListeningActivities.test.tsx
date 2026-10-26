@@ -203,6 +203,39 @@ describe('Listening Pillar & Audio Practice Framework Tests', () => {
       expect(window.speechSynthesis.speak).toHaveBeenCalled();
       expect(screen.getByText(/Áudio escutado/i)).toBeInTheDocument();
     });
+
+    it('identifies interlocutors and renders voice badges for dialogue activities', () => {
+      const dialogueAct = LISTENING_ACTIVITIES.find((a) => a.id === 'listening-a1-dial-weekend')!;
+      render(<AudioPlayerCard track={dialogueAct.listeningTrack!} activityTitle={dialogueAct.title} />);
+
+      expect(screen.getByText(/Interlocutores do Diálogo/i)).toBeInTheDocument();
+      expect(screen.getByText('Sarah')).toBeInTheDocument();
+      expect(screen.getByText('Mark')).toBeInTheDocument();
+      expect(screen.getByText('Voz Feminina')).toBeInTheDocument();
+      expect(screen.getByText('Voz Masculina')).toBeInTheDocument();
+
+      // Starts full dialogue sequence
+      const playBtn = screen.getByRole('button', { name: /Reproduzir áudio em inglês/i });
+      fireEvent.click(playBtn);
+
+      expect(window.speechSynthesis.speak).toHaveBeenCalled();
+    });
+
+    it('allows expanding and practicing individual lines in dialogue without spoiling transcript', () => {
+      const dialogueAct = LISTENING_ACTIVITIES.find((a) => a.id === 'listening-a1-dial-weekend')!;
+      render(<AudioPlayerCard track={dialogueAct.listeningTrack!} activityTitle={dialogueAct.title} />);
+
+      const toggleDrawer = screen.getByRole('button', { name: /Treinar Falas Individuais/i });
+      fireEvent.click(toggleDrawer);
+
+      expect(screen.getByText(/Ouça novamente cada fala de forma isolada/i)).toBeInTheDocument();
+
+      // Click to play line 1 (Sarah)
+      const line1Btn = screen.getByRole('button', { name: /Ouvir fala 1: Sarah/i });
+      fireEvent.click(line1Btn);
+
+      expect(window.speechSynthesis.speak).toHaveBeenCalled();
+    });
   });
 
   describe('5. UI Integration: ListeningActivitiesHub & ListeningActivityRunner', () => {

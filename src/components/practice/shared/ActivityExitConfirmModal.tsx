@@ -5,12 +5,16 @@ interface ActivityExitConfirmModalProps {
   isOpen: boolean;
   onCancel: () => void;
   onConfirm: () => void;
+  continueLabel?: string;
+  warningDescription?: string;
 }
 
 export const ActivityExitConfirmModal: React.FC<ActivityExitConfirmModalProps> = ({
   isOpen,
   onCancel,
-  onConfirm
+  onConfirm,
+  continueLabel = 'Continuar Atividade',
+  warningDescription
 }) => {
   if (!isOpen) return null;
 
@@ -21,7 +25,11 @@ export const ActivityExitConfirmModal: React.FC<ActivityExitConfirmModalProps> =
         <div className="space-y-1">
           <strong className="font-bold text-sm block">Deseja realmente sair?</strong>
           <p>
-            Tentativas incompletas <strong>não sobrescrevem</strong> seu último resultado válido salvo. Suas respostas atuais não serão registradas.
+            {warningDescription || (
+              <>
+                Tentativas incompletas <strong>não sobrescrevem</strong> seu último resultado válido salvo. Suas respostas atuais não serão registradas.
+              </>
+            )}
           </p>
         </div>
       </div>
@@ -31,7 +39,7 @@ export const ActivityExitConfirmModal: React.FC<ActivityExitConfirmModalProps> =
           onClick={onCancel}
           className="px-3 py-1.5 rounded-xl bg-white border border-amber-200 font-bold text-xs text-amber-900 hover:bg-amber-100 transition cursor-pointer"
         >
-          Continuar Atividade
+          {continueLabel}
         </button>
         <button
           type="button"

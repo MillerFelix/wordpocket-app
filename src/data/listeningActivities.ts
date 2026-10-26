@@ -86,17 +86,19 @@ export const LISTENING_ACTIVITIES: Activity<ListeningQuestion>[] = [
     listeningTrack: {
       title: 'Weekend Plans with Sarah and Mark',
       scenario: 'Dois amigos conversando sobre o fim de semana',
-      spokenText: 'Sarah: Hey Mark, do you have any plans for this Saturday? Mark: Hi Sarah! Yes, on Saturday morning I usually clean my apartment. But in the afternoon, I am going to the city park with my dog. How about you? Sarah: I am visiting my grandmother on Saturday. But on Sunday, I want to watch a new movie at the cinema. Mark: Sounds great! Let us watch the movie together on Sunday evening.',
+      spokenText: 'Hey Mark, do you have any plans for this Saturday? Hi Sarah! Yes, on Saturday morning I usually clean my apartment. But in the afternoon, I am going to the city park with my dog. How about you? I am visiting my grandmother on Saturday morning. But on Sunday, I want to watch a new movie at the cinema. Sounds great! Why not watch the movie together on Sunday evening? I would love that! Let us meet at six. Perfect, see you then!',
       dialogueLines: [
-        { speaker: 'Sarah', text: 'Hey Mark, do you have any plans for this Saturday?' },
-        { speaker: 'Mark', text: 'Hi Sarah! Yes, on Saturday morning I usually clean my apartment. But in the afternoon, I am going to the city park with my dog. How about you?' },
-        { speaker: 'Sarah', text: 'I am visiting my grandmother on Saturday. But on Sunday, I want to watch a new movie at the cinema.' },
-        { speaker: 'Mark', text: 'Sounds great! Let us watch the movie together on Sunday evening.' }
+        { speaker: 'Sarah', gender: 'female', text: 'Hey Mark, do you have any plans for this Saturday?', translation: 'Ei Mark, você tem planos para este sábado?' },
+        { speaker: 'Mark', gender: 'male', text: 'Hi Sarah! Yes, on Saturday morning I usually clean my apartment. But in the afternoon, I am going to the city park with my dog. How about you?', translation: 'Oi Sarah! Sim, no sábado de manhã eu costumo limpar meu apartamento. Mas à tarde, vou ao parque da cidade com meu cachorro. E você?' },
+        { speaker: 'Sarah', gender: 'female', text: 'I am visiting my grandmother on Saturday morning. But on Sunday, I want to watch a new movie at the cinema.', translation: 'Vou visitar minha avó no sábado de manhã. Mas no domingo, quero assistir a um filme novo no cinema.' },
+        { speaker: 'Mark', gender: 'male', text: 'Sounds great! Why not watch the movie together on Sunday evening?', translation: 'Parece ótimo! Por que não assistimos ao filme juntos no domingo à noite?' },
+        { speaker: 'Sarah', gender: 'female', text: 'I would love that! Let us meet at the cinema at six.', translation: 'Eu adoraria! Vamos nos encontrar no cinema às seis.' },
+        { speaker: 'Mark', gender: 'male', text: 'Perfect, see you then!', translation: 'Perfeito, até lá!' }
       ],
       speechRate: 0.88,
-      estimatedDurationSeconds: 22,
-      transcript: 'Sarah: Hey Mark, do you have any plans for this Saturday?\nMark: Hi Sarah! Yes, on Saturday morning I usually clean my apartment. But in the afternoon, I am going to the city park with my dog. How about you?\nSarah: I am visiting my grandmother on Saturday. But on Sunday, I want to watch a new movie at the cinema.\nMark: Sounds great! Let us watch the movie together on Sunday evening.',
-      transcriptTranslation: 'Sarah: Ei Mark, você tem planos para este sábado?\nMark: Oi Sarah! Sim, no sábado de manhã eu costumo limpar meu apartamento. Mas à tarde, vou ao parque da cidade com meu cachorro. E você?\nSarah: Vou visitar minha avó no sábado. Mas no domingo, quero assistir a um filme novo no cinema.\nMark: Parece ótimo! Vamos assistir ao filme juntos no domingo à noite.'
+      estimatedDurationSeconds: 24,
+      transcript: 'Sarah: Hey Mark, do you have any plans for this Saturday?\nMark: Hi Sarah! Yes, on Saturday morning I usually clean my apartment. But in the afternoon, I am going to the city park with my dog. How about you?\nSarah: I am visiting my grandmother on Saturday morning. But on Sunday, I want to watch a new movie at the cinema.\nMark: Sounds great! Why not watch the movie together on Sunday evening?\nSarah: I would love that! Let us meet at the cinema at six.\nMark: Perfect, see you then!',
+      transcriptTranslation: 'Sarah: Ei Mark, você tem planos para este sábado?\nMark: Oi Sarah! Sim, no sábado de manhã eu costumo limpar meu apartamento. Mas à tarde, vou ao parque da cidade com meu cachorro. E você?\nSarah: Vou visitar minha avó no sábado de manhã. Mas no domingo, quero assistir a um filme novo no cinema.\nMark: Parece ótimo! Por que não assistimos ao filme juntos no domingo à noite?\nSarah: Eu adoraria! Vamos nos encontrar no cinema às seis.\nMark: Perfeito, até lá!'
     },
     questions: [
       {
@@ -157,19 +159,20 @@ export const LISTENING_ACTIVITIES: Activity<ListeningQuestion>[] = [
     listeningTrack: {
       title: 'Ordering at the Coffee Shop',
       scenario: 'Balcão de uma cafeteria em Londres',
-      spokenText: 'Barista: Good morning! What can I get for you today? Customer: Hello! Could I please have a medium latte with oat milk? Barista: Sure. Would you like anything to eat with that? Customer: Yes, a blueberry muffin, please. Barista: Perfect. That will be six dollars and fifty cents altogether. Are you paying with card? Customer: Yes, by card. Thank you!',
+      spokenText: 'Good morning! Welcome to Central Brew. What can I get started for you today? Hello! Could I please have a medium latte with oat milk? Sure thing! Would you like anything to eat with that? Yes, please. A blueberry muffin sounds great. Perfect choice. That will be six dollars and fifty cents altogether. Are you paying with card? Yes, by card. Here you go! Thank you! We will have that ready in a moment.',
       dialogueLines: [
-        { speaker: 'Barista', text: 'Good morning! What can I get for you today?' },
-        { speaker: 'Customer', text: 'Hello! Could I please have a medium latte with oat milk?' },
-        { speaker: 'Barista', text: 'Sure. Would you like anything to eat with that?' },
-        { speaker: 'Customer', text: 'Yes, a blueberry muffin, please.' },
-        { speaker: 'Barista', text: 'Perfect. That will be six dollars and fifty cents altogether. Are you paying with card?' },
-        { speaker: 'Customer', text: 'Yes, by card. Thank you!' }
+        { speaker: 'Barista', gender: 'male', text: 'Good morning! Welcome to Central Brew. What can I get started for you today?', translation: 'Bom dia! Bem-vindo ao Central Brew. O que posso preparar para você hoje?' },
+        { speaker: 'Customer', gender: 'female', text: 'Hello! Could I please have a medium latte with oat milk?', translation: 'Olá! Poderia me ver um latte médio com leite de aveia, por favor?' },
+        { speaker: 'Barista', gender: 'male', text: 'Sure thing! Would you like anything to eat with that?', translation: 'Com certeza! Gostaria de algo para comer acompanhando?' },
+        { speaker: 'Customer', gender: 'female', text: 'Yes, please. A blueberry muffin sounds great.', translation: 'Sim, por favor. Um muffin de mirtilo parece ótimo.' },
+        { speaker: 'Barista', gender: 'male', text: 'Perfect choice. That will be six dollars and fifty cents altogether. Are you paying with card?', translation: 'Ótima escolha. Fica em seis dólares e cinquenta no total. Vai pagar no cartão?' },
+        { speaker: 'Customer', gender: 'female', text: 'Yes, by card. Here you go!', translation: 'Sim, no cartão. Aqui está!' },
+        { speaker: 'Barista', gender: 'male', text: 'Thank you! We will have that ready in a moment.', translation: 'Obrigado! Já vai estar pronto em um minuto.' }
       ],
       speechRate: 0.88,
-      estimatedDurationSeconds: 24,
-      transcript: 'Barista: Good morning! What can I get for you today?\nCustomer: Hello! Could I please have a medium latte with oat milk?\nBarista: Sure. Would you like anything to eat with that?\nCustomer: Yes, a blueberry muffin, please.\nBarista: Perfect. That will be six dollars and fifty cents altogether. Are you paying with card?\nCustomer: Yes, by card. Thank you!',
-      transcriptTranslation: 'Barista: Bom dia! O que posso preparar para você hoje?\nCliente: Olá! Poderia me ver um latte médio com leite de aveia?\nBarista: Claro. Gostaria de algo para comer junto?\nCliente: Sim, um muffin de mirtilo, por favor.\nBarista: Perfeito. Fica em seis dólares e cinquenta centavos no total. Vai pagar no cartão?\nCliente: Sim, no cartão. Obrigado!'
+      estimatedDurationSeconds: 26,
+      transcript: 'Barista: Good morning! Welcome to Central Brew. What can I get started for you today?\nCustomer: Hello! Could I please have a medium latte with oat milk?\nBarista: Sure thing! Would you like anything to eat with that?\nCustomer: Yes, please. A blueberry muffin sounds great.\nBarista: Perfect choice. That will be six dollars and fifty cents altogether. Are you paying with card?\nCustomer: Yes, by card. Here you go!\nBarista: Thank you! We will have that ready in a moment.',
+      transcriptTranslation: 'Barista: Bom dia! Bem-vindo ao Central Brew. O que posso preparar para você hoje?\nCliente: Olá! Poderia me ver um latte médio com leite de aveia, por favor?\nBarista: Com certeza! Gostaria de algo para comer acompanhando?\nCliente: Sim, por favor. Um muffin de mirtilo parece ótimo.\nBarista: Ótima escolha. Fica em seis dólares e cinquenta no total. Vai pagar no cartão?\nCliente: Sim, no cartão. Aqui está!\nBarista: Obrigado! Já vai estar pronto em um minuto.'
     },
     questions: [
       {
@@ -364,17 +367,18 @@ export const LISTENING_ACTIVITIES: Activity<ListeningQuestion>[] = [
     listeningTrack: {
       title: 'Business Trip Arrangements',
       scenario: 'Planejamento de viagem entre colegas no escritório',
-      spokenText: 'Daniel: Rachel, have you looked at hotel options for the Seattle conference? Rachel: Yes! The Grand Palace is two blocks from the convention center, but it is two hundred dollars a night. The Harbor View is only one hundred and twenty dollars, but we would need to take the light rail. Daniel: I think the Grand Palace is worth the extra price because we can walk to the venue and save time on commuting. Rachel: You are right. Time is crucial since our presentation starts at eight thirty in the morning. Let us book the Grand Palace.',
+      spokenText: 'Rachel, have you looked at hotel options for the Seattle conference? Yes! The Grand Palace is two blocks from the convention center, but it is two hundred dollars a night. The Harbor View is only one hundred and twenty dollars, but we would need to take the light rail. I think the Grand Palace is worth the extra price because we can walk to the venue and save time on commuting. You are right. Time is crucial since our presentation starts at eight thirty in the morning. Let us book the Grand Palace. Sounds like a plan. I will take care of the booking.',
       dialogueLines: [
-        { speaker: 'Daniel', text: 'Rachel, have you looked at hotel options for the Seattle conference?' },
-        { speaker: 'Rachel', text: 'Yes! The Grand Palace is two blocks from the convention center, but it is two hundred dollars a night. The Harbor View is only one hundred and twenty dollars, but we would need to take the light rail.' },
-        { speaker: 'Daniel', text: 'I think the Grand Palace is worth the extra price because we can walk to the venue and save time on commuting.' },
-        { speaker: 'Rachel', text: 'You are right. Time is crucial since our presentation starts at eight thirty in the morning. Let us book the Grand Palace.' }
+        { speaker: 'Daniel', gender: 'male', text: 'Rachel, have you looked at hotel options for the Seattle conference?', translation: 'Rachel, você olhou as opções de hotel para a conferência em Seattle?' },
+        { speaker: 'Rachel', gender: 'female', text: 'Yes! The Grand Palace is two blocks from the convention center, but it is two hundred dollars a night. The Harbor View is only one hundred and twenty dollars, but we would need to take the light rail.', translation: 'Sim! O Grand Palace fica a duas quadras do centro de convenções, mas custa duzentos dólares por noite. O Harbor View custa apenas cento e vinte dólares, mas precisaríamos pegar o veículo leve sobre trilhos.' },
+        { speaker: 'Daniel', gender: 'male', text: 'I think the Grand Palace is worth the extra price because we can walk to the venue and save time on commuting.', translation: 'Acho que o Grand Palace vale o preço a mais porque poderemos caminhar até o evento e economizar tempo no deslocamento.' },
+        { speaker: 'Rachel', gender: 'female', text: 'You are right. Time is crucial since our presentation starts at eight thirty in the morning. Let us book the Grand Palace.', translation: 'Tem razão. Tempo é fundamental, já que nossa apresentação começa às oito e meia da manhã. Vamos reservar o Grand Palace.' },
+        { speaker: 'Daniel', gender: 'male', text: 'Sounds like a plan. I will take care of the booking.', translation: 'Combinado! Vou cuidar da reserva agora mesmo.' }
       ],
       speechRate: 0.94,
-      estimatedDurationSeconds: 27,
-      transcript: 'Daniel: Rachel, have you looked at hotel options for the Seattle conference?\nRachel: Yes! The Grand Palace is two blocks from the convention center, but it is two hundred dollars a night. The Harbor View is only one hundred and twenty dollars, but we would need to take the light rail.\nDaniel: I think the Grand Palace is worth the extra price because we can walk to the venue and save time on commuting.\nRachel: You are right. Time is crucial since our presentation starts at eight thirty in the morning. Let us book the Grand Palace.',
-      transcriptTranslation: 'Daniel: Rachel, você olhou as opções de hotel para a conferência em Seattle?\nRachel: Sim! O Grand Palace fica a duas quadras do centro de convenções, mas custa duzentos dólares por noite. O Harbor View custa apenas cento e vinte dólares, mas precisaríamos pegar o veículo leve sobre trilhos.\nDaniel: Acho que o Grand Palace vale o preço a mais porque poderemos caminhar até o evento e economizar tempo no deslocamento.\nRachel: Tem razão. Tempo é fundamental, já que nossa apresentação começa às oito e meia da manhã. Vamos reservar o Grand Palace.'
+      estimatedDurationSeconds: 28,
+      transcript: 'Daniel: Rachel, have you looked at hotel options for the Seattle conference?\nRachel: Yes! The Grand Palace is two blocks from the convention center, but it is two hundred dollars a night. The Harbor View is only one hundred and twenty dollars, but we would need to take the light rail.\nDaniel: I think the Grand Palace is worth the extra price because we can walk to the venue and save time on commuting.\nRachel: You are right. Time is crucial since our presentation starts at eight thirty in the morning. Let us book the Grand Palace.\nDaniel: Sounds like a plan. I will take care of the booking.',
+      transcriptTranslation: 'Daniel: Rachel, você olhou as opções de hotel para a conferência em Seattle?\nRachel: Sim! O Grand Palace fica a duas quadras do centro de convenções, mas custa duzentos dólares por noite. O Harbor View custa apenas cento e vinte dólares, mas precisaríamos pegar o veículo leve sobre trilhos.\nDaniel: Acho que o Grand Palace vale o preço a mais porque poderemos caminhar até o evento e economizar tempo no deslocamento.\nRachel: Tem razão. Tempo é fundamental, já que nossa apresentação começa às oito e meia da manhã. Vamos reservar o Grand Palace.\nDaniel: Combinado! Vou cuidar da reserva agora mesmo.'
     },
     questions: [
       {
@@ -435,20 +439,22 @@ export const LISTENING_ACTIVITIES: Activity<ListeningQuestion>[] = [
     listeningTrack: {
       title: 'At the Pharmacy',
       scenario: 'Balcão de uma farmácia comunitária',
-      spokenText: 'Pharmacist: Hello there, how can I assist you today? Customer: Hi. I have had a bad headache and a sore throat since yesterday evening. Pharmacist: Do you also have a fever or allergies to medications? Customer: No fever, and no known allergies. Pharmacist: In that case, take these pain relief tablets. Take one tablet every six hours with water, preferably after a meal. Do not exceed four tablets in twenty-four hours. Customer: Does this medicine cause drowsiness? Pharmacist: No, this one is non-drowsy, so you can safely drive and work.',
+      spokenText: 'Hello there, how can I assist you today? Hi. I have had a bad headache and a sore throat since yesterday evening. I see. Do you also have a fever or allergies to medications? No fever, and no known allergies. In that case, take these pain relief tablets. Take one tablet every six hours with water, preferably after a meal. Do not exceed four tablets in twenty-four hours. Got it. Does this medicine cause drowsiness? No, this one is non-drowsy, so you can safely drive and work. That is wonderful news. Thank you very much! You are very welcome. Get well soon!',
       dialogueLines: [
-        { speaker: 'Pharmacist', text: 'Hello there, how can I assist you today?' },
-        { speaker: 'Customer', text: 'Hi. I have had a bad headache and a sore throat since yesterday evening.' },
-        { speaker: 'Pharmacist', text: 'Do you also have a fever or allergies to medications?' },
-        { speaker: 'Customer', text: 'No fever, and no known allergies.' },
-        { speaker: 'Pharmacist', text: 'In that case, take these pain relief tablets. Take one tablet every six hours with water, preferably after a meal. Do not exceed four tablets in twenty-four hours.' },
-        { speaker: 'Customer', text: 'Does this medicine cause drowsiness?' },
-        { speaker: 'Pharmacist', text: 'No, this one is non-drowsy, so you can safely drive and work.' }
+        { speaker: 'Pharmacist', gender: 'female', text: 'Hello there, how can I assist you today?', translation: 'Olá, como posso ajudar você hoje?' },
+        { speaker: 'Customer', gender: 'male', text: 'Hi. I have had a bad headache and a sore throat since yesterday evening.', translation: 'Oi. Estou com uma forte dor de cabeça e garganta inflamada desde ontem à noite.' },
+        { speaker: 'Pharmacist', gender: 'female', text: 'I see. Do you also have a fever or allergies to medications?', translation: 'Entendo. Você também tem febre ou alguma alergia a medicamentos?' },
+        { speaker: 'Customer', gender: 'male', text: 'No fever, and no known allergies.', translation: 'Sem febre e sem alergias conhecidas.' },
+        { speaker: 'Pharmacist', gender: 'female', text: 'In that case, take these pain relief tablets. Take one tablet every six hours with water, preferably after a meal. Do not exceed four tablets in twenty-four hours.', translation: 'Nesse caso, tome estes comprimidos para alívio da dor. Tome um comprimido a cada seis horas com água, de preferência após uma refeição. Não ultrapasse quatro comprimidos em vinte e quatro horas.' },
+        { speaker: 'Customer', gender: 'male', text: 'Got it. Does this medicine cause drowsiness?', translation: 'Entendido. Este remédio causa sonolência?' },
+        { speaker: 'Pharmacist', gender: 'female', text: 'No, this one is non-drowsy, so you can safely drive and work.', translation: 'Não, este é sem sonolência, então você pode dirigir e trabalhar com segurança.' },
+        { speaker: 'Customer', gender: 'male', text: 'That is wonderful news. Thank you very much!', translation: 'Essa é uma ótima notícia. Muito obrigado!' },
+        { speaker: 'Pharmacist', gender: 'female', text: 'You are very welcome. Get well soon!', translation: 'De nada! Melhoras para você!' }
       ],
       speechRate: 0.92,
-      estimatedDurationSeconds: 28,
-      transcript: 'Pharmacist: Hello there, how can I assist you today?\nCustomer: Hi. I have had a bad headache and a sore throat since yesterday evening.\nPharmacist: Do you also have a fever or allergies to medications?\nCustomer: No fever, and no known allergies.\nPharmacist: In that case, take these pain relief tablets. Take one tablet every six hours with water, preferably after a meal. Do not exceed four tablets in twenty-four hours.\nCustomer: Does this medicine cause drowsiness?\nPharmacist: No, this one is non-drowsy, so you can safely drive and work.',
-      transcriptTranslation: 'Farmacêutico: Olá, como posso ajudar você hoje?\nCliente: Oi. Estou com uma forte dor de cabeça e garganta inflamada desde ontem à noite.\nFarmacêutico: Você também tem febre ou alergia a remédios?\nCliente: Sem febre e sem alergias conhecidas.\nFarmacêutico: Nesse caso, tome estes comprimidos para dor. Tome um comprimido a cada seis horas com água, de preferência após uma refeição. Não ultrapasse quatro comprimidos em vinte e quatro horas.\nCliente: Este remédio dá sono?\nFarmacêutico: Não, este é sem sonolência, então você pode dirigir e trabalhar com segurança.'
+      estimatedDurationSeconds: 30,
+      transcript: 'Pharmacist: Hello there, how can I assist you today?\nCustomer: Hi. I have had a bad headache and a sore throat since yesterday evening.\nPharmacist: I see. Do you also have a fever or allergies to medications?\nCustomer: No fever, and no known allergies.\nPharmacist: In that case, take these pain relief tablets. Take one tablet every six hours with water, preferably after a meal. Do not exceed four tablets in twenty-four hours.\nCustomer: Got it. Does this medicine cause drowsiness?\nPharmacist: No, this one is non-drowsy, so you can safely drive and work.\nCustomer: That is wonderful news. Thank you very much!\nPharmacist: You are very welcome. Get well soon!',
+      transcriptTranslation: 'Farmacêutico: Olá, como posso ajudar você hoje?\nCliente: Oi. Estou com uma forte dor de cabeça e garganta inflamada desde ontem à noite.\nFarmacêutico: Entendo. Você também tem febre ou alguma alergia a medicamentos?\nCliente: Sem febre e sem alergias conhecidas.\nFarmacêutico: Nesse caso, tome estes comprimidos para alívio da dor. Tome um comprimido a cada seis horas com água, de preferência após uma refeição. Não ultrapasse quatro comprimidos em vinte e quatro horas.\nCliente: Entendido. Este remédio causa sonolência?\nFarmacêutico: Não, este é sem sonolência, então você pode dirigir e trabalhar com segurança.\nCliente: Essa é uma ótima notícia. Muito obrigado!\nFarmacêutico: De nada! Melhoras para você!'
     },
     questions: [
       {
@@ -643,18 +649,19 @@ export const LISTENING_ACTIVITIES: Activity<ListeningQuestion>[] = [
     listeningTrack: {
       title: 'Project Timeline and Risk Management',
       scenario: 'Reunião de alinhamento em uma empresa de tecnologia',
-      spokenText: 'Kevin: Laura, how are we looking regarding the mobile application launch deadline next Friday? Laura: To be completely transparent, the core features are solid, but our QA team discovered an unexpected memory issue during high-load tests yesterday. Kevin: That sounds concerning. Can we deploy a hotfix without delaying the entire release? Laura: If we reassign two developers from the reporting module to assist with debugging, we can fix it by Tuesday and conduct regression testing on Wednesday. Kevin: That is a sensible tradeoff. Let us shift those resources immediately so we do not jeopardize our launch date.',
+      spokenText: 'Laura, how are we looking regarding the mobile application launch deadline next Friday? To be completely transparent, the core features are solid, but our QA team discovered an unexpected memory issue during high-load tests yesterday. That sounds concerning. Can we deploy a hotfix without delaying the entire release? If we reassign two developers from the reporting module to assist with debugging, we can fix it by Tuesday and conduct regression testing on Wednesday. That is a sensible tradeoff. Let us shift those resources immediately so we do not jeopardize our launch date. I will coordinate with engineering right away.',
       dialogueLines: [
-        { speaker: 'Kevin', text: 'Laura, how are we looking regarding the mobile application launch deadline next Friday?' },
-        { speaker: 'Laura', text: 'To be completely transparent, the core features are solid, but our QA team discovered an unexpected memory issue during high-load tests yesterday.' },
-        { speaker: 'Kevin', text: 'That sounds concerning. Can we deploy a hotfix without delaying the entire release?' },
-        { speaker: 'Laura', text: 'If we reassign two developers from the reporting module to assist with debugging, we can fix it by Tuesday and conduct regression testing on Wednesday.' },
-        { speaker: 'Kevin', text: 'That is a sensible tradeoff. Let us shift those resources immediately so we do not jeopardize our launch date.' }
+        { speaker: 'Kevin', gender: 'male', text: 'Laura, how are we looking regarding the mobile application launch deadline next Friday?', translation: 'Laura, como estamos em relação ao prazo de lançamento do aplicativo móvel na próxima sexta-feira?' },
+        { speaker: 'Laura', gender: 'female', text: 'To be completely transparent, the core features are solid, but our QA team discovered an unexpected memory issue during high-load tests yesterday.', translation: 'Para ser totalmente transparente, os recursos principais estão sólidos, mas nossa equipe de QA descobriu um problema inesperado de memória durante testes de alta carga ontem.' },
+        { speaker: 'Kevin', gender: 'male', text: 'That sounds concerning. Can we deploy a hotfix without delaying the entire release?', translation: 'Isso parece preocupante. Conseguimos aplicar uma correção rápida sem adiar o lançamento todo?' },
+        { speaker: 'Laura', gender: 'female', text: 'If we reassign two developers from the reporting module to assist with debugging, we can fix it by Tuesday and conduct regression testing on Wednesday.', translation: 'Se realocarmos dois desenvolvedores do módulo de relatórios para ajudar no debugging, podemos corrigir até terça-feira e rodar testes de regressão na quarta.' },
+        { speaker: 'Kevin', gender: 'male', text: 'That is a sensible tradeoff. Let us shift those resources immediately so we do not jeopardize our launch date.', translation: 'Essa é uma concessão sensata. Vamos transferir esses recursos imediatamente para não colocar em risco a data de lançamento.' },
+        { speaker: 'Laura', gender: 'female', text: 'I will coordinate with engineering right away.', translation: 'Vou coordenar com a equipe de engenharia imediatamente.' }
       ],
       speechRate: 0.98,
-      estimatedDurationSeconds: 32,
-      transcript: 'Kevin: Laura, how are we looking regarding the mobile application launch deadline next Friday?\nLaura: To be completely transparent, the core features are solid, but our QA team discovered an unexpected memory issue during high-load tests yesterday.\nKevin: That sounds concerning. Can we deploy a hotfix without delaying the entire release?\nLaura: If we reassign two developers from the reporting module to assist with debugging, we can fix it by Tuesday and conduct regression testing on Wednesday.\nKevin: That\'s a sensible tradeoff. Let\'s shift those resources immediately so we don\'t jeopardize our launch date.',
-      transcriptTranslation: 'Kevin: Laura, como estamos em relação ao prazo de lançamento do aplicativo móvel na próxima sexta-feira?\nLaura: Para ser totalmente transparente, os recursos principais estão sólidos, mas nossa equipe de QA descobriu um problema inesperado de memória durante testes de alta carga ontem.\nKevin: Isso parece preocupante. Conseguimos aplicar uma correção sem adiar o lançamento todo?\nLaura: Se realocarmos dois desenvolvedores do módulo de relatórios para ajudar no debugging, podemos corrigir até terça-feira e rodar testes de regressão na quarta.\nKevin: Essa é uma concessão sensata. Vamos transferir esses recursos imediatamente para não colocar em risco a data de lançamento.'
+      estimatedDurationSeconds: 34,
+      transcript: 'Kevin: Laura, how are we looking regarding the mobile application launch deadline next Friday?\nLaura: To be completely transparent, the core features are solid, but our QA team discovered an unexpected memory issue during high-load tests yesterday.\nKevin: That sounds concerning. Can we deploy a hotfix without delaying the entire release?\nLaura: If we reassign two developers from the reporting module to assist with debugging, we can fix it by Tuesday and conduct regression testing on Wednesday.\nKevin: That\'s a sensible tradeoff. Let\'s shift those resources immediately so we don\'t jeopardize our launch date.\nLaura: I will coordinate with engineering right away.',
+      transcriptTranslation: 'Kevin: Laura, como estamos em relação ao prazo de lançamento do aplicativo móvel na próxima sexta-feira?\nLaura: Para ser totalmente transparente, os recursos principais estão sólidos, mas nossa equipe de QA descobriu um problema inesperado de memória durante testes de alta carga ontem.\nKevin: Isso parece preocupante. Conseguimos aplicar uma correção rápida sem adiar o lançamento todo?\nLaura: Se realocarmos dois desenvolvedores do módulo de relatórios para ajudar no debugging, podemos corrigir até terça-feira e rodar testes de regressão na quarta.\nKevin: Essa é uma concessão sensata. Vamos transferir esses recursos imediatamente para não colocar em risco a data de lançamento.\nLaura: Vou coordenar com a equipe de engenharia imediatamente.'
     },
     questions: [
       {

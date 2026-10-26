@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   CheckCircle2, 
   XCircle, 
   Volume2, 
   FileText, 
   Languages,
-  Headphones
+  Headphones,
+  Square,
+  Play,
+  Mic,
+  Users
 } from 'lucide-react';
 import { ActivityGradingResult, Activity, ListeningQuestion } from '../../../types/activity';
-import { speakEnglish, stopSpeech } from '../../../utils/speech';
+import { 
+  speakEnglish, 
+  stopSpeech, 
+  playDialogueSequence, 
+  speakDialogueLine, 
+  inferSpeakerGender,
+  DialoguePlaybackController 
+} from '../../../utils/speech';
 import { ResultScoreSummaryCard } from '../shared/ResultScoreSummaryCard';
 
 interface ListeningResultViewProps {
@@ -28,25 +39,109 @@ export const ListeningResultView: React.FC<ListeningResultViewProps> = ({
 }) => {
   const [showTranslation, setShowTranslation] = useState<boolean>(true);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
+  const [activeLineIndex, setActiveLineIndex] = useState<number | null>(null);
+  const [playingSingleLineIndex, setPlayingSingleLineIndex] = useState<number | null>(null);
+
+  const dialogueControllerRef = useRef<DialoguePlaybackController | null>(null);
+  const isMountedRef = useRef<boolean>(true);
+
   const track = activity.listeningTrack;
+  const isDialogue = Boolean(track?.dialogueLines && track.dialogueLines.length > 0);
+  const dialogueLines = track?.dialogueLines || [];
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      stopSpeech();
+    };
+  }, []);
 
   const handlePlayAudio = () => {
     if (!track) return;
-    if (isPlayingAudio) {
+
+    if (isPlayingAudio || playingSingleLineIndex !== null) {
       stopSpeech();
+      dialogueControllerRef.current = null;
       setIsPlayingAudio(false);
+      setActiveLineIndex(null);
+      setPlayingSingleLineIndex(null);
       return;
     }
 
-    const res = speakEnglish(track.spokenText, {
-      rate: track.speechRate ?? 0.9,
-      onStart: () => setIsPlayingAudio(true),
-      onEnd: () => setIsPlayingAudio(false),
-      onError: () => setIsPlayingAudio(false)
+    if (isDialogue) {
+      setIsPlayingAudio(true);
+      dialogueControllerRef.current = playDialogueSequence(dialogueLines, {
+        speedMultiplier: 1.0,
+        onLineStart: (index) => {
+          if (!isMountedRef.current) return;
+          setActiveLineIndex(index);
+          setIsPlayingAudio(true);
+        },
+        onComplete: () => {
+          if (!isMountedRef.current) return;
+          setIsPlayingAudio(false);
+          setActiveLineIndex(null);
+          dialogueControllerRef.current = null;
+        },
+        onError: () => {
+          if (!isMountedRef.current) return;
+          setIsPlayingAudio(false);
+          setActiveLineIndex(null);
+          dialogueControllerRef.current = null;
+        }
+      });
+    } else {
+      const res = speakEnglish(track.spokenText, {
+        rate: track.speechRate ?? 0.9,
+        onStart: () => setIsPlayingAudio(true),
+        onEnd: () => setIsPlayingAudio(false),
+        onError: () => setIsPlayingAudio(false)
+      });
+
+      if (res.success) {
+        setIsPlayingAudio(true);
+      }
+    }
+  };
+
+  const handlePlaySingleLine = (index: number) => {
+    const line = dialogueLines[index];
+    if (!line) return;
+
+    if (playingSingleLineIndex === index) {
+      stopSpeech();
+      setPlayingSingleLineIndex(null);
+      return;
+    }
+
+    if (isPlayingAudio) {
+      stopSpeech();
+      dialogueControllerRef.current = null;
+      setIsPlayingAudio(false);
+      setActiveLineIndex(null);
+    }
+
+    setPlayingSingleLineIndex(index);
+
+    const res = speakDialogueLine(line, undefined, {
+      rate: 0.95,
+      onStart: () => {
+        if (!isMountedRef.current) return;
+        setPlayingSingleLineIndex(index);
+      },
+      onEnd: () => {
+        if (!isMountedRef.current) return;
+        setPlayingSingleLineIndex(null);
+      },
+      onError: () => {
+        if (!isMountedRef.current) return;
+        setPlayingSingleLineIndex(null);
+      }
     });
 
-    if (res.success) {
-      setIsPlayingAudio(true);
+    if (!res.success) {
+      setPlayingSingleLineIndex(null);
     }
   };
 
@@ -85,11 +180,20 @@ export const ListeningResultView: React.FC<ListeningResultViewProps> = ({
                 onClick={handlePlayAudio}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#E1ECFC] text-[#176BFF] hover:bg-[#cde0fa] transition cursor-pointer"
               >
-                <Volume2 className="w-3.5 h-3.5" />
-                <span>{isPlayingAudio ? 'Parar Áudio' : 'Ouvir Novamente'}</span>
+                {isPlayingAudio ? (
+                  <>
+                    <Square className="w-3.5 h-3.5 fill-current" />
+                    <span>Parar Áudio</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-3.5 h-3.5" />
+                    <span>{isDialogue ? 'Ouvir Diálogo Novamente' : 'Ouvir Novamente'}</span>
+                  </>
+                )}
               </button>
 
-              {track.transcriptTranslation && (
+              {(track.transcriptTranslation || dialogueLines.some((l) => l.translation)) && (
                 <button
                   type="button"
                   onClick={() => setShowTranslation((prev) => !prev)}
@@ -102,19 +206,74 @@ export const ListeningResultView: React.FC<ListeningResultViewProps> = ({
             </div>
           </div>
 
-          {/* Dialogue or Spoken Text Layout */}
-          {track.dialogueLines && track.dialogueLines.length > 0 ? (
-            <div className="space-y-2.5">
-              {track.dialogueLines.map((line, i) => (
-                <div key={i} className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#176BFF] block">
-                    {line.speaker}:
-                  </span>
-                  <p className="text-xs sm:text-sm font-medium text-[#160F2E] leading-relaxed">
-                    {line.text}
-                  </p>
-                </div>
-              ))}
+          {/* Dialogue Layout with Individual Turn Audio Buttons */}
+          {isDialogue ? (
+            <div className="space-y-3">
+              <div className="flex items-center gap-1.5 text-xs text-[#52456F] font-semibold">
+                <Users className="w-3.5 h-3.5 text-[#176BFF]" />
+                <span>Clique no ícone de áudio de cada fala para ouvir apenas a fala daquele personagem:</span>
+              </div>
+
+              {dialogueLines.map((line, i) => {
+                const isLineActive = (isPlayingAudio && activeLineIndex === i) || playingSingleLineIndex === i;
+                const gender = inferSpeakerGender(line.speaker, line.gender);
+
+                return (
+                  <div
+                    key={i}
+                    className={`p-3.5 rounded-2xl border transition-all space-y-1.5 ${
+                      isLineActive
+                        ? 'bg-blue-50/80 border-[#176BFF] ring-2 ring-[#176BFF]/20 shadow-xs'
+                        : 'bg-slate-50/70 border-slate-200/80 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-[#176BFF]">
+                          {line.speaker}
+                        </span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-md font-semibold bg-white border border-slate-200 text-[#52456F]">
+                          {gender === 'female' ? 'Voz Feminina' : 'Voz Masculina'}
+                        </span>
+                        {isLineActive && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 animate-pulse">
+                            <Mic className="w-3 h-3" />
+                            <span>Reproduzindo</span>
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handlePlaySingleLine(i)}
+                        title={`Ouvir fala de ${line.speaker}`}
+                        aria-label={`Ouvir fala de ${line.speaker}`}
+                        className={`p-1.5 rounded-xl transition cursor-pointer ${
+                          playingSingleLineIndex === i
+                            ? 'bg-[#176BFF] text-white shadow-xs'
+                            : 'bg-white text-[#176BFF] border border-slate-200 hover:bg-[#E1ECFC]'
+                        }`}
+                      >
+                        {playingSingleLineIndex === i ? (
+                          <Square className="w-3.5 h-3.5 fill-current" />
+                        ) : (
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                        )}
+                      </button>
+                    </div>
+
+                    <p className="text-xs sm:text-sm font-medium text-[#160F2E] leading-relaxed">
+                      {line.text}
+                    </p>
+
+                    {showTranslation && line.translation && (
+                      <p className="text-xs text-indigo-700 font-normal pt-1 border-t border-slate-200/50">
+                        {line.translation}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-medium text-[#160F2E] leading-relaxed whitespace-pre-line">
@@ -122,8 +281,8 @@ export const ListeningResultView: React.FC<ListeningResultViewProps> = ({
             </div>
           )}
 
-          {/* Translation in Portuguese */}
-          {showTranslation && track.transcriptTranslation && (
+          {/* Translation in Portuguese (Overall fallback) */}
+          {showTranslation && track.transcriptTranslation && !isDialogue && (
             <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 text-xs text-[#362D59] font-medium leading-relaxed whitespace-pre-line space-y-1">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">
                 Tradução de Apoio:

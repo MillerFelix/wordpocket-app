@@ -426,7 +426,7 @@ export function gradeActivity(
         return gradeSpeakingItem(q as SpeakingQuestion, userAns);
       default:
         return {
-          questionId: q.id,
+          questionId: (q as any).id,
           isCorrect: false,
           scorePercent: 0,
           userAnswer: userAns,

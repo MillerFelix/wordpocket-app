@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Play, 
   Pause, 
@@ -7,7 +7,12 @@ import {
   VolumeX, 
   Lock, 
   Sparkles, 
-  Headphones 
+  Headphones,
+  Users,
+  Mic,
+  ChevronDown,
+  ChevronUp,
+  Info
 } from 'lucide-react';
 import { ListeningTrack } from '../../../types/activity';
 import { 
@@ -15,7 +20,12 @@ import {
   stopSpeech, 
   pauseSpeech, 
   resumeSpeech, 
-  isSpeechSupported 
+  isSpeechSupported,
+  playDialogueSequence,
+  speakDialogueLine,
+  getDialogueVoicesCapability,
+  inferSpeakerGender,
+  DialoguePlaybackController
 } from '../../../utils/speech';
 
 interface AudioPlayerCardProps {
@@ -33,21 +43,64 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Estados específicos para diálogos multi-voz
+  const [activeLineIndex, setActiveLineIndex] = useState<number | null>(null);
+  const [activeSpeaker, setActiveSpeaker] = useState<string | null>(null);
+  const [playingSingleLineIndex, setPlayingSingleLineIndex] = useState<number | null>(null);
+  const [showIndividualLines, setShowIndividualLines] = useState<boolean>(false);
+  const [audioCapability, setAudioCapability] = useState(() => getDialogueVoicesCapability());
+
   const isMountedRef = useRef<boolean>(true);
+  const dialogueControllerRef = useRef<DialoguePlaybackController | null>(null);
+
+  const isDialogue = Boolean(track.dialogueLines && track.dialogueLines.length > 0);
+  const dialogueLines = track.dialogueLines || [];
+
+  // Mapeia os interlocutores únicos com gênero associado
+  const interlocutors = useMemo(() => {
+    if (!dialogueLines.length) return [];
+    const map = new Map<string, { speaker: string; gender: 'male' | 'female' }>();
+    dialogueLines.forEach((l) => {
+      if (!map.has(l.speaker)) {
+        map.set(l.speaker, {
+          speaker: l.speaker,
+          gender: inferSpeakerGender(l.speaker, l.gender)
+        });
+      }
+    });
+    return Array.from(map.values());
+  }, [dialogueLines]);
 
   useEffect(() => {
     isMountedRef.current = true;
+    
+    // Atualiza capacidades caso vozes sejam carregadas assincronamente pelo navegador
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      const updateCap = () => {
+        if (isMountedRef.current) {
+          setAudioCapability(getDialogueVoicesCapability());
+        }
+      };
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = updateCap;
+      }
+    }
+
     return () => {
       isMountedRef.current = false;
       stopSpeech();
     };
   }, []);
 
-  // Para a fala ao mudar de atividade
+  // Para o áudio ao mudar de atividade
   useEffect(() => {
     stopSpeech();
+    dialogueControllerRef.current = null;
     setIsPlaying(false);
     setIsPaused(false);
+    setActiveLineIndex(null);
+    setActiveSpeaker(null);
+    setPlayingSingleLineIndex(null);
     setPlayCount(0);
     setErrorMessage(null);
   }, [track.spokenText]);
@@ -60,66 +113,125 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
       return;
     }
 
+    // Se estiver pausado, retoma
     if (isPaused) {
-      resumeSpeech();
+      if (isDialogue && dialogueControllerRef.current) {
+        dialogueControllerRef.current.resume();
+      } else {
+        resumeSpeech();
+      }
       setIsPaused(false);
       setIsPlaying(true);
       return;
     }
 
-    // Inicia nova reprodução do início
-    const baseRate = track.speechRate ?? 0.9;
-    const finalRate = Math.min(1.5, Math.max(0.6, baseRate * playbackSpeed));
+    // Se já havia fala isolada tocando, para
+    if (playingSingleLineIndex !== null) {
+      stopSpeech();
+      setPlayingSingleLineIndex(null);
+    }
 
-    const result = speakEnglish(track.spokenText, {
-      rate: finalRate,
-      onStart: () => {
-        if (!isMountedRef.current) return;
-        setIsPlaying(true);
-        setIsPaused(false);
-      },
-      onEnd: () => {
-        if (!isMountedRef.current) return;
-        setIsPlaying(false);
-        setIsPaused(false);
-      },
-      onError: (err) => {
-        if (!isMountedRef.current) return;
-        setIsPlaying(false);
-        setIsPaused(false);
-        if (err && err.error !== 'interrupted' && err.error !== 'canceled') {
-          setErrorMessage('Não foi possível concluir o áudio. Tente novamente.');
+    if (isDialogue) {
+      // Reprodução sequencial do diálogo multi-voz com vozes atribuídas consistentemente
+      dialogueControllerRef.current = playDialogueSequence(dialogueLines, {
+        speedMultiplier: playbackSpeed,
+        onLineStart: (index, line) => {
+          if (!isMountedRef.current) return;
+          setActiveLineIndex(index);
+          setActiveSpeaker(line.speaker);
+          setIsPlaying(true);
+          setIsPaused(false);
+        },
+        onLineEnd: () => {
+          if (!isMountedRef.current) return;
+        },
+        onComplete: () => {
+          if (!isMountedRef.current) return;
+          setIsPlaying(false);
+          setIsPaused(false);
+          setActiveLineIndex(null);
+          setActiveSpeaker(null);
+          dialogueControllerRef.current = null;
+        },
+        onError: (err: any) => {
+          if (!isMountedRef.current) return;
+          setIsPlaying(false);
+          setIsPaused(false);
+          setActiveLineIndex(null);
+          setActiveSpeaker(null);
+          dialogueControllerRef.current = null;
+          if (err && err.error !== 'interrupted' && err.error !== 'canceled') {
+            setErrorMessage('Não foi possível concluir o áudio do diálogo. Tente novamente.');
+          }
         }
-      }
-    });
+      });
 
-    if (result.success) {
       setIsPlaying(true);
       setIsPaused(false);
       setPlayCount((prev) => prev + 1);
     } else {
-      setIsPlaying(false);
-      setIsPaused(false);
-      setErrorMessage(result.message || 'Erro ao iniciar áudio.');
+      // Reprodução de áudio monólogo/narração
+      const baseRate = track.speechRate ?? 0.9;
+      const finalRate = Math.min(1.5, Math.max(0.6, baseRate * playbackSpeed));
+
+      const result = speakEnglish(track.spokenText, {
+        rate: finalRate,
+        onStart: () => {
+          if (!isMountedRef.current) return;
+          setIsPlaying(true);
+          setIsPaused(false);
+        },
+        onEnd: () => {
+          if (!isMountedRef.current) return;
+          setIsPlaying(false);
+          setIsPaused(false);
+        },
+        onError: (err) => {
+          if (!isMountedRef.current) return;
+          setIsPlaying(false);
+          setIsPaused(false);
+          if (err && err.error !== 'interrupted' && err.error !== 'canceled') {
+            setErrorMessage('Não foi possível concluir o áudio. Tente novamente.');
+          }
+        }
+      });
+
+      if (result.success) {
+        setIsPlaying(true);
+        setIsPaused(false);
+        setPlayCount((prev) => prev + 1);
+      } else {
+        setIsPlaying(false);
+        setIsPaused(false);
+        setErrorMessage(result.message || 'Erro ao iniciar áudio.');
+      }
     }
   };
 
   const handlePause = () => {
-    pauseSpeech();
+    if (isDialogue && dialogueControllerRef.current) {
+      dialogueControllerRef.current.pause();
+    } else {
+      pauseSpeech();
+    }
     setIsPaused(true);
     setIsPlaying(false);
   };
 
   const handleRestart = () => {
     stopSpeech();
+    dialogueControllerRef.current = null;
     setIsPaused(false);
     setIsPlaying(false);
+    setActiveLineIndex(null);
+    setActiveSpeaker(null);
+    setPlayingSingleLineIndex(null);
 
-    // Pequeno timeout para o sintetizador resetar no navegador
+    // Timeout para o sintetizador do navegador reiniciar completamente
     setTimeout(() => {
       if (!isMountedRef.current) return;
       handlePlayOrResume();
-    }, 80);
+    }, 90);
   };
 
   const handleSpeedChange = (speed: number) => {
@@ -127,20 +239,61 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
     // Se estiver tocando, reinicia com a nova velocidade
     if (isPlaying) {
       stopSpeech();
+      dialogueControllerRef.current = null;
       setIsPaused(false);
       setIsPlaying(false);
+      setActiveLineIndex(null);
+      setActiveSpeaker(null);
       setTimeout(() => {
         if (!isMountedRef.current) return;
-        const baseRate = track.speechRate ?? 0.9;
-        const finalRate = Math.min(1.5, Math.max(0.6, baseRate * speed));
-        speakEnglish(track.spokenText, {
-          rate: finalRate,
-          onStart: () => setIsPlaying(true),
-          onEnd: () => setIsPlaying(false),
-          onError: () => setIsPlaying(false)
-        });
-        setIsPlaying(true);
-      }, 80);
+        handlePlayOrResume();
+      }, 90);
+    }
+  };
+
+  // Reproduz uma fala individual do diálogo sob demanda
+  const handlePlaySingleLine = (index: number) => {
+    const line = dialogueLines[index];
+    if (!line) return;
+
+    // Se esta mesma fala já está tocando, para
+    if (playingSingleLineIndex === index) {
+      stopSpeech();
+      setPlayingSingleLineIndex(null);
+      return;
+    }
+
+    // Para áudio geral se estiver tocando
+    if (isPlaying) {
+      stopSpeech();
+      dialogueControllerRef.current = null;
+      setIsPlaying(false);
+      setIsPaused(false);
+      setActiveLineIndex(null);
+      setActiveSpeaker(null);
+    }
+
+    setPlayingSingleLineIndex(index);
+
+    const result = speakDialogueLine(line, undefined, {
+      rate: playbackSpeed,
+      onStart: () => {
+        if (!isMountedRef.current) return;
+        setPlayingSingleLineIndex(index);
+      },
+      onEnd: () => {
+        if (!isMountedRef.current) return;
+        setPlayingSingleLineIndex(null);
+      },
+      onError: () => {
+        if (!isMountedRef.current) return;
+        setPlayingSingleLineIndex(null);
+      }
+    });
+
+    if (!result.success) {
+      setPlayingSingleLineIndex(null);
+      setErrorMessage(result.message || 'Não foi possível reproduzir a fala individual.');
     }
   };
 
@@ -154,7 +307,7 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
           </div>
           <div>
             <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#52456F] block">
-              Áudio da Atividade
+              {isDialogue ? 'Diálogo com Vozes Distintas' : 'Áudio da Atividade'}
             </span>
             <h2 className="text-base sm:text-lg font-black text-[#160F2E] leading-tight">
               {track.title || activityTitle}
@@ -170,23 +323,73 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
         )}
       </div>
 
-      {/* Central Audio Playback Box */}
-      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-[#160F2E] text-white space-y-5 shadow-inner">
-        {/* Animated Wave / Status */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Volume2 className={`w-5 h-5 ${isPlaying ? 'text-[#176BFF] animate-pulse' : 'text-slate-400'}`} />
-            <span className="text-xs font-bold text-slate-300">
-              {isPlaying 
-                ? 'Reproduzindo áudio em inglês...' 
-                : isPaused 
-                ? 'Áudio pausado' 
-                : 'Pronto para ouvir'}
+      {/* Interlocutors Banner (When dialogue) */}
+      {isDialogue && interlocutors.length > 0 && (
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#160F2E]">
+              <Users className="w-4 h-4 text-[#176BFF]" />
+              <span>Interlocutores do Diálogo</span>
+            </div>
+            <span className="text-[11px] text-[#52456F] font-medium">
+              Voz consistente por personagem
             </span>
           </div>
 
+          <div className="flex flex-wrap gap-2">
+            {interlocutors.map((inter) => {
+              const isSpeakingThis = isPlaying && activeSpeaker === inter.speaker;
+              return (
+                <div
+                  key={inter.speaker}
+                  className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    isSpeakingThis
+                      ? 'bg-[#176BFF] text-white shadow-md ring-2 ring-[#176BFF]/40 scale-105'
+                      : 'bg-white text-[#160F2E] border border-slate-200 shadow-xs'
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${isSpeakingThis ? 'bg-amber-300 animate-ping' : inter.gender === 'female' ? 'bg-pink-400' : 'bg-blue-400'}`} />
+                  <span>{inter.speaker}</span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold ${
+                    isSpeakingThis ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#52456F]'
+                  }`}>
+                    {inter.gender === 'female' ? 'Voz Feminina' : 'Voz Masculina'}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Central Audio Playback Box */}
+      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-[#160F2E] text-white space-y-5 shadow-inner">
+        {/* Animated Wave / Status */}
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <Volume2 className={`w-5 h-5 shrink-0 ${isPlaying ? 'text-[#176BFF] animate-pulse' : 'text-slate-400'}`} />
+            <div className="min-w-0">
+              <span className="text-xs font-bold text-slate-200 block truncate">
+                {isPlaying ? (
+                  activeSpeaker ? (
+                    <span className="flex items-center gap-1.5 text-amber-300">
+                      <Mic className="w-3.5 h-3.5 animate-bounce" />
+                      <span>{activeSpeaker} falando agora {activeLineIndex !== null ? `(fala ${activeLineIndex + 1} de ${dialogueLines.length})` : ''}</span>
+                    </span>
+                  ) : (
+                    'Reproduzindo áudio em inglês...'
+                  )
+                ) : isPaused ? (
+                  'Áudio pausado'
+                ) : (
+                  'Pronto para ouvir o áudio'
+                )}
+              </span>
+            </div>
+          </div>
+
           {/* Waveform Bars Animation */}
-          <div className="flex items-center gap-1 h-5 px-2">
+          <div className="flex items-center gap-1 h-5 px-2 shrink-0">
             {[40, 75, 55, 95, 60, 85, 45, 90].map((h, i) => (
               <span
                 key={i}
@@ -223,7 +426,15 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
               className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl bg-[#176BFF] hover:bg-[#1258d4] text-white font-black text-sm shadow-colored-blue transition active:scale-95 cursor-pointer"
             >
               <Play className="w-5 h-5 fill-current" />
-              <span>{isPaused ? 'Continuar' : playCount > 0 ? 'Ouvir Novamente' : 'Ouvir Áudio'}</span>
+              <span>
+                {isPaused 
+                  ? 'Continuar' 
+                  : playCount > 0 
+                  ? 'Ouvir Novamente' 
+                  : isDialogue 
+                  ? 'Ouvir Diálogo Completo' 
+                  : 'Ouvir Áudio'}
+              </span>
             </button>
           )}
 
@@ -278,7 +489,98 @@ export const AudioPlayerCard: React.FC<AudioPlayerCardProps> = ({
             ))}
           </div>
         </div>
+
+        {/* Technical strategy note */}
+        {isDialogue && (
+          <div className="pt-2 border-t border-white/5 flex items-center gap-1.5 text-[11px] text-slate-400">
+            <Info className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+            <span>
+              Síntese nativa: {audioCapability.strategyDescription}
+            </span>
+          </div>
+        )}
       </div>
+
+      {/* Individual Line Playback Section (Dialogue only) */}
+      {isDialogue && dialogueLines.length > 0 && (
+        <div className="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/60">
+          <button
+            type="button"
+            onClick={() => setShowIndividualLines((prev) => !prev)}
+            className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-slate-100/70 transition cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <Mic className="w-4 h-4 text-[#176BFF]" />
+              <span className="text-xs font-bold text-[#160F2E]">
+                Treinar Falas Individuais ({dialogueLines.length} falas)
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-[#52456F]">
+              <span>{showIndividualLines ? 'Ocultar' : 'Praticar cada fala'}</span>
+              {showIndividualLines ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </div>
+          </button>
+
+          {showIndividualLines && (
+            <div className="p-4 pt-1 space-y-2 border-t border-slate-200/60">
+              <p className="text-[11px] text-[#52456F] font-medium mb-2">
+                Ouça novamente cada fala de forma isolada com a voz do personagem, sem revelar o texto escrito antes de responder:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {dialogueLines.map((line, idx) => {
+                  const isCurrentSingle = playingSingleLineIndex === idx;
+                  const isLineInDialogue = isPlaying && activeLineIndex === idx;
+                  const gender = inferSpeakerGender(line.speaker, line.gender);
+
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      aria-label={`Ouvir fala ${idx + 1}: ${line.speaker}`}
+                      onClick={() => handlePlaySingleLine(idx)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-left border transition text-xs ${
+                        isCurrentSingle || isLineInDialogue
+                          ? 'bg-[#176BFF] text-white border-[#176BFF] shadow-xs'
+                          : 'bg-white text-[#160F2E] border-slate-200 hover:bg-slate-100'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`w-6 h-6 rounded-lg flex items-center justify-center font-bold text-[11px] ${
+                          isCurrentSingle || isLineInDialogue ? 'bg-white/20 text-white' : 'bg-slate-100 text-[#52456F]'
+                        }`}>
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <span className="font-bold block">{line.speaker}</span>
+                          <span className={`text-[10px] ${
+                            isCurrentSingle || isLineInDialogue ? 'text-blue-100' : 'text-[#52456F]'
+                          }`}>
+                            {gender === 'female' ? 'Voz Feminina' : 'Voz Masculina'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className={`p-1.5 rounded-lg ${
+                        isCurrentSingle || isLineInDialogue ? 'bg-white/20' : 'bg-slate-100'
+                      }`}>
+                        {isCurrentSingle ? (
+                          <Pause className="w-3.5 h-3.5 fill-current" />
+                        ) : (
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Error Banner */}
       {errorMessage && (

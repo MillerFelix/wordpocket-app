@@ -1,5 +1,7 @@
 import { PracticeSkillId } from './index';
 
+export type { PracticeSkillId };
+
 /**
  * Níveis de proficiência pedagógica do CEFR adotados no Word Pocket
  */
@@ -174,6 +176,9 @@ export interface DialogueLine {
   speaker: string;
   text: string;
   translation?: string;
+  gender?: 'male' | 'female';
+  speechRate?: number;
+  pitch?: number;
 }
 
 /**

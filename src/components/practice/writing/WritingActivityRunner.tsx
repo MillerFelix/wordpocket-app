@@ -96,7 +96,6 @@ export const WritingActivityRunner: React.FC<WritingActivityRunnerProps> = ({
   }
 
   const answeredCount = Object.values(answers).filter((a) => a.trim().length > 0).length;
-  const progressPercent = Math.round(((currentIndex + 1) / totalQuestions) * 100);
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto animate-in fade-in duration-300">
