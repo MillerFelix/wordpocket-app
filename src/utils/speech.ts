@@ -8,18 +8,44 @@ export function isSpeechSupported(): boolean {
 }
 
 let cachedVoices: SpeechSynthesisVoice[] = [];
+let cachedEnglishVoice: SpeechSynthesisVoice | null = null;
+let cachedPortugueseVoice: SpeechSynthesisVoice | null = null;
+let currentUtterance: SpeechSynthesisUtterance | null = null;
+
+function resolveVoices(): void {
+  try {
+    cachedVoices = window.speechSynthesis.getVoices() || [];
+    if (cachedVoices.length > 0) {
+      const enVoices = cachedVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+      cachedEnglishVoice = enVoices.find(v => v.lang === 'en-US') || enVoices.find(v => v.lang === 'en-GB') || enVoices[0] || null;
+      cachedPortugueseVoice = cachedVoices.find(v => v.lang === 'pt-BR') || cachedVoices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt')) || null;
+    }
+  } catch {
+    cachedVoices = [];
+  }
+}
+
+/**
+ * Prepara o mecanismo de áudio nativo para resposta imediata ao primeiro toque/clique.
+ */
+export function warmUpSpeech(): void {
+  if (!isSpeechSupported()) return;
+  try {
+    resolveVoices();
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+  } catch {}
+}
+
+export function getActiveUtterance(): SpeechSynthesisUtterance | null {
+  return currentUtterance;
+}
 
 if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-  const loadVoices = () => {
-    try {
-      cachedVoices = window.speechSynthesis.getVoices();
-    } catch {
-      cachedVoices = [];
-    }
-  };
-  loadVoices();
+  resolveVoices();
   if (window.speechSynthesis.onvoiceschanged !== undefined) {
-    window.speechSynthesis.onvoiceschanged = loadVoices;
+    window.speechSynthesis.onvoiceschanged = resolveVoices;
   }
 }
 
@@ -36,20 +62,28 @@ export function getEnglishVoices(): SpeechSynthesisVoice[] {
 }
 
 export function getEnglishVoice(): SpeechSynthesisVoice | null {
+  if (cachedEnglishVoice) return cachedEnglishVoice;
   const englishVoices = getEnglishVoices();
   if (englishVoices.length === 0) return null;
   
-  // Prefer US English, then GB English, then any English
   const usVoice = englishVoices.find(v => v.lang === 'en-US');
-  if (usVoice) return usVoice;
+  if (usVoice) {
+    cachedEnglishVoice = usVoice;
+    return usVoice;
+  }
 
   const gbVoice = englishVoices.find(v => v.lang === 'en-GB');
-  if (gbVoice) return gbVoice;
+  if (gbVoice) {
+    cachedEnglishVoice = gbVoice;
+    return gbVoice;
+  }
 
+  cachedEnglishVoice = englishVoices[0];
   return englishVoices[0];
 }
 
 export function getPortugueseVoice(): SpeechSynthesisVoice | null {
+  if (cachedPortugueseVoice) return cachedPortugueseVoice;
   if (!isSpeechSupported()) return null;
   let voices: SpeechSynthesisVoice[] = [];
   try {
@@ -60,10 +94,16 @@ export function getPortugueseVoice(): SpeechSynthesisVoice | null {
   }
   
   const ptBr = voices.find(v => v.lang === 'pt-BR');
-  if (ptBr) return ptBr;
+  if (ptBr) {
+    cachedPortugueseVoice = ptBr;
+    return ptBr;
+  }
 
   const anyPt = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
-  if (anyPt) return anyPt;
+  if (anyPt) {
+    cachedPortugueseVoice = anyPt;
+    return anyPt;
+  }
 
   return null;
 }
@@ -314,6 +354,7 @@ export function stopSpeech(): void {
     } catch {}
     globalActiveDialogueController = null;
   }
+  currentUtterance = null;
   if (isSpeechSupported()) {
     try {
       window.speechSynthesis.cancel();
@@ -375,7 +416,12 @@ export function speakEnglish(text: string, options?: SpeakOptions): SpeechResult
 
   try {
     window.speechSynthesis.cancel();
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+
     const utterance = new SpeechSynthesisUtterance(cleanText);
+    currentUtterance = utterance;
     
     const voice = getEnglishVoice();
     if (voice) {
@@ -386,19 +432,22 @@ export function speakEnglish(text: string, options?: SpeakOptions): SpeechResult
     utterance.rate = options?.rate ?? 0.9; // Articulação clara para estudantes
     utterance.pitch = options?.pitch ?? 1.0;
 
-    if (options?.onStart) {
-      utterance.onstart = options.onStart;
-    }
-    if (options?.onEnd) {
-      utterance.onend = options.onEnd;
-    }
-    if (options?.onError) {
-      utterance.onerror = options.onError;
-    }
+    utterance.onstart = () => {
+      options?.onStart?.();
+    };
+    utterance.onend = () => {
+      currentUtterance = null;
+      options?.onEnd?.();
+    };
+    utterance.onerror = (err) => {
+      currentUtterance = null;
+      options?.onError?.(err);
+    };
 
     window.speechSynthesis.speak(utterance);
     return { success: true };
   } catch {
+    currentUtterance = null;
     return {
       success: false,
       message: 'Não foi possível reproduzir a pronúncia no momento.'
@@ -406,7 +455,7 @@ export function speakEnglish(text: string, options?: SpeakOptions): SpeechResult
   }
 }
 
-export function speakPortuguese(text: string): SpeechResult {
+export function speakPortuguese(text: string, options?: SpeakOptions): SpeechResult {
   if (!isSpeechSupported()) {
     return {
       success: false,
@@ -424,18 +473,37 @@ export function speakPortuguese(text: string): SpeechResult {
 
   try {
     window.speechSynthesis.cancel();
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+
     const utterance = new SpeechSynthesisUtterance(cleanText);
+    currentUtterance = utterance;
+
     const voice = getPortugueseVoice();
     if (voice) {
       utterance.voice = voice;
     }
     utterance.lang = 'pt-BR';
-    utterance.rate = 0.95;
-    utterance.pitch = 1.0;
+    utterance.rate = options?.rate ?? 0.95;
+    utterance.pitch = options?.pitch ?? 1.0;
+
+    utterance.onstart = () => {
+      options?.onStart?.();
+    };
+    utterance.onend = () => {
+      currentUtterance = null;
+      options?.onEnd?.();
+    };
+    utterance.onerror = (err) => {
+      currentUtterance = null;
+      options?.onError?.(err);
+    };
 
     window.speechSynthesis.speak(utterance);
     return { success: true };
   } catch {
+    currentUtterance = null;
     return {
       success: false,
       message: 'Não foi possível reproduzir a pronúncia no momento.'
@@ -443,8 +511,8 @@ export function speakPortuguese(text: string): SpeechResult {
   }
 }
 
-export function speakText(text: string, lang: 'en' | 'pt' = 'en'): SpeechResult {
-  return lang === 'pt' ? speakPortuguese(text) : speakEnglish(text);
+export function speakText(text: string, lang: 'en' | 'pt' = 'en', options?: SpeakOptions): SpeechResult {
+  return lang === 'pt' ? speakPortuguese(text, options) : speakEnglish(text, options);
 }
 
 export interface DialoguePlaybackController {

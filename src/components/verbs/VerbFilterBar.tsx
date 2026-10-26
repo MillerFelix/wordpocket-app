@@ -37,7 +37,7 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Buscar verbo em inglês ou tradução (ex: go, went, speak, quebrar)..."
+            placeholder="Buscar verbo em inglês..."
             className="w-full pl-11 pr-10 py-3 text-sm bg-white/85 backdrop-blur-md hover:border-[#176BFF]/40 focus:border-[#176BFF] focus:bg-white focus:ring-4 focus:ring-[#176BFF]/10 rounded-2xl border border-white/90 shadow-2xs outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
           />
           {search && (

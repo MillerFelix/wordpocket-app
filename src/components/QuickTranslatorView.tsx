@@ -4,12 +4,12 @@ import {
   Languages, 
   Clipboard, 
   X, 
-  Loader2, 
   Sparkles
 } from 'lucide-react';
 import { translateText, TranslationDirection, TranslationResult } from '../utils/translator';
 import { TranslationResultCard } from './translator/TranslationResultCard';
 import { TranslationErrorCard } from './translator/TranslationErrorCard';
+import { LoadingIndicator } from './shared/LoadingIndicator';
 
 interface QuickTranslatorViewProps {
   initialText?: string;
@@ -244,10 +244,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
               }`}
             >
               {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
-                  <span>Traduzindo...</span>
-                </>
+                <LoadingIndicator size="sm" variant="white" label="Traduzindo..." labelPosition="right" />
               ) : (
                 <>
                   <Languages className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.3]" />
@@ -263,13 +260,8 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
 
         {/* Estado de carregamento */}
         {isLoading && (
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 border border-white/90 shadow-soft-card animate-pulse space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="h-4 w-36 bg-[#FFEAE1] rounded-full" />
-              <div className="h-7 w-20 bg-white/90 rounded-xl" />
-            </div>
-            <div className="h-6 w-3/4 bg-slate-200/80 rounded-lg" />
-            <div className="h-4 w-1/2 bg-slate-200/60 rounded-lg" />
+          <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-7 border border-[#FFD2C2] shadow-soft-card flex flex-col items-center justify-center space-y-3 animate-in fade-in duration-200">
+            <LoadingIndicator size="lg" label="Traduzindo termo em tempo real..." />
           </div>
         )}
 

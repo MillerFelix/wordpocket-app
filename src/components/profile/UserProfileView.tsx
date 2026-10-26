@@ -21,6 +21,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { getUserSkillProgress } from '../../services/progressService';
 import { SkillProgress } from '../../types/progress';
 import { PracticeSkillId, TabType } from '../../types';
+import { LoadingIndicator } from '../shared/LoadingIndicator';
 
 interface UserProfileViewProps {
   onNavigate: (tab: TabType) => void;
@@ -246,8 +247,8 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
         </div>
 
         {loadingProgress ? (
-          <div className="p-8 text-center text-xs text-[#52456F]">
-            Carregando progresso...
+          <div className="py-12 flex items-center justify-center">
+            <LoadingIndicator size="md" label="Carregando progresso consolidado..." />
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -111,16 +111,18 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
         <tr className="bg-gradient-to-r from-[#F6F1FF] to-[#EFF7FE] border-b border-[#E2D7F8]">
           <td colSpan={5} className="py-2.5 sm:py-3 px-3 sm:px-6">
             <div className="flex items-start justify-between gap-3 sm:gap-4 bg-white/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-white/90 shadow-2xs">
-              <div className="space-y-1">
+              <div className="space-y-1 min-w-0 flex-1">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-[#6938F5] flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-[#FFD447]" />
                   Exemplo de uso natural em inglês
                 </span>
-                <p className="text-xs sm:text-sm font-semibold text-[#160F2E] italic leading-snug">
+                <p className="text-xs sm:text-sm font-semibold text-[#160F2E] italic leading-snug break-words">
                   "{verb.example}"
                 </p>
               </div>
-              <PronounceButton text={verb.example} size="sm" showLabel />
+              <div className="shrink-0 pt-0.5">
+                <PronounceButton text={verb.example} size="sm" showLabel />
+              </div>
             </div>
           </td>
         </tr>

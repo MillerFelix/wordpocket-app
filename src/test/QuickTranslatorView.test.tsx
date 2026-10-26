@@ -106,7 +106,7 @@ describe('QuickTranslatorView Component Tests', () => {
     const listenBtn = screen.getByRole('button', { name: /Ouvir/i });
     fireEvent.click(listenBtn);
 
-    expect(speakSpy).toHaveBeenCalledWith(expect.stringContaining('ir'), 'pt');
+    expect(speakSpy).toHaveBeenCalledWith(expect.stringContaining('ir'), 'pt', expect.any(Object));
   });
 
   it('clears input text and result when clicking Limpar', async () => {
