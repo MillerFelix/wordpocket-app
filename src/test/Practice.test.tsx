@@ -43,7 +43,7 @@ describe('PracticeView & 4 English Skills Hub', () => {
 
     // Listening Activities Hub controls
     expect(screen.getByText('Atividades de Escuta (Listening)')).toBeInTheDocument();
-    expect(screen.getByText(/12 atividades disponíveis/i)).toBeInTheDocument();
+    expect(screen.getByText(/45 atividades disponíveis/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /A1 — Iniciante/i })).toBeInTheDocument();
 
     // Return back to hub
@@ -65,7 +65,7 @@ describe('PracticeView & 4 English Skills Hub', () => {
 
     // Speaking Activities Hub controls
     expect(screen.getByText('Atividades de Fala (Speaking)')).toBeInTheDocument();
-    expect(screen.getByText(/12 atividades disponíveis/i)).toBeInTheDocument();
+    expect(screen.getByText(/45 atividades disponíveis/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /A1 — Iniciante/i })).toBeInTheDocument();
 
     const a2Btn = screen.getByRole('button', { name: /A2 — Básico/i });

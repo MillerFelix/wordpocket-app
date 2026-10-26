@@ -14,17 +14,17 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
   });
 
   describe('1. Activity Content & Structure Validation', () => {
-    it('contains 12 high-quality activities evenly distributed across A1, A2, and B1', () => {
+    it('contains 45 high-quality activities evenly distributed across A1, A2, and B1', () => {
       const all = writingService.getActivities();
-      expect(all.length).toBe(12);
+      expect(all.length).toBe(45);
 
       const a1 = writingService.getActivities('a1');
       const a2 = writingService.getActivities('a2');
       const b1 = writingService.getActivities('b1');
 
-      expect(a1.length).toBe(4);
-      expect(a2.length).toBe(4);
-      expect(b1.length).toBe(4);
+      expect(a1.length).toBe(15);
+      expect(a2.length).toBe(15);
+      expect(b1.length).toBe(15);
     });
 
     it('covers all 4 writing activity mechanics with structured data and learning objectives', () => {
@@ -360,7 +360,7 @@ describe('Writing Pillar & Extensible Activity Framework Tests', () => {
       );
 
       // Should show summary badge and activities
-      expect(screen.getByText(/12 atividades/i)).toBeInTheDocument();
+      expect(screen.getByText(/45 atividades/i)).toBeInTheDocument();
       expect(screen.getByText('Construindo Frases de Rotina')).toBeInTheDocument();
 
       // Click level A2 filter

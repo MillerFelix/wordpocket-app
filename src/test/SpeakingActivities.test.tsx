@@ -74,17 +74,17 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
   });
 
   describe('1. Activity Content & Structure Validation', () => {
-    it('contains 12 speaking activities evenly distributed across A1, A2, and B1', () => {
+    it('contains 45 speaking activities evenly distributed across A1, A2, and B1', () => {
       const all = speakingService.getActivities();
-      expect(all.length).toBe(12);
+      expect(all.length).toBe(45);
 
       const a1 = speakingService.getActivities('a1');
       const a2 = speakingService.getActivities('a2');
       const b1 = speakingService.getActivities('b1');
 
-      expect(a1.length).toBe(4);
-      expect(a2.length).toBe(4);
-      expect(b1.length).toBe(4);
+      expect(a1.length).toBe(15);
+      expect(a2.length).toBe(15);
+      expect(b1.length).toBe(15);
     });
 
     it('covers all 4 speaking formats with complete instructional and pedagogical metadata', () => {
@@ -115,7 +115,7 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
 
     it('validates sound_training activities have deterministic perception questions with minimal pairs', () => {
       const soundActs = SPEAKING_ACTIVITIES.filter((act) => act.type === 'sound_training');
-      expect(soundActs.length).toBe(3);
+      expect(soundActs.length).toBe(12);
 
       soundActs.forEach((act) => {
         act.questions.forEach((q) => {
@@ -131,7 +131,7 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
       const conversationalActs = SPEAKING_ACTIVITIES.filter(
         (act) => act.type === 'rapid_response' || act.type === 'roleplay_situation'
       );
-      expect(conversationalActs.length).toBe(6);
+      expect(conversationalActs.length).toBe(21);
 
       conversationalActs.forEach((act) => {
         act.questions.forEach((q) => {
@@ -343,22 +343,22 @@ describe('Speaking Pillar & Oral Production Framework Tests', () => {
       render(<SpeakingActivitiesHub onSelectActivity={vi.fn()} />);
 
       expect(screen.getByText('Atividades de Fala (Speaking)')).toBeInTheDocument();
-      expect(screen.getByText(/12 atividades disponíveis/i)).toBeInTheDocument();
+      expect(screen.getByText(/45 atividades disponíveis/i)).toBeInTheDocument();
 
       // Click A1 filter
       const a1Tab = screen.getByRole('button', { name: /A1 — Iniciante/i });
       fireEvent.click(a1Tab);
 
-      // Should show 4 cards
+      // Should show 15 cards
       const startButtons = screen.getAllByRole('button', { name: /Iniciar/i });
-      expect(startButtons.length).toBe(4);
+      expect(startButtons.length).toBe(15);
 
       // Click B1 filter
       const b1Tab = screen.getByRole('button', { name: /B1 — Intermediário/i });
       fireEvent.click(b1Tab);
 
       const b1StartButtons = screen.getAllByRole('button', { name: /Iniciar/i });
-      expect(b1StartButtons.length).toBe(4);
+      expect(b1StartButtons.length).toBe(15);
     });
 
     it('navigates turns and completes an activity showing result summary and self-evaluation checklist', async () => {

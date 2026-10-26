@@ -14,17 +14,17 @@ describe('Reading Pillar & Extensible Activity Framework Tests', () => {
   });
 
   describe('1. Activity Content & Structure Validation', () => {
-    it('contains 12 high-quality reading activities evenly distributed across A1, A2, and B1', () => {
+    it('contains 45 high-quality reading activities evenly distributed across A1, A2, and B1', () => {
       const all = readingService.getActivities();
-      expect(all.length).toBe(12);
+      expect(all.length).toBe(45);
 
       const a1 = readingService.getActivities('a1');
       const a2 = readingService.getActivities('a2');
       const b1 = readingService.getActivities('b1');
 
-      expect(a1.length).toBe(4);
-      expect(a2.length).toBe(4);
-      expect(b1.length).toBe(4);
+      expect(a1.length).toBe(15);
+      expect(a2.length).toBe(15);
+      expect(b1.length).toBe(15);
     });
 
     it('covers all 4 reading formats with passages, glossaries, and multiple-choice questions', () => {
@@ -166,7 +166,7 @@ describe('Reading Pillar & Extensible Activity Framework Tests', () => {
       );
 
       // Should show summary and initial activities
-      expect(screen.getByText(/12 atividades/i)).toBeInTheDocument();
+      expect(screen.getByText(/45 atividades/i)).toBeInTheDocument();
       expect(screen.getByText('A Rotina Matinal de David')).toBeInTheDocument();
 
       // Click level B1 filter

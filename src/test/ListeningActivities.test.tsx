@@ -34,17 +34,17 @@ describe('Listening Pillar & Audio Practice Framework Tests', () => {
   });
 
   describe('1. Activity Content & Structure Validation', () => {
-    it('contains 12 listening activities evenly distributed across A1, A2, and B1', () => {
+    it('contains 45 listening activities evenly distributed across A1, A2, and B1', () => {
       const all = listeningService.getActivities();
-      expect(all.length).toBe(12);
+      expect(all.length).toBe(45);
 
       const a1 = listeningService.getActivities('a1');
       const a2 = listeningService.getActivities('a2');
       const b1 = listeningService.getActivities('b1');
 
-      expect(a1.length).toBe(4);
-      expect(a2.length).toBe(4);
-      expect(b1.length).toBe(4);
+      expect(a1.length).toBe(15);
+      expect(a2.length).toBe(15);
+      expect(b1.length).toBe(15);
     });
 
     it('covers all 4 listening formats with audio tracks, spoken text, and transcripts', () => {
@@ -252,7 +252,7 @@ describe('Listening Pillar & Audio Practice Framework Tests', () => {
       );
 
       // Should show summary and initial activities
-      expect(screen.getByText(/12 atividades/i)).toBeInTheDocument();
+      expect(screen.getByText(/45 atividades/i)).toBeInTheDocument();
       expect(screen.getByText('Distinção de Sons: Vogais Curtas e Longas')).toBeInTheDocument();
 
       // Click level B1 filter
