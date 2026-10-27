@@ -145,7 +145,9 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
                 key={lvl.id}
                 type="button"
                 onClick={() => onLevelChange(lvl.id)}
-                className={`p-3 rounded-2xl text-left transition-all duration-150 border flex flex-col justify-between cursor-pointer ${
+                className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl text-left transition-all duration-150 border flex flex-col justify-between cursor-pointer ${
+                  lvl.id === 'all' ? 'col-span-2 sm:col-span-1' : ''
+                } ${
                   isSelected
                     ? 'bg-white border-[#176BFF] ring-2 ring-[#176BFF]/20 shadow-xs'
                     : 'bg-white/60 hover:bg-white border-white/80 text-[#52456F]'
@@ -295,12 +297,24 @@ export const ReadingActivitiesHub: React.FC<ReadingActivitiesHubProps> = ({
       )}
 
       {activities.length === 0 && (
-        <div className="p-8 rounded-3xl bg-white/80 border border-slate-200/80 text-center space-y-2">
-          <BookOpen className="w-8 h-8 text-slate-400 mx-auto" />
+        <div className="p-8 sm:p-10 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/90 shadow-soft-card text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#176BFF] flex items-center justify-center mx-auto">
+            <BookOpen className="w-6 h-6" />
+          </div>
           <h4 className="text-sm font-bold text-[#160F2E]">Nenhuma atividade encontrada</h4>
-          <p className="text-xs text-[#52456F]">
+          <p className="text-xs text-[#52456F] max-w-sm mx-auto">
             Tente selecionar outro nível ou formato de leitura nos filtros acima.
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              onLevelChange('all');
+              setSelectedFormat('all');
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#176BFF]/10 hover:bg-[#176BFF]/20 text-[#176BFF] text-xs font-bold transition cursor-pointer"
+          >
+            Ver todas as atividades
+          </button>
         </div>
       )}
 

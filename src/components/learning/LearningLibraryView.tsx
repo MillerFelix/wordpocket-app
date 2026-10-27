@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
-  BookOpen, 
   Layers, 
   ArrowLeft, 
   ArrowRight,
@@ -179,13 +178,13 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
       {/* Cabeçalho Minimalista e Leve */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-gradient-brand text-white flex items-center justify-center shadow-colored-blue shrink-0 ring-4 ring-white/80">
-            <BookOpen className="w-4 sm:w-5 h-4 sm:h-5 stroke-[2.3]" />
+          <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-gradient-to-br from-[#00BFA5] to-[#0A9B80] text-white flex items-center justify-center shadow-colored-teal shrink-0 ring-4 ring-white/80">
+            <Compass className="w-5 sm:w-6 h-5 sm:h-6 stroke-[2.3]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#176BFF]" />
-              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#176BFF]">
+              <span className="w-2 h-2 rounded-full bg-[#00BFA5]" />
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#009688]">
                 Biblioteca de Conhecimento • 37 Artigos
               </span>
             </div>
@@ -196,6 +195,11 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
               Consulte regras explicadas sem complicação, entenda os fundamentos e tire dúvidas com exemplos práticos.
             </p>
           </div>
+        </div>
+
+        <div className="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/80 backdrop-blur-md border border-white/90 shadow-2xs text-xs font-bold text-[#0A9B80]">
+          <Compass className="w-4 h-4 text-[#00BFA5]" />
+          <span>37 Artigos & 6 Categorias</span>
         </div>
       </div>
 
@@ -231,13 +235,13 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
           </div>
 
           {filteredArticles.length === 0 ? (
-            <div className="p-8 rounded-3xl bg-white border border-slate-200 text-center space-y-3 shadow-soft-card max-w-md mx-auto">
-              <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+            <div className="p-8 rounded-3xl bg-white/90 border border-slate-200/80 text-center space-y-3 shadow-soft-card max-w-md mx-auto">
+              <div className="w-12 h-12 rounded-2xl bg-[#E0F7F4] text-[#00BFA5] flex items-center justify-center mx-auto shadow-2xs">
                 <Search className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-[#160F2E]">Nenhum artigo encontrado</h3>
-                <p className="text-xs text-[#52456F] mt-1">
+                <p className="text-xs text-[#52456F] mt-1 leading-relaxed">
                   Não encontramos resultados para &ldquo;{searchQuery}&rdquo;. Tente buscar por outros termos como &ldquo;to be&rdquo;, &ldquo;do&rdquo;, &ldquo;passado&rdquo; ou &ldquo;preposições&rdquo;.
                 </p>
               </div>
@@ -287,9 +291,9 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
                 setSelectedLevel('all');
                 setCurrentPage(1);
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-[#176BFF] transition cursor-pointer shadow-2xs active:scale-95"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white text-[#160F2E] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 cursor-pointer group"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
+              <ArrowLeft className="w-4 h-4 text-[#00BFA5] group-hover:-translate-x-0.5 transition-transform" />
               <span>Voltar para categorias</span>
             </button>
 

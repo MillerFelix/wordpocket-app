@@ -97,13 +97,13 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-5 sm:space-y-6 animate-in fade-in duration-300">
       {/* Top Navigation Bar: Back Button & Breadcrumbs */}
       <div className="flex items-center justify-between gap-4">
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/80 hover:bg-white text-[#160F2E] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white text-[#160F2E] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 text-[#176BFF] group-hover:-translate-x-0.5 transition-transform" />
           <span>Voltar para Praticar Inglês</span>
@@ -115,7 +115,7 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
       </div>
 
       {/* Hero Header Card with Skill Identity Color */}
-      <div className={`relative overflow-hidden rounded-3xl p-6 sm:p-8 ${skill.gradientClass} text-white shadow-soft-card ring-1 ring-white/30`}>
+      <div className={`relative overflow-hidden rounded-3xl p-5 sm:p-6 lg:p-7 ${skill.gradientClass} text-white shadow-soft-card ring-1 ring-white/30`}>
         {/* Background Radial Shape */}
         <div className="absolute -right-6 -bottom-10 w-48 h-48 opacity-15 pointer-events-none">
           <svg viewBox="0 0 100 100" fill="currentColor">
@@ -123,17 +123,17 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
           </svg>
         </div>
 
-        <div className="max-w-2xl space-y-3 z-10 relative">
+        <div className="max-w-2xl space-y-2.5 z-10 relative">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold backdrop-blur-sm border border-white/25">
             <Icon className="w-3.5 h-3.5" />
             <span>Habilidade de {skill.namePt}</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
+          <h1 className="text-xl sm:text-3xl font-black tracking-tight text-white leading-tight">
             {skill.nameEn} — {skill.namePt}
           </h1>
 
-          <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed">
+          <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed max-w-xl">
             {skill.objective}
           </p>
         </div>
@@ -211,7 +211,7 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
                 key={other.id}
                 type="button"
                 onClick={() => onSelectOtherSkill(other.id)}
-                className="p-3.5 rounded-2xl bg-white/80 hover:bg-white border border-white/90 shadow-2xs transition group flex items-center justify-between text-left cursor-pointer"
+                className="p-3.5 sm:p-4 rounded-2xl bg-white/90 hover:bg-white border border-slate-200/80 hover:border-[#176BFF]/40 shadow-2xs hover:shadow-soft-card transition-all duration-150 group flex items-center justify-between text-left cursor-pointer active:scale-[0.99]"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -224,7 +224,7 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
                     <p className="text-xs font-bold text-[#160F2E] group-hover:text-[#176BFF] transition leading-tight">
                       {other.nameEn}
                     </p>
-                    <p className="text-[11px] text-[#52456F]">
+                    <p className="text-[11px] text-[#52456F] font-medium">
                       {other.namePt}
                     </p>
                   </div>

@@ -62,9 +62,9 @@ export const PracticeSkillCard: React.FC<PracticeSkillCardProps> = ({ skill, onS
         </div>
 
         {/* Highlight of activities */}
-        <div className="pt-1 border-t border-white/20 space-y-1">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-white/80 block">
-            Atividades em desenvolvimento:
+        <div className="pt-1.5 border-t border-white/20 space-y-1">
+          <span className="text-[10px] uppercase font-bold tracking-wider text-white/85 block">
+            Atividades práticas disponíveis:
           </span>
           <p className="text-xs text-white/95 leading-snug line-clamp-2">
             {skill.futureActivities.join(' • ')}

@@ -37,11 +37,11 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
     }
   }, [user]);
   return (
-    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-5 sm:space-y-6 animate-in fade-in duration-300">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div className="flex items-start gap-3.5">
-          <div className="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-gradient-brand text-white flex items-center justify-center shadow-colored-blue shrink-0 ring-4 ring-white/80">
+          <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-gradient-brand text-white flex items-center justify-center shadow-colored-blue shrink-0 ring-4 ring-white/80">
             <GraduationCap className="w-5 sm:w-6 h-5 sm:h-6 stroke-[2.3]" />
           </div>
           <div>
@@ -51,10 +51,10 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
                 Centro de Aprendizagem
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
+            <h1 className="text-xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
               Praticar Inglês
             </h1>
-            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-0.5 sm:mt-1 max-w-2xl leading-relaxed">
               Desenvolva as quatro habilidades essenciais do idioma no seu próprio ritmo, com foco prático em escuta, pronúncia, leitura e construção de frases.
             </p>
           </div>

@@ -136,7 +136,7 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
         </div>
 
         {/* Level Tabs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-1.5 sm:gap-2">
           {levelTabs.map((lvl) => {
             const isSelected = selectedLevel === lvl.id;
             return (
@@ -144,7 +144,9 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
                 key={lvl.id}
                 type="button"
                 onClick={() => onLevelChange(lvl.id)}
-                className={`p-3 rounded-2xl text-left transition-all duration-150 border flex flex-col justify-between cursor-pointer ${
+                className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl text-left transition-all duration-150 border flex flex-col justify-between cursor-pointer ${
+                  lvl.id === 'all' ? 'col-span-2 sm:col-span-1' : ''
+                } ${
                   isSelected
                     ? 'bg-white border-[#176BFF] ring-2 ring-[#176BFF]/20 shadow-xs'
                     : 'bg-white/60 hover:bg-white border-white/80 text-[#52456F]'
@@ -294,12 +296,26 @@ export const ListeningActivitiesHub: React.FC<ListeningActivitiesHubProps> = ({
       )}
 
       {activities.length === 0 && (
-        <div className="p-8 rounded-3xl bg-white/80 border border-slate-200/80 text-center space-y-2">
-          <Headphones className="w-8 h-8 text-slate-400 mx-auto" />
-          <h4 className="text-sm font-bold text-[#160F2E]">Nenhuma atividade encontrada</h4>
-          <p className="text-xs text-[#52456F]">
-            Tente selecionar outro nível ou formato de escuta nos filtros acima.
-          </p>
+        <div className="p-8 rounded-3xl bg-white/90 border border-slate-200/80 text-center space-y-3 shadow-soft-card max-w-md mx-auto">
+          <div className="w-12 h-12 rounded-2xl bg-[#E1ECFC] text-[#176BFF] flex items-center justify-center mx-auto shadow-2xs">
+            <Headphones className="w-6 h-6 stroke-[2.2]" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-[#160F2E]">Nenhuma atividade encontrada</h4>
+            <p className="text-xs text-[#52456F] mt-1 leading-relaxed">
+              Não encontramos lições para os filtros atuais. Experimente selecionar outro nível ou formato de escuta.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              onLevelChange('all');
+              setSelectedFormat('all');
+            }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-brand text-white font-extrabold text-xs shadow-colored-blue cursor-pointer active:scale-95 transition"
+          >
+            <span>Ver todas as atividades</span>
+          </button>
         </div>
       )}
     </div>

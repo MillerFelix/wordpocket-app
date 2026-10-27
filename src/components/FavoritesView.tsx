@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Star, BookOpen, ArrowRight, Trash2, Search } from 'lucide-react';
+import { Star, BookOpen, ArrowRight, Trash2 } from 'lucide-react';
 import { TabType } from '../types';
 import { verbsService } from '../services/verbsService';
 import { PronounceButton } from './PronounceButton';
 import { useFavorites } from '../hooks/useFavorites';
+import { SearchInput } from './shared/SearchInput';
 
 interface FavoritesViewProps {
   onNavigate: (tab: TabType, term?: string) => void;
@@ -80,14 +81,13 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({ onNavigate }) => {
           </div>
 
           {verbsList.length > 3 && (
-            <div className="relative w-full sm:w-64">
-              <Search className="w-3.5 h-3.5 text-[#52456F] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <input
-                type="text"
+            <div className="w-full sm:w-64">
+              <SearchInput
                 value={filterQuery}
-                onChange={(e) => setFilterQuery(e.target.value)}
+                onChange={setFilterQuery}
+                onClear={() => setFilterQuery('')}
                 placeholder="Filtrar nesta lista..."
-                className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white/90 border border-white/90 text-xs text-[#160F2E] placeholder-[#52456F] focus:outline-none focus:ring-2 focus:ring-[#6545F5]/30 shadow-2xs"
+                ariaLabel="Filtrar verbos favoritos"
               />
             </div>
           )}

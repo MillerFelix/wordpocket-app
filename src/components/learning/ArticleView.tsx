@@ -52,9 +52,9 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200/90 text-xs sm:text-sm font-bold text-[#160F2E] transition active:scale-95 shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white border border-white/90 text-xs sm:text-sm font-bold text-[#160F2E] transition active:scale-95 shadow-2xs cursor-pointer group"
         >
-          <ArrowLeft className="w-4 h-4 text-[#176BFF]" />
+          <ArrowLeft className="w-4 h-4 text-[#176BFF] group-hover:-translate-x-0.5 transition-transform" />
           <span>Voltar para a biblioteca</span>
         </button>
 

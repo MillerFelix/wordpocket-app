@@ -145,7 +145,9 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
                 key={tab.id}
                 type="button"
                 onClick={() => onLevelChange(tab.id)}
-                className={`p-3 rounded-2xl text-left transition-all duration-150 border flex flex-col justify-between cursor-pointer ${
+                className={`p-2.5 sm:p-3 rounded-xl sm:rounded-2xl text-left transition-all duration-150 border flex flex-col justify-between cursor-pointer ${
+                  tab.id === 'all' ? 'col-span-2 sm:col-span-1' : ''
+                } ${
                   isSelected
                     ? 'bg-white border-[#FF5B26] ring-2 ring-[#FF5B26]/20 shadow-xs'
                     : 'bg-white/60 hover:bg-white border-white/80 text-[#52456F]'
@@ -295,12 +297,24 @@ export const WritingActivitiesHub: React.FC<WritingActivitiesHubProps> = ({
       )}
 
       {activities.length === 0 && (
-        <div className="p-8 rounded-3xl bg-white/80 border border-slate-200/80 text-center space-y-2">
-          <PenTool className="w-8 h-8 text-slate-400 mx-auto" />
+        <div className="p-8 sm:p-10 rounded-3xl bg-white/85 backdrop-blur-xl border border-white/90 shadow-soft-card text-center space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#FF5B26] flex items-center justify-center mx-auto">
+            <PenTool className="w-6 h-6" />
+          </div>
           <h4 className="text-sm font-bold text-[#160F2E]">Nenhuma atividade encontrada</h4>
-          <p className="text-xs text-[#52456F]">
+          <p className="text-xs text-[#52456F] max-w-sm mx-auto">
             Tente selecionar outro nível ou formato de escrita nos filtros acima.
           </p>
+          <button
+            type="button"
+            onClick={() => {
+              onLevelChange('all');
+              setSelectedFormat('all');
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#FF5B26]/10 hover:bg-[#FF5B26]/20 text-[#FF5B26] text-xs font-bold transition cursor-pointer"
+          >
+            Ver todas as atividades
+          </button>
         </div>
       )}
     </div>
