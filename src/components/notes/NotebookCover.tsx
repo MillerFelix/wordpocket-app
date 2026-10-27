@@ -58,7 +58,7 @@ export const NotebookCover: React.FC<NotebookCoverProps> = ({
             </div>
 
             {/* Header: Brand & Emblem */}
-            <div className="pl-6 sm:pl-8 flex items-center justify-between relative z-10">
+            <div className="pl-6 sm:pl-8 flex flex-col sm:flex-row sm:items-center justify-between gap-2 relative z-10">
               <div className="flex items-center gap-2">
                 <WordPocketLogo
                   variant="icon"

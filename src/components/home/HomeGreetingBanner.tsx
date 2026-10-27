@@ -12,12 +12,12 @@ export const HomeGreetingBanner: React.FC = () => {
     <>
       {/* Mobile Top Greeting Card with Rocket Illustration (Blue Pulse Palette) */}
       <div className="md:hidden relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-5 border border-white/90 shadow-soft-card">
-        <div className="relative z-10 max-w-[70%]">
+        <div className="relative z-10 max-w-[75%] sm:max-w-[70%]">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 text-[#176BFF] text-[11px] font-bold mb-2 shadow-2xs border border-[#BED7FA]">
             <Sparkles className="w-3.5 h-3.5 text-[#26D9FF]" />
             <span>Bem-vindo ao Word Pocket</span>
           </div>
-          <h1 className="text-xl font-extrabold text-[#160F2E] tracking-tight">
+          <h1 className="text-lg sm:text-xl font-extrabold text-[#160F2E] tracking-tight">
             {greetingTitle}
           </h1>
           <p className="text-xs font-semibold text-[#52456F] mt-1 leading-snug">
@@ -26,7 +26,7 @@ export const HomeGreetingBanner: React.FC = () => {
         </div>
 
         {/* Decorative Floating Rocket SVG Illustration */}
-        <div className="absolute right-2 -bottom-1 pointer-events-none w-28 h-28 opacity-95">
+        <div className="absolute right-2 -bottom-1 pointer-events-none w-24 h-24 sm:w-28 sm:h-28 opacity-95">
           <svg
             viewBox="0 0 120 120"
             fill="none"

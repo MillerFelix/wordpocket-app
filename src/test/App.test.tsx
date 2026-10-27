@@ -79,13 +79,16 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(screen.getByText(/Tradução em Inglês/i)).toBeInTheDocument();
   });
 
-  it('navigates to Praticar when clicking "Praticar agora" in Grandes Conquistas card', () => {
+  it('opens mobile navigation drawer and navigates to Perfil', () => {
     render(<App />);
-    const praticarAgoraBtn = screen.getByRole('button', { name: /Praticar agora/i });
-    expect(praticarAgoraBtn).toBeInTheDocument();
-    fireEvent.click(praticarAgoraBtn);
+    const menuBtn = screen.getByRole('button', { name: /Abrir menu lateral/i });
+    expect(menuBtn).toBeInTheDocument();
+    fireEvent.click(menuBtn);
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 3, name: /Listening/i })).toBeInTheDocument();
+    const perfilButtons = screen.getAllByRole('button', { name: /Perfil/i });
+    expect(perfilButtons.length).toBeGreaterThan(0);
+    fireEvent.click(perfilButtons[0]);
+
+    expect(screen.getByRole('heading', { name: /Perfil/i })).toBeInTheDocument();
   });
 });

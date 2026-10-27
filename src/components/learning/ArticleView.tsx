@@ -48,7 +48,7 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-200 pb-12 max-w-4xl mx-auto">
       {/* Top Navigation Bar: Back Button */}
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <button
           type="button"
           onClick={onBack}

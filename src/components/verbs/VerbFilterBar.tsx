@@ -60,17 +60,17 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
       </div>
 
       {/* Morphological Pattern Filter Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+      <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto sm:overflow-visible sm:flex-wrap pb-1.5 pt-0.5 text-xs scrollbar-thin">
         <span className="text-[#2446C8] flex items-center gap-1.5 pr-1 font-bold shrink-0">
           <Filter className="w-3.5 h-3.5 text-[#176BFF]" />
-          Padrão:
+          <span>Padrão:</span>
         </span>
         {filterOptions.map((opt) => (
           <button
             key={opt.id}
             type="button"
             onClick={() => onSelectGroup(opt.id)}
-            className={`shrink-0 px-3.5 py-2 rounded-xl font-bold transition active:scale-95 text-xs ${
+            className={`whitespace-nowrap px-3 sm:px-3.5 py-2 rounded-xl font-bold transition active:scale-95 text-xs cursor-pointer shrink-0 ${
               selectedGroup === opt.id
                 ? 'bg-gradient-verbs text-white shadow-xs'
                 : 'bg-[#E1ECFC]/80 hover:bg-[#D4E5FE] text-[#160F2E] border border-white/70'

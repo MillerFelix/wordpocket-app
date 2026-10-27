@@ -26,9 +26,11 @@ interface AppProps {
 const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [pendingSearch, setPendingSearch] = useState<string>('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleNavigate = (tab: TabType, term?: string) => {
     setActiveTab(tab);
+    setIsMobileMenuOpen(false);
     if (term) {
       setPendingSearch(term);
     } else {
@@ -53,12 +55,14 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
         <div className="absolute bottom-10 right-10 w-[620px] h-[620px] rounded-full bg-gradient-to-tl from-[#6545F5]/22 via-[#2446C8]/22 to-[#176BFF]/22 blur-3xl" />
       </div>
 
-      {/* Desktop Vertical Sidebar */}
+      {/* Desktop Persistent Sidebar Navigation & Mobile Drawer */}
       <Sidebar
         activeTab={activeTab}
         onTabChange={handleNavigate}
         verbCount={verbCount}
         practiceCount={practiceCount}
+        isMobileOpen={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
       />
 
       {/* Mobile Top Header & Bottom Navigation Bar */}
@@ -67,6 +71,7 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
         onTabChange={handleNavigate}
         verbCount={verbCount}
         practiceCount={practiceCount}
+        onOpenMenu={() => setIsMobileMenuOpen(true)}
       />
 
       {/* Main Content Area */}

@@ -8,7 +8,8 @@ import {
   WifiOff, 
   Download,
   LogIn,
-  Compass
+  Compass,
+  Menu
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
@@ -22,11 +23,13 @@ interface MobileNavProps {
   onTabChange: (tab: TabType) => void;
   verbCount?: number;
   practiceCount?: number;
+  onOpenMenu?: () => void;
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   activeTab,
   onTabChange,
+  onOpenMenu
 }) => {
   const isOnline = useOnlineStatus();
   const { canInstall, promptInstall } = usePwaInstall();
@@ -85,19 +88,31 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       {/* Mobile & Tablet Compact Top Header */}
       <header className="lg:hidden sticky top-0 z-30 bg-[#F0F6FF]/85 backdrop-blur-2xl border-b border-white/80 px-3.5 py-2.5 shadow-2xs">
         <div className="flex items-center justify-between gap-2 max-w-lg mx-auto">
-          {/* Brand — Logo symbol alongside Word Pocket logotype */}
-          <button 
-            type="button"
-            onClick={() => onTabChange('home')}
-            className="flex items-center text-left active:scale-95 transition shrink-0"
-            aria-label="Ir para a página inicial do Word Pocket"
-          >
-            <WordPocketLogo
-              variant="horizontal"
-              size="sm"
-              badge="PWA"
-            />
-          </button>
+          {/* Menu button + Brand */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            {onOpenMenu && (
+              <button
+                type="button"
+                onClick={onOpenMenu}
+                className="p-1.5 -ml-1 rounded-xl text-[#160F2E] hover:bg-white/80 active:scale-95 transition cursor-pointer"
+                aria-label="Abrir menu lateral"
+              >
+                <Menu className="w-5 h-5 stroke-[2.2]" />
+              </button>
+            )}
+            <button 
+              type="button"
+              onClick={() => onTabChange('home')}
+              className="flex items-center text-left active:scale-95 transition shrink-0"
+              aria-label="Ir para a página inicial do Word Pocket"
+            >
+              <WordPocketLogo
+                variant="horizontal"
+                size="sm"
+                badge="PWA"
+              />
+            </button>
+          </div>
 
           {/* Right Status & Avatar Profile */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">

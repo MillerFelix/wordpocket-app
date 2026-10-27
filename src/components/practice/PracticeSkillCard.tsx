@@ -47,7 +47,7 @@ export const PracticeSkillCard: React.FC<PracticeSkillCardProps> = ({ skill, onS
 
         {/* Title, Portuguese Subtitle & Objective */}
         <div>
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-baseline gap-2 flex-wrap">
             <h3 className="text-xl font-black tracking-tight text-white leading-tight">
               {skill.nameEn}
             </h3>

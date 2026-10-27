@@ -68,12 +68,12 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
 
       {/* 4 Main Skill Cards Grid */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between px-1">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 px-1">
           <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#52456F] flex items-center gap-1.5">
             <Compass className="w-3.5 h-3.5 text-[#176BFF]" />
             <span>Escolha uma habilidade para praticar</span>
           </h2>
-          <span className="text-xs font-semibold text-[#52456F]">
+          <span className="text-xs font-semibold text-[#52456F] shrink-0 self-start sm:self-auto">
             4 Áreas Disponíveis
           </span>
         </div>

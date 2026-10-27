@@ -140,7 +140,7 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
                 Módulo de Tradução
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
+            <h1 className="text-xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
               Tradutor Rápido
             </h1>
             <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-1">

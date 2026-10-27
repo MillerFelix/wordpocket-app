@@ -28,9 +28,9 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
       >
         {/* Form 1: Base Form (Sticky pinned on mobile so it stays visible during horizontal scroll) */}
         <td
-          className={`py-2 sm:py-3.5 px-2.5 sm:px-5 border-r border-white/80 sticky left-0 z-10 transition-colors ${
+          className={`py-2 sm:py-3.5 px-2 sm:px-5 border-r border-white/80 sticky left-0 z-10 transition-colors ${
             isExpanded ? 'bg-[#F2ECFD]' : 'bg-white/95 group-hover:bg-white'
-          } shadow-[2px_0_6px_rgba(0,0,0,0.03)] w-[26%] sm:w-[24%] min-w-[130px] sm:min-w-[160px]`}
+          } shadow-[2px_0_6px_rgba(0,0,0,0.03)] w-[26%] sm:w-[24%] min-w-[120px] sm:min-w-[160px]`}
         >
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
@@ -57,7 +57,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
         </td>
 
         {/* Form 2: Simple Past (Fresh Mint column) */}
-        <td className="py-2 sm:py-3.5 px-2.5 sm:px-5 border-r border-white/80 whitespace-nowrap w-[20%] sm:w-[22%] min-w-[105px] sm:min-w-[130px]">
+        <td className="py-2 sm:py-3.5 px-2 sm:px-5 border-r border-white/80 whitespace-nowrap w-[20%] sm:w-[22%] min-w-[100px] sm:min-w-[130px]">
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <span className="font-mono font-bold text-[#0A9B80] text-xs sm:text-[14px] truncate">
               {verb.pastSimple}
@@ -69,7 +69,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
         </td>
 
         {/* Form 3: Past Participle (Tangerine column) */}
-        <td className="py-2 sm:py-3.5 px-2.5 sm:px-5 border-r border-white/80 whitespace-nowrap w-[20%] sm:w-[22%] min-w-[105px] sm:min-w-[130px]">
+        <td className="py-2 sm:py-3.5 px-2 sm:px-5 border-r border-white/80 whitespace-nowrap w-[20%] sm:w-[22%] min-w-[100px] sm:min-w-[130px]">
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <span className="font-mono font-bold text-[#E04D1B] text-xs sm:text-[14px] truncate">
               {verb.pastParticiple}
@@ -81,7 +81,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
         </td>
 
         {/* Translation & Variant Tag */}
-        <td className="py-2 sm:py-3.5 px-2.5 sm:px-5 text-[#160F2E] font-medium border-r border-white/80 text-xs sm:text-sm min-w-[120px]">
+        <td className="py-2 sm:py-3.5 px-2 sm:px-5 text-[#160F2E] font-medium border-r border-white/80 text-xs sm:text-sm min-w-[110px]">
           <span className="block leading-snug">{verb.translation}</span>
           {verb.variants && (
             <span className="block text-[10px] sm:text-[11px] font-semibold text-[#FF6534] mt-0.5 leading-tight">
@@ -91,7 +91,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
         </td>
 
         {/* Actions (Expand toggle) */}
-        <td className="py-2 sm:py-3.5 px-1.5 sm:px-4 text-center w-10 sm:w-16 shrink-0">
+        <td className="py-2 sm:py-3.5 px-1 sm:px-4 text-center w-9 sm:w-16 shrink-0">
           <button
             type="button"
             aria-label={`Ver exemplo de ${verb.infinitive}`}

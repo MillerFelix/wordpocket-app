@@ -416,7 +416,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
       ) : (
         /* State 4: Página Inicial Minimalista, Convidativa e Organizada por Categorias */
         <section className="space-y-4">
-          <div className="flex items-center justify-between px-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 px-1">
             <div>
               <h2 className="text-xs font-bold uppercase tracking-wider text-[#52456F]">
                 Categorias de Aprendizagem
@@ -425,7 +425,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
                 Escolha uma área para consultar artigos explicados de forma simples e direta
               </p>
             </div>
-            <span className="text-xs font-semibold text-[#176BFF]">
+            <span className="text-xs font-semibold text-[#176BFF] shrink-0 self-start sm:self-auto">
               37 de 37 artigos
             </span>
           </div>
