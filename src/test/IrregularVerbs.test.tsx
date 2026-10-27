@@ -103,4 +103,47 @@ describe('Irregular Verbs 200 Database and Pagination Tests', () => {
     // Identical verbs
     expect(screen.getByText(/Exibindo/)).toBeInTheDocument();
   });
+
+  it('expands a verb row on click, showing contextual example and pronounce button together', () => {
+    render(<IrregularVerbsView />);
+
+    // Before expansion, example text is not visible
+    const firstVerb = irregularVerbs[0]; // e.g. arise
+    expect(screen.queryByText(`"${firstVerb.example}"`)).not.toBeInTheDocument();
+
+    // Find expand toggle button for first verb
+    const expandButtons = screen.getAllByRole('button', { name: new RegExp(`Ver exemplo de ${firstVerb.infinitive}`, 'i') });
+    expect(expandButtons.length).toBeGreaterThanOrEqual(1);
+
+    // Click the expand button
+    fireEvent.click(expandButtons[0]);
+
+    // Example and pronounce button should now be visible together
+    expect(screen.getByText(`"${firstVerb.example}"`)).toBeInTheDocument();
+    expect(screen.getByText('Exemplo de uso natural em inglês')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: new RegExp(firstVerb.example, 'i') })).toBeInTheDocument();
+    expect(screen.getByText('Ouvir')).toBeInTheDocument();
+
+    // Toggle collapse
+    const collapseButtons = screen.getAllByRole('button', { name: new RegExp(`Recolher exemplo de ${firstVerb.infinitive}`, 'i') });
+    fireEvent.click(collapseButtons[0]);
+    expect(screen.queryByText(`"${firstVerb.example}"`)).not.toBeInTheDocument();
+  });
+
+  it('supports row keyboard interaction with Enter key to toggle expansion', () => {
+    render(<IrregularVerbsView />);
+
+    const firstVerb = irregularVerbs[0];
+    const rows = screen.getAllByRole('row');
+    // Row 0 is header, Row 1 is first verb row
+    const firstRow = rows[1];
+
+    // Press Enter to expand
+    fireEvent.keyDown(firstRow, { key: 'Enter', code: 'Enter' });
+    expect(screen.getByText(`"${firstVerb.example}"`)).toBeInTheDocument();
+
+    // Press Enter again to collapse
+    fireEvent.keyDown(firstRow, { key: 'Enter', code: 'Enter' });
+    expect(screen.queryByText(`"${firstVerb.example}"`)).not.toBeInTheDocument();
+  });
 });

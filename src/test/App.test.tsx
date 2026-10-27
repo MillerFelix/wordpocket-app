@@ -91,4 +91,30 @@ describe('Word Pocket Refined Interface Tests', () => {
 
     expect(screen.getByRole('heading', { name: /Perfil/i })).toBeInTheDocument();
   });
+
+  it('verifies menu options order is Aprender, Praticar, Verbos Irregulares, Tradutor', () => {
+    render(<App />);
+
+    // In desktop sidebar navigation
+    const mainNav = screen.getByRole('navigation', { name: /Navegação Principal/i });
+    const buttons = mainNav.querySelectorAll('button');
+    const buttonTexts = Array.from(buttons).map((b) => b.textContent || '');
+
+    // Início is followed by Aprender -> Praticar -> Verbos Irregulares -> Tradutor
+    const learnIndex = buttonTexts.findIndex((t) => t.includes('Aprender'));
+    const practiceIndex = buttonTexts.findIndex((t) => t.includes('Praticar'));
+    const verbsIndex = buttonTexts.findIndex((t) => t.includes('Verbos Irregulares'));
+    const translatorIndex = buttonTexts.findIndex((t) => t.includes('Tradutor'));
+
+    expect(learnIndex).toBeGreaterThan(-1);
+    expect(practiceIndex).toBeGreaterThan(learnIndex);
+    expect(verbsIndex).toBeGreaterThan(practiceIndex);
+    expect(translatorIndex).toBeGreaterThan(verbsIndex);
+  });
+
+  it('does not display PWA badge next to Word Pocket brand in header', () => {
+    render(<App />);
+    // The PWA badge was removed from the header next to Word Pocket
+    expect(screen.queryByText('PWA')).not.toBeInTheDocument();
+  });
 });

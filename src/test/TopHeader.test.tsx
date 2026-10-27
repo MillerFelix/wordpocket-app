@@ -23,5 +23,7 @@ describe('TopHeader Component Tests', () => {
 
     expect(screen.getByText(/Conectado|Modo Offline/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Entrar/i })).toBeInTheDocument();
+    // Notification bell should be completely removed
+    expect(screen.queryByTitle(/Notificações/i)).not.toBeInTheDocument();
   });
 });

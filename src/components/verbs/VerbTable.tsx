@@ -24,7 +24,7 @@ export const VerbTable: React.FC<VerbTableProps> = ({
           <thead>
             <tr className="border-b border-[#E2D7F8] text-[11px] sm:text-xs font-black uppercase tracking-wider">
               {/* Coluna 1: Base Form (Fixa à esquerda no scroll horizontal em telas menores) */}
-              <th className="py-2.5 sm:py-3.5 px-2 sm:px-5 text-white bg-gradient-verbs border-r border-white/20 sticky left-0 z-20 shadow-[2px_0_6px_rgba(0,0,0,0.06)] w-[26%] sm:w-[24%] min-w-[120px] sm:min-w-[160px]">
+              <th className="py-2.5 sm:py-3.5 px-2 sm:px-5 text-white bg-gradient-verbs border-r border-white/20 sticky left-0 z-20 shadow-[2px_0_6px_rgba(0,0,0,0.06)] w-[28%] sm:w-[24%] min-w-[130px] sm:min-w-[160px]">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <span>Verbo base</span>
                 </div>

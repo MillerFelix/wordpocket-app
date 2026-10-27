@@ -58,20 +58,20 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       activeDot: 'bg-[#00BFA5]'
     },
     {
-      id: 'verbs' as TabType,
-      label: 'Verbos',
-      icon: BookOpen,
-      color: 'text-[#6545F5]',
-      activeBg: 'bg-[#EDE8FD] text-[#6545F5] border border-white/90 shadow-2xs',
-      activeDot: 'bg-[#6545F5]'
-    },
-    {
       id: 'practice' as TabType,
       label: 'Praticar',
       icon: GraduationCap,
       color: 'text-[#176BFF]',
       activeBg: 'bg-[#E1ECFC] text-[#176BFF] border border-white/90 shadow-2xs',
       activeDot: 'bg-[#176BFF]'
+    },
+    {
+      id: 'verbs' as TabType,
+      label: 'Verbos',
+      icon: BookOpen,
+      color: 'text-[#6545F5]',
+      activeBg: 'bg-[#EDE8FD] text-[#6545F5] border border-white/90 shadow-2xs',
+      activeDot: 'bg-[#6545F5]'
     },
     {
       id: 'translator' as TabType,
@@ -109,7 +109,6 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               <WordPocketLogo
                 variant="horizontal"
                 size="sm"
-                badge="PWA"
               />
             </button>
           </div>

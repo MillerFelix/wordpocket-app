@@ -81,17 +81,6 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
       activeBar: 'bg-[#00BFA5]'
     },
     {
-      id: 'verbs' as TabType,
-      label: 'Verbos Irregulares',
-      subtitle: 'Tabela das 3 formas',
-      icon: BookOpen,
-      count: verbCount,
-      color: 'text-[#6545F5]',
-      activeBg: 'bg-[#EDE8FD] border border-white/90',
-      activeText: 'text-[#6545F5]',
-      activeBar: 'bg-[#6545F5]'
-    },
-    {
       id: 'practice' as TabType,
       label: 'Praticar',
       subtitle: '4 Habilidades do idioma',
@@ -101,6 +90,17 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
       activeBg: 'bg-[#E1ECFC] border border-white/90',
       activeText: 'text-[#176BFF]',
       activeBar: 'bg-[#176BFF]'
+    },
+    {
+      id: 'verbs' as TabType,
+      label: 'Verbos Irregulares',
+      subtitle: 'Tabela das 3 formas',
+      icon: BookOpen,
+      count: verbCount,
+      color: 'text-[#6545F5]',
+      activeBg: 'bg-[#EDE8FD] border border-white/90',
+      activeText: 'text-[#6545F5]',
+      activeBar: 'bg-[#6545F5]'
     },
     {
       id: 'translator' as TabType,

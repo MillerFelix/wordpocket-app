@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, Wifi, WifiOff, LogIn } from 'lucide-react';
+import { Wifi, WifiOff, LogIn } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { useAuth } from '../contexts/AuthContext';
@@ -134,7 +134,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         </span>
       </div>
 
-      {/* Controles à direita: status de rede, notificações e avatar */}
+      {/* Controles à direita: status de rede e avatar */}
       <div className="flex items-center gap-3">
         {/* Indicador de conectividade */}
         <div
@@ -156,16 +156,6 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             </>
           )}
         </div>
-
-        {/* Botão de notificações */}
-        <button
-          type="button"
-          className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#52456F] hover:text-[#176BFF] border border-white/90 shadow-2xs transition"
-          title="Notificações"
-        >
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#176BFF]" />
-        </button>
 
         {/* Avatar de perfil ou botão de login */}
         <div className="flex items-center gap-2.5 pl-3 border-l border-white/80">

@@ -25,16 +25,6 @@ const FEATURE_CARDS: FeatureCardConfig[] = [
     arrowColorClass: 'text-[#00BFA5]'
   },
   {
-    id: 'verbs',
-    title: 'Verbos Irregulares',
-    description: 'Consulte todas as formas verbais da língua inglesa, com exemplos e traduções.',
-    tag: 'Morfologia',
-    icon: BookOpen,
-    gradientClass: 'bg-gradient-verbs',
-    shadowClass: 'shadow-soft-card hover:shadow-colored-violet',
-    arrowColorClass: 'text-[#6545F5]'
-  },
-  {
     id: 'practice',
     title: 'Praticar',
     description: 'Listening, Speaking, Reading e Writing para desenvolver sua fluência no seu próprio ritmo.',
@@ -43,6 +33,16 @@ const FEATURE_CARDS: FeatureCardConfig[] = [
     gradientClass: 'bg-gradient-brand',
     shadowClass: 'shadow-soft-card hover:shadow-colored-blue',
     arrowColorClass: 'text-[#176BFF]'
+  },
+  {
+    id: 'verbs',
+    title: 'Verbos Irregulares',
+    description: 'Consulte todas as formas verbais da língua inglesa, com exemplos e traduções.',
+    tag: 'Morfologia',
+    icon: BookOpen,
+    gradientClass: 'bg-gradient-verbs',
+    shadowClass: 'shadow-soft-card hover:shadow-colored-violet',
+    arrowColorClass: 'text-[#6545F5]'
   },
   {
     id: 'translator',
