@@ -55,6 +55,11 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     title: 'Perfil Pessoal',
     subtitle: 'Gerencie sua conta, progresso sincronizado e histórico',
     badge: 'Conta'
+  },
+  notes: {
+    title: 'Caderno de Anotações',
+    subtitle: 'Seu espaço pessoal de anotações, vocabulário e estudos em inglês',
+    badge: 'Anotações'
   }
 };
 
@@ -64,6 +69,10 @@ const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
     badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
   },
   profile: {
+    dot: 'bg-[#176BFF] ring-[#176BFF]/20',
+    badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+  },
+  notes: {
     dot: 'bg-[#176BFF] ring-[#176BFF]/20',
     badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
   },

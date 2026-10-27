@@ -1,9 +1,10 @@
-export type TabType = 'home' | 'learn' | 'verbs' | 'practice' | 'translator' | 'favorites' | 'history' | 'settings' | 'profile';
+export type TabType = 'home' | 'learn' | 'verbs' | 'practice' | 'translator' | 'favorites' | 'history' | 'settings' | 'profile' | 'notes';
 
 export * from './auth';
 export * from './progress';
 export * from './activity';
 export * from './learning';
+export * from './notes';
 
 export type PracticeSkillId = 'listening' | 'speaking' | 'reading' | 'writing';
 

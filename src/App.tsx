@@ -10,6 +10,7 @@ import { LearningLibraryView } from './components/learning/LearningLibraryView';
 import { FavoritesView } from './components/FavoritesView';
 import { SettingsView } from './components/SettingsView';
 import { UserProfileView } from './components/profile/UserProfileView';
+import { NotesView } from './components/notes/NotesView';
 import { AuthModal } from './components/auth/AuthModal';
 import { VisitorPromptModal } from './components/auth/VisitorPromptModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
@@ -107,6 +108,10 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
 
           {activeTab === 'settings' && (
             <SettingsView />
+          )}
+
+          {activeTab === 'notes' && (
+            <NotesView onNavigate={handleNavigate} />
           )}
 
           {activeTab === 'profile' && (

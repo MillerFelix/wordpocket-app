@@ -13,7 +13,8 @@ import {
   Sparkles, 
   ArrowRight,
   User,
-  Compass
+  Compass,
+  BookMarked
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
@@ -94,6 +95,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const secondaryNavItems = [
+    {
+      id: 'notes' as TabType,
+      label: 'Anotações',
+      icon: BookMarked,
+      iconColor: 'text-[#176BFF]'
+    },
     {
       id: 'favorites' as TabType,
       label: 'Favoritos',

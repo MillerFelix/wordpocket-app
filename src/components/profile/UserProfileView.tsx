@@ -15,7 +15,8 @@ import {
   Edit2,
   Check,
   X,
-  Camera
+  Camera,
+  BookMarked
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserSkillProgress } from '../../services/progressService';
@@ -419,6 +420,23 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
               </div>
             </div>
             <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#6545F5] transition" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onNavigate('notes')}
+            className="flex items-center justify-between p-4 rounded-2xl bg-white/70 hover:bg-white border border-white/80 shadow-2xs transition text-left cursor-pointer group sm:col-span-2"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-[#E1ECFC] text-[#176BFF] flex items-center justify-center">
+                <BookMarked className="w-4 h-4" />
+              </div>
+              <div>
+                <strong className="text-[#160F2E] font-bold block">Caderno de Anotações</strong>
+                <span className="text-[#52456F]">Seu espaço pessoal para registrar regras e vocabulário</span>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#176BFF] transition" />
           </button>
         </div>
       </div>
