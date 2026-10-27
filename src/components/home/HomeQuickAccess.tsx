@@ -21,20 +21,20 @@ const QUICK_ACCESS_ITEMS: QuickAccessItem[] = [
     iconHoverClass: 'group-hover:bg-[#00BFA5]'
   },
   {
-    id: 'verbs',
-    label: 'Verbos',
-    icon: BookOpen,
-    containerClass: 'bg-[#EDE8FD] hover:bg-[#E2D7F8] text-[#6545F5]',
-    iconColorClass: 'text-[#6545F5]',
-    iconHoverClass: 'group-hover:bg-[#6545F5]'
-  },
-  {
     id: 'practice',
     label: 'Praticar',
     icon: GraduationCap,
     containerClass: 'bg-[#E1ECFC] hover:bg-[#D0E2FA] text-[#176BFF]',
     iconColorClass: 'text-[#176BFF]',
     iconHoverClass: 'group-hover:bg-[#176BFF]'
+  },
+  {
+    id: 'verbs',
+    label: 'Verbos',
+    icon: BookOpen,
+    containerClass: 'bg-[#EDE8FD] hover:bg-[#E2D7F8] text-[#6545F5]',
+    iconColorClass: 'text-[#6545F5]',
+    iconHoverClass: 'group-hover:bg-[#6545F5]'
   },
   {
     id: 'translator',

@@ -4,8 +4,6 @@ import {
   BookOpen, 
   GraduationCap, 
   Languages, 
-  Star, 
-  Settings, 
   User, 
   Compass, 
   BookMarked,
@@ -36,18 +34,6 @@ const SECONDARY_NAV_ITEMS: SecondaryNavItem[] = [
     label: 'Anotações',
     icon: BookMarked,
     iconColor: 'text-[#176BFF]'
-  },
-  {
-    id: 'favorites',
-    label: 'Favoritos',
-    icon: Star,
-    iconColor: 'text-[#F52E91]'
-  },
-  {
-    id: 'settings',
-    label: 'Configurações',
-    icon: Settings,
-    iconColor: 'text-[#2446C8]'
   },
   {
     id: 'profile',
@@ -214,7 +200,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      {/* Navegação secundária (Anotações, Favoritos, Configurações e Perfil) */}
+      {/* Navegação secundária (Anotações e Perfil) */}
       <div className="pt-2 border-t border-white/80 space-y-1">
         {SECONDARY_NAV_ITEMS.map((item) => {
           const Icon = item.icon;

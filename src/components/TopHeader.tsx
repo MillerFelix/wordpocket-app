@@ -36,20 +36,10 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     subtitle: 'Consulta e tradução imediata com inteligência contextual',
     badge: 'Tradutor'
   },
-  favorites: {
-    title: 'Palavras Salvas',
-    subtitle: 'Sua lista personalizada de estudo e revisão',
-    badge: 'Favoritos'
-  },
   history: {
     title: 'Histórico de Consultas',
     subtitle: 'Registro das suas últimas pesquisas no aplicativo',
     badge: 'Histórico'
-  },
-  settings: {
-    title: 'Configurações & Guia',
-    subtitle: 'Preferências do aplicativo, voz de áudio e informações do sistema',
-    badge: 'Ajustes'
   },
   profile: {
     title: 'Perfil Pessoal',
@@ -92,17 +82,9 @@ const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
     dot: 'bg-[#FF6534] ring-[#FF6534]/20',
     badge: 'bg-[#FFEAE1] text-[#E04D1B] border-[#FFD2C2]'
   },
-  favorites: {
-    dot: 'bg-[#F52E91] ring-[#F52E91]/20',
-    badge: 'bg-[#FDE8F1] text-[#F52E91] border-[#FFD0E5]'
-  },
   history: {
     dot: 'bg-[#176BFF] ring-[#176BFF]/20',
     badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
-  },
-  settings: {
-    dot: 'bg-[#52456F] ring-[#52456F]/20',
-    badge: 'bg-white/90 text-[#52456F] border-white/90'
   }
 };
 

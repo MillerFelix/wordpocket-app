@@ -2,7 +2,6 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { Search, BookOpen, HelpCircle } from 'lucide-react';
 import { verbsService } from '../services/verbsService';
 import { VerbGroup } from '../types';
-import { useFavorites } from '../hooks/useFavorites';
 import { VerbFilterBar } from './verbs/VerbFilterBar';
 import { VerbCoverageModal } from './verbs/VerbCoverageModal';
 import { VerbTable } from './verbs/VerbTable';
@@ -29,12 +28,6 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [showCoverageInfo, setShowCoverageInfo] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const { isFavorite, toggleFavorite } = useFavorites(
-    'wordpocket_fav_verbs',
-    ['go', 'be', 'begin'],
-    'upword_fav_verbs'
-  );
 
   useEffect(() => {
     if (initialSearch) {
@@ -198,9 +191,7 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
         <VerbTable
           verbs={paginatedVerbs}
           expandedRowId={expandedRowId}
-          isFavorite={isFavorite}
           onToggleExpand={toggleExpand}
-          onToggleFavorite={toggleFavorite}
         />
       )}
 

@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
 import { formatAuthError } from '../services/authService';
-import { syncLocalFavoritesToRemote } from '../services/favoritesSyncService';
 import { createDefaultProgress } from '../services/progressService';
 import { createOrUpdateProfile } from '../services/userService';
 
@@ -41,20 +40,6 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
     expect(progress.listening.currentLevel).toBe('easy');
   });
 
-  it('merges local visitor favorites into remote set without duplicating', async () => {
-    localStorage.setItem('wordpocket_fav_verbs', JSON.stringify(['go', 'come', 'take']));
-    localStorage.setItem('wordpocket_fav_vocab', JSON.stringify(['resilient', 'insightful']));
-
-    const result = await syncLocalFavoritesToRemote('test_user_123');
-    expect(result.verbsCount).toBeGreaterThanOrEqual(3);
-    expect(result.vocabCount).toBeGreaterThanOrEqual(2);
-
-    const updatedVerbs = JSON.parse(localStorage.getItem('wordpocket_fav_verbs') || '[]');
-    expect(updatedVerbs).toContain('go');
-    expect(updatedVerbs).toContain('come');
-    expect(updatedVerbs).toContain('take');
-  });
-
   it('renders visitor mode by default, showing Entrar button and no fake user name', () => {
     render(<App />);
 
@@ -91,10 +76,10 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
     expect(screen.getByRole('button', { name: /Criar Conta ou Fazer Login/i })).toBeInTheDocument();
   });
 
-  it('walks through the 5 steps of the Guided Onboarding tutorial from settings', async () => {
-    render(<App initialTab="settings" />);
+  it('walks through the 5 steps of the Guided Onboarding tutorial from profile', async () => {
+    render(<App initialTab="profile" />);
 
-    // Click Tutorial button in settings
+    // Click Tutorial button in profile
     const tutorialBtn = screen.getByRole('button', { name: /Tutorial de Boas-Vindas/i });
     fireEvent.click(tutorialBtn);
 

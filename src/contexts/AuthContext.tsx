@@ -15,10 +15,7 @@ import {
   updateUserProfile, 
   completeUserOnboarding 
 } from '../services/userService';
-import { 
-  syncLocalFavoritesToRemote, 
-  clearLocalFavoritesOnLogout 
-} from '../services/favoritesSyncService';
+
 import { AuthMode, UserProfile } from '../types/auth';
 import { DEFAULT_AVATAR_ID, getStoredVisitorAvatar, setStoredVisitorAvatar } from '../data/avatars';
 
@@ -125,8 +122,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           );
           setProfile(userProf);
 
-          // Sincroniza favoritos locais anônimos com a nuvem de forma transparente
-          await syncLocalFavoritesToRemote(firebaseUser.uid);
+
 
           // Dispara o onboarding guiado se for a primeira entrada
           if (!userProf.onboardingCompleted) {
@@ -208,7 +204,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setLoading(true);
     try {
       await apiSignOutUser();
-      clearLocalFavoritesOnLogout();
       setUser(null);
       setProfile(null);
     } catch (err) {

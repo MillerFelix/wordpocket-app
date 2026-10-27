@@ -69,7 +69,7 @@ export const OnboardingModal: React.FC = () => {
           <div className="p-3 rounded-2xl bg-[#EDE8FD] border border-[#D9CEFC] text-xs space-y-1">
             <span className="font-bold text-[#6545F5] block">💡 Dica de estudo:</span>
             <span className="text-[#160F2E]">
-              Use a estrela para favoritar os verbos mais desafiadores e revisá-los na sua coleção pessoal.
+              Clique em qualquer verbo para ouvir a pronúncia nativa e ver frases de exemplo em contexto real.
             </span>
           </div>
         </div>

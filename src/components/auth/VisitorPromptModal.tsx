@@ -82,7 +82,7 @@ export const VisitorPromptModal: React.FC<VisitorPromptModalProps> = ({ onContin
           <div className="flex items-start gap-2.5">
             <CheckCircle2 className="w-4 h-4 text-[#6545F5] shrink-0 mt-0.5" />
             <span className="text-[#160F2E] font-medium">
-              <strong>Sincronização contínua:</strong> acesse seus favoritos e progresso no celular, tablet e computador.
+              <strong>Sincronização contínua:</strong> acesse seu histórico e progresso no celular, tablet e computador.
             </span>
           </div>
         </div>

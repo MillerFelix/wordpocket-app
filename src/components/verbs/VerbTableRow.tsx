@@ -1,22 +1,18 @@
 import React from 'react';
-import { Star, ChevronUp, ChevronDown, Sparkles } from 'lucide-react';
+import { ChevronUp, ChevronDown, Sparkles } from 'lucide-react';
 import { IrregularVerb } from '../../types';
 import { PronounceButton } from '../PronounceButton';
 
 interface VerbTableRowProps {
   verb: IrregularVerb;
   isExpanded: boolean;
-  isFavorite: boolean;
   onToggleExpand: (id: string) => void;
-  onToggleFavorite: (infinitive: string, e: React.MouseEvent) => void;
 }
 
 export const VerbTableRow: React.FC<VerbTableRowProps> = ({
   verb,
   isExpanded,
-  isFavorite,
   onToggleExpand,
-  onToggleFavorite
 }) => {
   return (
     <>
@@ -41,23 +37,9 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
           } shadow-[2px_0_6px_rgba(0,0,0,0.03)] w-[28%] sm:w-[24%] min-w-[130px] sm:min-w-[160px]`}
         >
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
-            <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
-              <button
-                type="button"
-                onClick={(e) => onToggleFavorite(verb.infinitive, e)}
-                className="text-[#52456F] hover:text-[#F52E91] transition p-0.5 shrink-0"
-                title={isFavorite ? 'Remover dos favoritos' : 'Favoritar'}
-              >
-                <Star
-                  className={`w-3.5 sm:w-4 h-3.5 sm:h-4 ${
-                    isFavorite ? 'fill-[#F52E91] text-[#F52E91]' : 'stroke-[1.8]'
-                  }`}
-                />
-              </button>
-              <span className="font-extrabold text-[#160F2E] capitalize text-xs sm:text-[15px] truncate">
-                {verb.infinitive}
-              </span>
-            </div>
+            <span className="font-extrabold text-[#160F2E] capitalize text-xs sm:text-[15px] truncate">
+              {verb.infinitive}
+            </span>
             <div className="shrink-0 flex items-center gap-1">
               <PronounceButton text={verb.infinitive} size="xs" />
               <button

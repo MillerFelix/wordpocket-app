@@ -1,4 +1,4 @@
-export type TabType = 'home' | 'learn' | 'verbs' | 'practice' | 'translator' | 'favorites' | 'history' | 'settings' | 'profile' | 'notes';
+export type TabType = 'home' | 'learn' | 'verbs' | 'practice' | 'translator' | 'history' | 'profile' | 'notes';
 
 export * from './auth';
 export * from './progress';

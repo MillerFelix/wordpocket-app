@@ -5,17 +5,13 @@ import { VerbTableRow } from './VerbTableRow';
 interface VerbTableProps {
   verbs: IrregularVerb[];
   expandedRowId: string | null;
-  isFavorite: (verbName: string) => boolean;
   onToggleExpand: (id: string) => void;
-  onToggleFavorite: (verbName: string) => void;
 }
 
 export const VerbTable: React.FC<VerbTableProps> = ({
   verbs,
   expandedRowId,
-  isFavorite,
   onToggleExpand,
-  onToggleFavorite,
 }) => {
   return (
     <div className="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/90 shadow-soft-card overflow-hidden">
@@ -53,9 +49,7 @@ export const VerbTable: React.FC<VerbTableProps> = ({
                 key={verb.id}
                 verb={verb}
                 isExpanded={expandedRowId === verb.id}
-                isFavorite={isFavorite(verb.infinitive)}
                 onToggleExpand={onToggleExpand}
-                onToggleFavorite={onToggleFavorite}
               />
             ))}
           </tbody>

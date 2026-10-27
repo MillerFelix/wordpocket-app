@@ -5,7 +5,6 @@ import {
   CloudCheck, 
   LogOut, 
   HelpCircle, 
-  Sparkles, 
   Headphones, 
   Mic, 
   BookOpen, 
@@ -149,6 +148,14 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
           >
             <span>Criar Conta ou Fazer Login</span>
             <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={openOnboarding}
+            className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-white hover:bg-slate-50 text-[#52456F] font-bold text-sm border border-[#BED7FA] shadow-xs transition cursor-pointer"
+          >
+            <HelpCircle className="w-4 h-4 text-[#176BFF]" />
+            <span>Tutorial de Boas-Vindas</span>
           </button>
         </div>
 
@@ -407,25 +414,8 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
 
           <button
             type="button"
-            onClick={() => onNavigate('favorites')}
-            className="flex items-center justify-between p-4 rounded-2xl bg-white/70 hover:bg-white border border-white/80 shadow-2xs transition text-left cursor-pointer group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-[#EDE8FD] text-[#6545F5] flex items-center justify-center">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div>
-                <strong className="text-[#160F2E] font-bold block">Sua Coleção de Favoritos</strong>
-                <span className="text-[#52456F]">Verbos e vocabulário salvos na sua conta</span>
-              </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#6545F5] transition" />
-          </button>
-
-          <button
-            type="button"
             onClick={() => onNavigate('notes')}
-            className="flex items-center justify-between p-4 rounded-2xl bg-white/70 hover:bg-white border border-white/80 shadow-2xs transition text-left cursor-pointer group sm:col-span-2"
+            className="flex items-center justify-between p-4 rounded-2xl bg-white/70 hover:bg-white border border-white/80 shadow-2xs transition text-left cursor-pointer group"
           >
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-[#E1ECFC] text-[#176BFF] flex items-center justify-center">

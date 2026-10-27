@@ -7,8 +7,6 @@ import { IrregularVerbsView } from './components/IrregularVerbsView';
 import { PracticeView } from './components/practice/PracticeView';
 import { QuickTranslatorView } from './components/QuickTranslatorView';
 import { LearningLibraryView } from './components/learning/LearningLibraryView';
-import { FavoritesView } from './components/FavoritesView';
-import { SettingsView } from './components/SettingsView';
 import { UserProfileView } from './components/profile/UserProfileView';
 import { NotesView } from './components/notes/NotesView';
 import { AuthModal } from './components/auth/AuthModal';
@@ -103,16 +101,8 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
             <QuickTranslatorView initialText={pendingSearch} />
           )}
 
-          {activeTab === 'favorites' && (
-            <FavoritesView onNavigate={handleNavigate} />
-          )}
-
           {activeTab === 'history' && (
             <HomeView onNavigate={handleNavigate} />
-          )}
-
-          {activeTab === 'settings' && (
-            <SettingsView />
           )}
 
           {activeTab === 'notes' && (
