@@ -31,7 +31,7 @@ export const HomeTipCard: React.FC<HomeNavigationProps> = ({ onNavigate }) => {
           onClick={() => onNavigate('practice')}
           className="text-xs font-bold text-white bg-gradient-brand px-3.5 py-1.5 rounded-xl shadow-xs hover:opacity-95 transition"
         >
-          Praticar inglês
+          Praticar
         </button>
       </div>
 

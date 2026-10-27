@@ -27,7 +27,7 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     badge: '200 Verbos'
   },
   practice: {
-    title: 'Praticar Inglês',
+    title: 'Praticar',
     subtitle: 'Desenvolvimento das 4 habilidades: Escuta, Fala, Leitura e Escrita',
     badge: '4 Habilidades'
   },

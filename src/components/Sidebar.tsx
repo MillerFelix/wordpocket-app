@@ -5,7 +5,6 @@ import {
   GraduationCap, 
   Languages, 
   Star, 
-  Clock, 
   Settings, 
   Download, 
   Wifi, 
@@ -72,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'practice' as TabType,
-      label: 'Praticar Inglês',
+      label: 'Praticar',
       subtitle: '4 Habilidades do idioma',
       icon: GraduationCap,
       count: practiceCount ? `${practiceCount} Lições` : '4 Áreas',
@@ -106,12 +105,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Favoritos',
       icon: Star,
       iconColor: 'text-[#F52E91]'
-    },
-    {
-      id: 'history' as TabType,
-      label: 'Histórico',
-      icon: Clock,
-      iconColor: 'text-[#176BFF]'
     },
     {
       id: 'settings' as TabType,

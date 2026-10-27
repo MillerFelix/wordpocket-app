@@ -22,7 +22,7 @@ const RECENT_ITEMS: RecentItem[] = [
   },
   {
     term: 'Listening',
-    type: 'Praticar Inglês',
+    type: 'Praticar',
     sub: 'Compreensão oral • Áudio',
     targetTab: 'practice',
     color: 'bg-[#176BFF]',

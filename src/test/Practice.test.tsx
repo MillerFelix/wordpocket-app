@@ -3,11 +3,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { PracticeView } from '../components/practice/PracticeView';
 
 describe('PracticeView & 4 English Skills Hub', () => {
-  it('renders the Praticar Inglês hub with 4 distinct skill cards and discrete progress', () => {
+  it('renders the Praticar hub with 4 distinct skill cards and discrete progress', () => {
     render(<PracticeView />);
 
     // Hub Header
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
     expect(
       screen.getByText(/Desenvolva as quatro habilidades essenciais do idioma no seu próprio ritmo/i)
     ).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('PracticeView & 4 English Skills Hub', () => {
     fireEvent.click(listeningCard);
 
     // Breadcrumb and Title
-    expect(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Voltar para Praticar/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1, name: /Listening/i })).toBeInTheDocument();
     expect(screen.getByText(/Desenvolver a compreensão do inglês falado/i)).toBeInTheDocument();
 
@@ -47,11 +47,11 @@ describe('PracticeView & 4 English Skills Hub', () => {
     expect(screen.getByRole('button', { name: /A1 — Iniciante/i })).toBeInTheDocument();
 
     // Return back to hub
-    const backBtn = screen.getByRole('button', { name: /Voltar para Praticar Inglês/i });
+    const backBtn = screen.getByRole('button', { name: /Voltar para Praticar/i });
     fireEvent.click(backBtn);
 
     // Hub is visible again
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
   });
 
   it('navigates to Speaking, Reading, and Writing areas correctly and verifies Speaking activities hub', () => {
@@ -73,23 +73,23 @@ describe('PracticeView & 4 English Skills Hub', () => {
     fireEvent.click(a2Btn);
 
     // Return to hub
-    fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar/i }));
 
     // Test Reading
     const readingCard = screen.getByRole('button', { name: /Acessar área de prática de Reading/i });
     fireEvent.click(readingCard);
     expect(screen.getByRole('heading', { level: 1, name: /Reading/i })).toBeInTheDocument();
     expect(screen.getByText(/Desenvolver a compreensão rápida e fluida de textos/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar/i }));
 
     // Test Writing
     const writingCard = screen.getByRole('button', { name: /Acessar área de prática de Writing/i });
     fireEvent.click(writingCard);
     expect(screen.getByRole('heading', { level: 1, name: /Writing/i })).toBeInTheDocument();
     expect(screen.getByText(/Praticar a ortografia, ordenação sintática e a elaboração/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar Inglês/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Voltar para Praticar/i }));
 
     // Back to hub
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
   });
 });

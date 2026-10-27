@@ -61,7 +61,7 @@ export const THEME_TOKENS = {
     },
     practice: {
       id: 'practice',
-      name: 'Praticar Inglês',
+      name: 'Praticar',
       primary: '#176BFF',
       dark: '#2446C8',
       subtle: '#E1ECFC',

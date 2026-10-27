@@ -102,7 +102,7 @@ export const HomeFeatureCards: React.FC<HomeFeatureCardsProps> = ({ onNavigate }
           </div>
         </div>
 
-        {/* Card 2: Praticar Inglês (Blue Pulse / 4 Habilidades) */}
+        {/* Card 2: Praticar (Blue Pulse / 4 Habilidades) */}
         <div
           onClick={() => onNavigate('practice')}
           className="group relative overflow-hidden rounded-3xl p-6 bg-gradient-brand text-white shadow-soft-card hover:shadow-colored-blue ring-1 ring-white/30 transition-all duration-200 cursor-pointer flex flex-col justify-between min-h-[160px] active:scale-[0.99]"
@@ -129,7 +129,7 @@ export const HomeFeatureCards: React.FC<HomeFeatureCardsProps> = ({ onNavigate }
             </div>
             <div>
               <h3 className="text-lg font-extrabold tracking-tight text-white leading-tight">
-                Praticar Inglês
+                Praticar
               </h3>
               <p className="text-xs text-white/90 mt-1 leading-relaxed font-medium">
                 Listening, Speaking, Reading e Writing para desenvolver sua fluência no seu próprio ritmo.

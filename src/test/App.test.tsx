@@ -40,12 +40,12 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(screen.getByText(/Critérios Linguísticos e Fontes da Base/i)).toBeInTheDocument();
   });
 
-  it('navigates to Praticar Inglês hub and displays the 4 skills and discrete progress', () => {
+  it('navigates to Praticar hub and displays the 4 skills and discrete progress', () => {
     render(<App />);
     const practiceButtons = screen.getAllByRole('button', { name: /Praticar/i });
     fireEvent.click(practiceButtons[0]);
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /Listening/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /Speaking/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /Reading/i })).toBeInTheDocument();
@@ -79,13 +79,13 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(screen.getByText(/Tradução em Inglês/i)).toBeInTheDocument();
   });
 
-  it('navigates to Praticar Inglês when clicking "Praticar agora" in Grandes Conquistas card', () => {
+  it('navigates to Praticar when clicking "Praticar agora" in Grandes Conquistas card', () => {
     render(<App />);
     const praticarAgoraBtn = screen.getByRole('button', { name: /Praticar agora/i });
     expect(praticarAgoraBtn).toBeInTheDocument();
     fireEvent.click(praticarAgoraBtn);
 
-    expect(screen.getByRole('heading', { level: 1, name: 'Praticar Inglês' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: /Listening/i })).toBeInTheDocument();
   });
 });

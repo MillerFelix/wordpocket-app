@@ -107,7 +107,7 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
 
     // Advance to Step 3
     fireEvent.click(screen.getByRole('button', { name: /Próximo/i }));
-    expect(screen.getByRole('heading', { level: 2, name: /Praticar Inglês/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Praticar' })).toBeInTheDocument();
 
     // Advance to Step 4
     fireEvent.click(screen.getByRole('button', { name: /Próximo/i }));

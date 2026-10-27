@@ -178,7 +178,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
       {/* Cabeçalho Minimalista e Leve */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div className="flex items-start gap-3.5">
-          <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-gradient-to-br from-[#00BFA5] to-[#0A9B80] text-white flex items-center justify-center shadow-colored-teal shrink-0 ring-4 ring-white/80">
+          <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-gradient-to-br from-[#00BFA5] to-[#0A9B80] text-white flex items-center justify-center shadow-colored-teal shrink-0">
             <Compass className="w-5 sm:w-6 h-5 sm:h-6 stroke-[2.3]" />
           </div>
           <div>

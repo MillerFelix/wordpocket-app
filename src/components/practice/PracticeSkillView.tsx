@@ -106,11 +106,11 @@ export const PracticeSkillView: React.FC<PracticeSkillViewProps> = ({
           className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/90 hover:bg-white text-[#160F2E] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4 text-[#176BFF] group-hover:-translate-x-0.5 transition-transform" />
-          <span>Voltar para Praticar Inglês</span>
+          <span>Voltar para Praticar</span>
         </button>
 
         <span className="hidden sm:inline-block text-xs text-[#52456F] font-semibold">
-          Praticar Inglês • <strong className="text-[#160F2E]">{skill.nameEn}</strong>
+          Praticar • <strong className="text-[#160F2E]">{skill.nameEn}</strong>
         </span>
       </div>
 

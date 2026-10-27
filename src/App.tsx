@@ -124,14 +124,11 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
         <VisitorPromptModal />
         <OnboardingModal />
 
-        {/* Desktop Footer */}
-        <footer className="hidden lg:block border-t border-white/80 bg-white/60 backdrop-blur-xl py-4 px-8 text-xs text-[#52456F]">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Footer */}
+        <footer className="border-t border-white/80 bg-white/60 backdrop-blur-xl py-4 px-4 sm:px-8 text-xs text-[#52456F] pb-24 sm:pb-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-center sm:justify-between text-center sm:text-left">
             <p>
-              <strong className="text-[#160F2E]">Word Pocket</strong> — Identidade Visual Neon Candy Vibrant & Guia Inteligente de Inglês.
-            </p>
-            <p className="font-bold text-[#6938F5]">
-              100% Offline • Sem Backend Próprio • PWA Nativo
+              &copy; {new Date().getFullYear()} <strong className="text-[#160F2E]">Word Pocket</strong>. Todos os direitos reservados.
             </p>
           </div>
         </footer>

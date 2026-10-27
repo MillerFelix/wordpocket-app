@@ -77,7 +77,7 @@ export const OnboardingModal: React.FC = () => {
     },
     {
       tag: '4 Habilidades',
-      title: 'Praticar Inglês',
+      title: 'Praticar',
       subtitle: 'Desenvolvimento integrado de Listening, Speaking, Reading e Writing.',
       icon: GraduationCap,
       iconBg: 'bg-gradient-brand',
