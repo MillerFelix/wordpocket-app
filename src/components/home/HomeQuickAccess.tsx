@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, GraduationCap, Languages, ArrowRight } from 'lucide-react';
+import { BookOpen, GraduationCap, Languages, ArrowRight, Compass } from 'lucide-react';
 import { TabType } from '../../types';
 
 interface HomeQuickAccessProps {
@@ -15,15 +15,26 @@ export const HomeQuickAccess: React.FC<HomeQuickAccessProps> = ({ onNavigate }) 
         </h2>
         <button
           type="button"
-          onClick={() => onNavigate('verbs')}
-          className="text-xs font-bold text-[#176BFF] hover:underline flex items-center gap-1"
+          onClick={() => onNavigate('learn')}
+          className="text-xs font-bold text-[#176BFF] hover:underline flex items-center gap-1 cursor-pointer"
         >
-          <span>Ver todos</span>
+          <span>Ver biblioteca</span>
           <ArrowRight className="w-3 h-3" />
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+        <button
+          type="button"
+          onClick={() => onNavigate('learn')}
+          className="flex items-center justify-center gap-2 py-3 px-3 rounded-2xl bg-[#E0F7F4] hover:bg-[#CCF2EB] text-[#009688] border border-white/90 shadow-2xs font-bold text-xs sm:text-sm transition active:scale-95 group cursor-pointer"
+        >
+          <div className="w-6 h-6 rounded-lg bg-white/90 text-[#00BFA5] flex items-center justify-center group-hover:bg-[#00BFA5] group-hover:text-white transition shadow-2xs">
+            <Compass className="w-3.5 h-3.5" />
+          </div>
+          <span>Aprender</span>
+        </button>
+
         <button
           type="button"
           onClick={() => onNavigate('verbs')}

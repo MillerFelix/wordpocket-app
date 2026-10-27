@@ -1,6 +1,7 @@
 import React from 'react';
-import { Search, X, Filter, Info } from 'lucide-react';
+import { Filter, Info } from 'lucide-react';
 import { VerbGroup } from '../../types';
+import { SearchInput } from '../shared/SearchInput';
 
 interface VerbFilterBarProps {
   search: string;
@@ -32,24 +33,13 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         {/* Main Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#176BFF]" />
-          <input
-            type="text"
+          <SearchInput
             value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={onSearchChange}
             placeholder="Buscar verbo em inglês..."
-            className="w-full pl-11 pr-10 py-3 text-sm bg-white/85 backdrop-blur-md hover:border-[#176BFF]/40 focus:border-[#176BFF] focus:bg-white focus:ring-4 focus:ring-[#176BFF]/10 rounded-2xl border border-white/90 shadow-2xs outline-none transition text-[#160F2E] placeholder:text-[#645A82] font-medium"
+            ariaLabel="Buscar verbo em inglês"
+            variant="default"
           />
-          {search && (
-            <button
-              type="button"
-              onClick={() => onSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#2446C8] hover:text-[#160F2E] rounded-lg"
-              title="Limpar pesquisa"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
         </div>
 
         {/* Action button: Methodology info */}

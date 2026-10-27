@@ -12,7 +12,8 @@ import {
   WifiOff, 
   Sparkles, 
   ArrowRight,
-  User
+  User,
+  Compass
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
@@ -45,6 +46,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
       activeBg: 'bg-[#E1ECFC] border border-white/90',
       activeText: 'text-[#176BFF]',
       activeBar: 'bg-[#176BFF]'
+    },
+    {
+      id: 'learn' as TabType,
+      label: 'Aprender',
+      subtitle: 'Biblioteca & Fundamentos',
+      icon: Compass,
+      count: '37 Artigos',
+      color: 'text-[#00BFA5]',
+      activeBg: 'bg-[#E0F7F4] border border-white/90',
+      activeText: 'text-[#00BFA5]',
+      activeBar: 'bg-[#00BFA5]'
     },
     {
       id: 'verbs' as TabType,

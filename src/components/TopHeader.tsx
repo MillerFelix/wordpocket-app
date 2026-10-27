@@ -16,6 +16,11 @@ const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: stri
     subtitle: 'Word Pocket — Guia e Estudo Inteligente de Inglês',
     badge: 'Início'
   },
+  learn: {
+    title: 'Biblioteca Aprender',
+    subtitle: 'Consultas, explicações claras, fundamentos e gramática essencial',
+    badge: 'Aprender'
+  },
   verbs: {
     title: 'Verbos Irregulares',
     subtitle: 'Base completa com 200 verbos e três formas gramaticais',
@@ -61,6 +66,10 @@ const TAB_THEMES: Record<TabType, { dot: string; badge: string }> = {
   profile: {
     dot: 'bg-[#176BFF] ring-[#176BFF]/20',
     badge: 'bg-[#E1ECFC] text-[#176BFF] border-[#BED7FA]'
+  },
+  learn: {
+    dot: 'bg-[#00BFA5] ring-[#00BFA5]/20',
+    badge: 'bg-[#E0F7F4] text-[#00BFA5] border-[#A7F3D0]'
   },
   verbs: {
     dot: 'bg-[#6545F5] ring-[#6545F5]/20',

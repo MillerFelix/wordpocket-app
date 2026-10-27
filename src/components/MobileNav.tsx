@@ -7,7 +7,8 @@ import {
   Wifi, 
   WifiOff, 
   Download,
-  LogIn
+  LogIn,
+  Compass
 } from 'lucide-react';
 import { TabType } from '../types';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
@@ -44,6 +45,14 @@ export const MobileNav: React.FC<MobileNavProps> = ({
       color: 'text-[#176BFF]',
       activeBg: 'bg-[#E1ECFC] text-[#176BFF] border border-white/90 shadow-2xs',
       activeDot: 'bg-[#176BFF]'
+    },
+    {
+      id: 'learn' as TabType,
+      label: 'Aprender',
+      icon: Compass,
+      color: 'text-[#00BFA5]',
+      activeBg: 'bg-[#E0F7F4] text-[#00BFA5] border border-white/90 shadow-2xs',
+      activeDot: 'bg-[#00BFA5]'
     },
     {
       id: 'verbs' as TabType,
@@ -158,7 +167,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         aria-label="Navegação Móvel"
         className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F0F6FF]/85 backdrop-blur-2xl border-t border-white/80 px-3 py-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-[0_-8px_32px_rgba(23,107,255,0.08)]"
       >
-        <div className="grid grid-cols-4 gap-1 max-w-md mx-auto">
+        <div className="grid grid-cols-5 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;

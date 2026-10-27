@@ -6,6 +6,7 @@ import { HomeView } from './components/HomeView';
 import { IrregularVerbsView } from './components/IrregularVerbsView';
 import { PracticeView } from './components/practice/PracticeView';
 import { QuickTranslatorView } from './components/QuickTranslatorView';
+import { LearningLibraryView } from './components/learning/LearningLibraryView';
 import { FavoritesView } from './components/FavoritesView';
 import { SettingsView } from './components/SettingsView';
 import { UserProfileView } from './components/profile/UserProfileView';
@@ -78,6 +79,10 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 pb-28 lg:pb-12">
           {activeTab === 'home' && (
             <HomeView onNavigate={handleNavigate} />
+          )}
+
+          {activeTab === 'learn' && (
+            <LearningLibraryView initialSearch={pendingSearch} />
           )}
 
           {activeTab === 'verbs' && (
