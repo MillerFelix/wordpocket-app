@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { updateRemoteFavoritesByType } from '../services/favoritesSyncService';
 
@@ -11,8 +11,8 @@ export interface UseFavoritesResult {
 }
 
 /**
- * Hook to manage persistent favorites saved in localStorage with fallback support and exception safety.
- * When a user is authenticated, it also synchronizes the changes to Firestore in the background.
+ * Hook para gerenciar favoritos persistidos no localStorage com fallback e segurança contra exceções.
+ * Quando o usuário está autenticado, sincroniza alterações com o Firestore em segundo plano.
  */
 export function useFavorites(
   storageKey: string,
@@ -105,9 +105,11 @@ export function useFavorites(
     [favorites]
   );
 
+  const favoritesList = useMemo(() => Array.from(favorites), [favorites]);
+
   return {
     favorites,
-    favoritesList: Array.from(favorites),
+    favoritesList,
     isFavorite,
     toggleFavorite,
     removeFavorite

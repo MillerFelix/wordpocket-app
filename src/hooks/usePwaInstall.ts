@@ -12,7 +12,7 @@ export interface UsePwaInstallResult {
 }
 
 /**
- * Hook to manage PWA beforeinstallprompt event and install prompt trigger.
+ * Hook para gerenciar o evento beforeinstallprompt do PWA e o disparo de instalação.
  */
 export function usePwaInstall(): UsePwaInstallResult {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);

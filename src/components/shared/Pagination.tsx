@@ -47,7 +47,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const activeStyle = ACCENT_STYLES[accentColor] || ACCENT_STYLES.brand;
   const hoverText = ACCENT_HOVER_TEXT[accentColor] || ACCENT_HOVER_TEXT.brand;
 
-  // Generate page list with smart ellipsis
+  // Gera lista de páginas com reticências inteligentes
   const getPageNumbers = (): (number | string)[] => {
     if (totalPages <= 10) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -84,7 +84,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       aria-label={ariaLabel}
       className={`bg-white/80 backdrop-blur-xl rounded-3xl border border-white/90 p-4 sm:p-5 shadow-soft-card flex flex-col sm:flex-row items-center justify-between gap-4 ${className}`}
     >
-      {/* Range and total summary */}
+      {/* Resumo do intervalo e contagem total */}
       <div className="text-xs text-[#52456F] font-semibold text-center sm:text-left">
         <span>
           Mostrando{' '}
@@ -97,9 +97,9 @@ export const Pagination: React.FC<PaginationProps> = ({
         </span>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Controles de paginação */}
       <div className="flex items-center gap-1.5 flex-wrap justify-center">
-        {/* First page button */}
+        {/* Botão primeira página */}
         <button
           type="button"
           onClick={() => onPageChange(1)}
@@ -111,7 +111,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           <ChevronsLeft className="w-4 h-4" />
         </button>
 
-        {/* Previous page button */}
+        {/* Botão página anterior */}
         <button
           type="button"
           onClick={() => onPageChange(currentPage - 1)}
@@ -124,7 +124,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           <span className="hidden sm:inline">Anterior</span>
         </button>
 
-        {/* Page number buttons */}
+        {/* Botões numéricos de páginas */}
         <div className="flex items-center gap-1">
           {pageNumbers.map((page, index) => {
             if (page === '...') {
@@ -160,7 +160,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           })}
         </div>
 
-        {/* Next page button */}
+        {/* Botão próxima página */}
         <button
           type="button"
           onClick={() => onPageChange(currentPage + 1)}
@@ -173,7 +173,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           <ChevronRight className="w-4 h-4" />
         </button>
 
-        {/* Last page button */}
+        {/* Botão última página */}
         <button
           type="button"
           onClick={() => onPageChange(totalPages)}

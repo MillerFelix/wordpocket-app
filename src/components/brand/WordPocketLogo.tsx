@@ -2,32 +2,38 @@ import React, { useId } from 'react';
 
 export interface WordPocketLogoProps {
   /**
-   * 'horizontal' renders symbol + 'Word Pocket' logotype
-   * 'icon' renders symbol only
+   * 'horizontal' exibe o símbolo + logotipo 'Word Pocket'
+   * 'icon' exibe apenas o símbolo
    */
   variant?: 'horizontal' | 'icon';
-  /**
-   * Preset sizing
-   */
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  /**
-   * Optional subtitle/tagline under Word Pocket in horizontal layout
-   */
   showSubtitle?: boolean;
   subtitleText?: string;
-  /**
-   * Optional badge displayed beside 'Pocket' (e.g. 'PWA')
-   */
   badge?: string;
-  /**
-   * For dark backgrounds (inverts 'Word' to white)
-   */
   inverted?: boolean;
-  /**
-   * Custom CSS wrapper classes
-   */
   className?: string;
 }
+
+const SYMBOL_SIZE_MAP = {
+  sm: 'w-7 h-7 sm:w-8 sm:h-8',
+  md: 'w-10 h-10 sm:w-11 sm:h-11',
+  lg: 'w-14 h-14',
+  xl: 'w-20 h-20',
+};
+
+const TITLE_SIZE_MAP = {
+  sm: 'text-sm sm:text-base',
+  md: 'text-xl',
+  lg: 'text-2xl',
+  xl: 'text-3xl',
+};
+
+const SUBTITLE_SIZE_MAP = {
+  sm: 'text-[9px]',
+  md: 'text-[11px]',
+  lg: 'text-xs',
+  xl: 'text-sm',
+};
 
 export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
   variant = 'horizontal',
@@ -38,34 +44,9 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
   inverted = false,
   className = '',
 }) => {
-  // Generate unique ID per instance so gradient references never break across responsive breakpoints
+  // Gera identificador único por instância para evitar colisões no SVG
   const rawId = useId();
   const gradientId = `wp-pulse-${rawId.replace(/[^a-zA-Z0-9_-]/g, '')}`;
-
-  // Dimensions mapping
-  const symbolSizeMap = {
-    sm: 'w-7 h-7 sm:w-8 sm:h-8',
-    md: 'w-10 h-10 sm:w-11 sm:h-11',
-    lg: 'w-14 h-14',
-    xl: 'w-20 h-20',
-  };
-
-  const titleSizeMap = {
-    sm: 'text-sm sm:text-base',
-    md: 'text-xl',
-    lg: 'text-2xl',
-    xl: 'text-3xl',
-  };
-
-  const subtitleSizeMap = {
-    sm: 'text-[9px]',
-    md: 'text-[11px]',
-    lg: 'text-xs',
-    xl: 'text-sm',
-  };
-
-  // SVG Symbol: Blue Pulse Palette
-  // Cyan: #26D9FF | Electric Blue: #176BFF | Intense Violet: #6545F5
   const symbolSvg = (
     <svg
       viewBox="0 0 512 512"
@@ -96,14 +77,13 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
         fill="#FFFFFF"
         fillOpacity="0.95"
       />
-      {/* Language beacon / bookmark notch spark */}
       <circle cx="256" cy="164" r="16" fill="#FFFFFF" />
     </svg>
   );
 
   if (variant === 'icon') {
     return (
-      <div className={`relative inline-flex items-center justify-center shrink-0 ${symbolSizeMap[size]} ${className}`}>
+      <div className={`relative inline-flex items-center justify-center shrink-0 ${SYMBOL_SIZE_MAP[size]} ${className}`}>
         {symbolSvg}
       </div>
     );
@@ -111,23 +91,21 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
 
   return (
     <div className={`inline-flex items-center gap-2 sm:gap-2.5 shrink-0 select-none ${className}`}>
-      {/* Brand Icon Mark */}
-      <div className={`relative shrink-0 flex items-center justify-center ${symbolSizeMap[size]}`}>
+      <div className={`relative shrink-0 flex items-center justify-center ${SYMBOL_SIZE_MAP[size]}`}>
         {symbolSvg}
       </div>
 
-      {/* Brand Typography */}
       <div className="flex flex-col justify-center leading-none">
         <div className="flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
           <span
             className={`font-black tracking-tight ${
               inverted ? 'text-white' : 'text-[#160F2E]'
-            } ${titleSizeMap[size]}`}
+            } ${TITLE_SIZE_MAP[size]}`}
           >
             Word
           </span>
           <span
-            className={`font-black bg-gradient-to-r from-[#176BFF] via-[#2446C8] to-[#6545F5] bg-clip-text text-transparent ${titleSizeMap[size]}`}
+            className={`font-black bg-gradient-to-r from-[#176BFF] via-[#2446C8] to-[#6545F5] bg-clip-text text-transparent ${TITLE_SIZE_MAP[size]}`}
           >
             Pocket
           </span>
@@ -142,7 +120,7 @@ export const WordPocketLogo: React.FC<WordPocketLogoProps> = ({
           <p
             className={`font-bold tracking-wide mt-0.5 hidden xs:block ${
               inverted ? 'text-[#C5BDE0]' : 'text-[#2446C8]'
-            } ${subtitleSizeMap[size]}`}
+            } ${SUBTITLE_SIZE_MAP[size]}`}
           >
             {subtitleText}
           </p>

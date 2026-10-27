@@ -35,7 +35,6 @@ export const HomeTipCard: React.FC<HomeNavigationProps> = ({ onNavigate }) => {
         </button>
       </div>
 
-      {/* Decorative books vector illustration */}
       <div className="absolute right-2 -bottom-2 pointer-events-none opacity-25 w-32 h-32">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="20" y="30" width="60" height="15" rx="3" fill="#6938F5" />

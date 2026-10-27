@@ -26,7 +26,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
           isExpanded ? 'bg-[#F3EDFD]' : 'hover:bg-white/90'
         }`}
       >
-        {/* Form 1: Base Form (Sticky pinned on mobile so it stays visible during horizontal scroll) */}
+        {/* Forma 1: Forma base (fixa na rolagem horizontal em telas móveis) */}
         <td
           className={`py-2 sm:py-3.5 px-2 sm:px-5 border-r border-white/80 sticky left-0 z-10 transition-colors ${
             isExpanded ? 'bg-[#F2ECFD]' : 'bg-white/95 group-hover:bg-white'
@@ -56,7 +56,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
           </div>
         </td>
 
-        {/* Form 2: Simple Past (Fresh Mint column) */}
+        {/* Forma 2: Passado simples */}
         <td className="py-2 sm:py-3.5 px-2 sm:px-5 border-r border-white/80 whitespace-nowrap w-[20%] sm:w-[22%] min-w-[100px] sm:min-w-[130px]">
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <span className="font-mono font-bold text-[#0A9B80] text-xs sm:text-[14px] truncate">
@@ -68,7 +68,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
           </div>
         </td>
 
-        {/* Form 3: Past Participle (Tangerine column) */}
+        {/* Forma 3: Particípio passado */}
         <td className="py-2 sm:py-3.5 px-2 sm:px-5 border-r border-white/80 whitespace-nowrap w-[20%] sm:w-[22%] min-w-[100px] sm:min-w-[130px]">
           <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <span className="font-mono font-bold text-[#E04D1B] text-xs sm:text-[14px] truncate">
@@ -80,7 +80,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
           </div>
         </td>
 
-        {/* Translation & Variant Tag */}
+        {/* Tradução e variantes */}
         <td className="py-2 sm:py-3.5 px-2 sm:px-5 text-[#160F2E] font-medium border-r border-white/80 text-xs sm:text-sm min-w-[110px]">
           <span className="block leading-snug">{verb.translation}</span>
           {verb.variants && (
@@ -90,7 +90,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
           )}
         </td>
 
-        {/* Actions (Expand toggle) */}
+        {/* Ações: alternar expansão */}
         <td className="py-2 sm:py-3.5 px-1 sm:px-4 text-center w-9 sm:w-16 shrink-0">
           <button
             type="button"
@@ -106,7 +106,7 @@ export const VerbTableRow: React.FC<VerbTableRowProps> = ({
         </td>
       </tr>
 
-      {/* Expanded Contextual Example Row */}
+      {/* Linha expandida com exemplo contextual de uso */}
       {isExpanded && (
         <tr className="bg-gradient-to-r from-[#F6F1FF] to-[#EFF7FE] border-b border-[#E2D7F8]">
           <td colSpan={5} className="py-2.5 sm:py-3 px-3 sm:px-6">

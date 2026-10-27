@@ -10,7 +10,7 @@ export const HomeGreetingBanner: React.FC = () => {
 
   return (
     <>
-      {/* Mobile Top Greeting Card with Rocket Illustration (Blue Pulse Palette) */}
+      {/* Banner de boas-vindas para dispositivos móveis */}
       <div className="md:hidden relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-5 border border-white/90 shadow-soft-card">
         <div className="relative z-10 max-w-[75%] sm:max-w-[70%]">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 text-[#176BFF] text-[11px] font-bold mb-2 shadow-2xs border border-[#BED7FA]">
@@ -25,7 +25,6 @@ export const HomeGreetingBanner: React.FC = () => {
           </p>
         </div>
 
-        {/* Decorative Floating Rocket SVG Illustration */}
         <div className="absolute right-2 -bottom-1 pointer-events-none w-24 h-24 sm:w-28 sm:h-28 opacity-95">
           <svg
             viewBox="0 0 120 120"
@@ -33,14 +32,11 @@ export const HomeGreetingBanner: React.FC = () => {
             xmlns="http://www.w3.org/2000/svg"
             className="w-full h-full drop-shadow-md"
           >
-            {/* Soft Pastel Clouds */}
             <ellipse cx="60" cy="100" rx="36" ry="12" fill="#BED7FA" />
             <ellipse cx="40" cy="98" rx="20" ry="10" fill="#D4E5FE" />
             <ellipse cx="80" cy="98" rx="22" ry="10" fill="#D4E5FE" />
 
-            {/* Rocket Body */}
             <g transform="rotate(-35 60 55)">
-              {/* Rocket Thruster Flame */}
               <path d="M54 85 Q60 102 66 85 Z" fill="url(#flameGrad)" />
               <path d="M57 85 Q60 94 63 85 Z" fill="#FFE5F0" />
 
@@ -96,7 +92,7 @@ export const HomeGreetingBanner: React.FC = () => {
         </div>
       </div>
 
-      {/* Desktop / Tablet Header Greeting Banner (Blue Pulse Landscape) */}
+      {/* Banner de cabeçalho para desktop e tablets */}
       <div className="hidden md:block relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-7 border border-white/90 shadow-soft-card">
         <div className="flex items-center justify-between">
           <div className="max-w-xl space-y-2 z-10">
@@ -112,7 +108,6 @@ export const HomeGreetingBanner: React.FC = () => {
             </p>
           </div>
 
-          {/* Badge Sticker & Landscape SVG Art */}
           <div className="flex items-center gap-4 z-10">
             <div className="hidden lg:flex flex-col items-center justify-center bg-white/95 px-4 py-2.5 rounded-2xl border border-white/90 shadow-sm transform rotate-2">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#176BFF]">
@@ -123,7 +118,6 @@ export const HomeGreetingBanner: React.FC = () => {
           </div>
         </div>
 
-        {/* Ambient Neon Candy Landscape SVG Background */}
         <div className="absolute right-0 bottom-0 pointer-events-none w-80 h-32 opacity-75">
           <svg
             viewBox="0 0 320 120"

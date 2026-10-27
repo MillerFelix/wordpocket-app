@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Hook to monitor browser online/offline status with automatic event listener cleanup.
+ * Hook para monitorar o status online/offline do navegador com limpeza automática dos listeners.
  */
 export function useOnlineStatus(): boolean {
   const [isOnline, setIsOnline] = useState<boolean>(() => {

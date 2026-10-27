@@ -19,7 +19,7 @@ export const NotebookCover: React.FC<NotebookCoverProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center py-6 sm:py-12 px-4 max-w-xl mx-auto w-full select-none">
-      {/* 3D Perspective Container for Smooth Opening Animation */}
+      {/* Contêiner com perspectiva 3D para transição suave de abertura */}
       <div 
         className="w-full relative [perspective:1200px]"
         role="region"
@@ -37,27 +37,27 @@ export const NotebookCover: React.FC<NotebookCoverProps> = ({
             transformOrigin: 'left center'
           }}
         >
-          {/* Notebook Outer Spine & Shadow */}
+          {/* Lombada e sombra externa do caderno */}
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-[#092257] via-[#1250C4] to-[#1e40af] opacity-40 blur-lg group-hover:opacity-60 transition duration-500" />
 
-          {/* Book Cover Body */}
+          {/* Corpo principal da capa */}
           <div className="relative rounded-3xl bg-gradient-to-br from-[#0a2769] via-[#1250C4] to-[#1a44b8] text-white p-7 sm:p-10 shadow-[0_20px_50px_rgba(9,34,87,0.4)] border border-[#2a68e8]/30 overflow-hidden min-h-[460px] sm:min-h-[500px] flex flex-col justify-between">
-            {/* Background Texture Lines and Lighting */}
+            {/* Textura de fundo e iluminação */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/15 via-transparent to-black/30 pointer-events-none" />
             <div className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-[#176BFF]/25 blur-3xl pointer-events-none" />
             <div className="absolute -left-20 -bottom-20 w-64 h-64 rounded-full bg-[#26D9FF]/15 blur-3xl pointer-events-none" />
 
-            {/* Left Leather Spine Detail with Stitching */}
+            {/* Lombada lateral simulando couro com costura */}
             <div className="absolute top-0 bottom-0 left-0 w-8 sm:w-10 bg-gradient-to-r from-black/50 via-black/25 to-transparent border-r border-white/10 flex flex-col justify-between py-6 items-center">
               <div className="w-1.5 h-full border-r-2 border-dashed border-white/20" />
             </div>
 
-            {/* Ribbon Bookmark Hanging Out */}
+            {/* Fita marcadora de páginas */}
             <div className="absolute top-0 right-10 sm:right-14 w-6 sm:w-7 h-20 bg-gradient-to-b from-[#F59E0B] to-[#D97706] shadow-md rounded-b-md flex flex-col items-center justify-end pb-1.5 transform transition-transform group-hover:translate-y-1">
               <span className="w-2.5 h-2.5 rotate-45 bg-[#0a2769] transform translate-y-2" />
             </div>
 
-            {/* Header: Brand & Emblem */}
+            {/* Cabeçalho da capa com marca e contagem */}
             <div className="pl-6 sm:pl-8 flex flex-col sm:flex-row sm:items-center justify-between gap-2 relative z-10">
               <div className="flex items-center gap-2">
                 <WordPocketLogo
@@ -75,10 +75,10 @@ export const NotebookCover: React.FC<NotebookCoverProps> = ({
               </div>
             </div>
 
-            {/* Center Golden/Embossed Plaque */}
+            {/* Placa central em destaque */}
             <div className="pl-6 sm:pl-8 my-auto relative z-10 py-6">
               <div className="bg-white/[0.08] backdrop-blur-xl border border-white/25 rounded-2xl p-6 sm:p-8 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] relative overflow-hidden group-hover:border-white/40 transition">
-                {/* Subtle shine line across plaque */}
+                {/* Linha sutil de brilho sobre a placa */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
 
                 <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-[#176BFF] via-[#26D9FF] to-white/90 p-0.5 shadow-lg flex items-center justify-center">
@@ -94,7 +94,7 @@ export const NotebookCover: React.FC<NotebookCoverProps> = ({
                   Seu espaço pessoal para registrar vocabulário, regras gramaticais e reflexões de estudo.
                 </p>
 
-                {/* Owner Info Plaque */}
+                {/* Identificação do proprietário do caderno */}
                 <div className="mt-5 pt-4 border-t border-white/15 flex items-center justify-center gap-2.5 text-xs text-blue-200">
                   {userAvatar ? (
                     <img 
@@ -112,7 +112,7 @@ export const NotebookCover: React.FC<NotebookCoverProps> = ({
               </div>
             </div>
 
-            {/* Bottom Call to Action */}
+            {/* Rodapé com botão de abertura */}
             <div className="pl-6 sm:pl-8 relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
               <span className="text-[11px] text-blue-200/80 font-medium">
                 Toque na capa para abrir suas anotações

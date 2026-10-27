@@ -109,10 +109,10 @@ export const AuthModal: React.FC = () => {
         className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-white/80 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Ambient Top Glow */}
+        {/* Brilho decorativo superior */}
         <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-brand pointer-events-none" />
 
-        {/* Back button for reset mode */}
+        {/* Botão de retorno no modo de recuperação */}
         {authModalMode === 'reset' && (
           <button
             type="button"
@@ -124,7 +124,7 @@ export const AuthModal: React.FC = () => {
           </button>
         )}
 
-        {/* Close button */}
+        {/* Botão de fechar */}
         <button
           type="button"
           onClick={closeAuthModal}
@@ -134,7 +134,7 @@ export const AuthModal: React.FC = () => {
           <X className="w-5 h-5" />
         </button>
 
-        {/* Brand & Titles */}
+        {/* Marca e títulos contextuais */}
         <div className="text-center space-y-2 pt-2">
           <div className="flex justify-center mb-1">
             <WordPocketLogo variant="icon" size="md" />
@@ -153,7 +153,7 @@ export const AuthModal: React.FC = () => {
           </p>
         </div>
 
-        {/* Missing Firebase warning if not configured */}
+        {/* Alerta quando o Firebase não está configurado */}
         {!isConfigured && (
           <div className="mt-4 p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" />
@@ -161,7 +161,7 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Error message banner */}
+        {/* Mensagem de erro de validação ou autenticação */}
         {activeError && (
           <div className="mt-4 p-3.5 rounded-2xl bg-[#FDE8F1] border border-[#FFD0E5] text-[#F52E91] text-xs font-bold flex items-start gap-2.5 animate-in fade-in">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
@@ -169,7 +169,7 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Reset success banner - Neutral confirmation message */}
+        {/* Mensagem de confirmação de envio para recuperação */}
         {resetSuccess && (
           <div className="mt-4 p-4 rounded-2xl bg-[#DCF8F1] border border-[#B6F5E8] text-[#0A9B80] text-xs font-bold space-y-2 animate-in fade-in">
             <div className="flex items-start gap-2.5">
@@ -188,7 +188,7 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Google Authentication Button */}
+        {/* Botão de autenticação via Google */}
         {authModalMode !== 'reset' && (
           <div className="mt-6 space-y-4">
             <button
@@ -227,7 +227,7 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Email & Password Form */}
+        {/* Formulário de e-mail e senha */}
         {!resetSuccess ? (
           <form onSubmit={handleSubmit} noValidate className="mt-4 space-y-3.5">
             {authModalMode === 'signup' && (
@@ -342,7 +342,7 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Footer switch between Login / Signup */}
+        {/* Alternância de modo entre Login e Cadastro */}
         <div className="mt-5 pt-4 border-t border-slate-100 text-center text-xs text-[#52456F]">
           {authModalMode === 'login' && (
             <p>

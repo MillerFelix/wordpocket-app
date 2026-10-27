@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Plus, Pin, Clock, BookOpen, BookMarked, Sparkles } from 'lucide-react';
 import { Note } from '../../types/notes';
 import { SearchInput } from '../shared/SearchInput';
@@ -23,20 +23,22 @@ export const NotebookSidebar: React.FC<NotebookSidebarProps> = ({
   onCreateNote,
   onCloseNotebook
 }) => {
-  const filteredNotes = notes.filter((n) => {
-    if (!searchQuery.trim()) return true;
+  const filteredNotes = useMemo(() => {
+    if (!searchQuery.trim()) return notes;
     const q = searchQuery.toLowerCase();
-    const titleMatch = (n.title || '').toLowerCase().includes(q);
-    const contentMatch = stripHtml(n.content || '').toLowerCase().includes(q);
-    return titleMatch || contentMatch;
-  });
+    return notes.filter((n) => {
+      const titleMatch = (n.title || '').toLowerCase().includes(q);
+      const contentMatch = stripHtml(n.content || '').toLowerCase().includes(q);
+      return titleMatch || contentMatch;
+    });
+  }, [notes, searchQuery]);
 
   return (
     <aside 
       className="flex flex-col h-full bg-[#F0F6FF]/70 backdrop-blur-xl border-r border-white/80 p-3 sm:p-4 select-none"
       aria-label="Índice do Caderno"
     >
-      {/* Top Bar: Cover Return & New Note CTA */}
+      {/* Barra superior: retorno à capa e contador */}
       <div className="space-y-3 pb-3 border-b border-white/80">
         <div className="flex items-center justify-between gap-2">
           <button
@@ -55,7 +57,7 @@ export const NotebookSidebar: React.FC<NotebookSidebarProps> = ({
           </div>
         </div>
 
-        {/* Primary Action: New Note */}
+        {/* Ação principal: nova anotação */}
         <button
           type="button"
           onClick={onCreateNote}
@@ -65,7 +67,7 @@ export const NotebookSidebar: React.FC<NotebookSidebarProps> = ({
           <span>Nova Anotação</span>
         </button>
 
-        {/* Realtime Search Bar */}
+        {/* Campo de busca em tempo real */}
         <SearchInput
           value={searchQuery}
           onChange={onSearchChange}
@@ -75,7 +77,7 @@ export const NotebookSidebar: React.FC<NotebookSidebarProps> = ({
         />
       </div>
 
-      {/* Notes List Scroll Area */}
+      {/* Lista com rolagem de anotações */}
       <div className="flex-1 overflow-y-auto pt-3 space-y-2 pr-0.5" role="list">
         {filteredNotes.length === 0 ? (
           <div className="py-10 px-3 text-center space-y-3">
@@ -118,7 +120,7 @@ export const NotebookSidebar: React.FC<NotebookSidebarProps> = ({
                     : 'bg-white/75 hover:bg-white border-white/90 text-[#160F2E] hover:shadow-2xs'
                 }`}
               >
-                {/* Left Active Indicator Bar */}
+                {/* Indicador lateral da nota selecionada */}
                 {isSelected && (
                   <span className="absolute left-0 top-3 bottom-3 w-1 bg-[#176BFF] rounded-r-full" />
                 )}

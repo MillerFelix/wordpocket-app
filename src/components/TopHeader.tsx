@@ -118,7 +118,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
   return (
     <header className="hidden lg:flex items-center justify-between py-3.5 px-8 border-b border-white/80 bg-[#F0F6FF]/75 backdrop-blur-2xl sticky top-0 z-30 shadow-[0_4px_24px_rgba(23,107,255,0.06)]">
-      {/* Contextual Section Header with pillar identity dot & badge */}
+      {/* Cabeçalho contextual da seção com indicador e badge */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2.5">
           <span className={`w-2.5 h-2.5 rounded-full ring-4 ${currentTabTheme.dot}`} />
@@ -134,9 +134,9 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         </span>
       </div>
 
-      {/* Right Controls: Online Status, Notifications, Avatar */}
+      {/* Controles à direita: status de rede, notificações e avatar */}
       <div className="flex items-center gap-3">
-        {/* Network status indicator */}
+        {/* Indicador de conectividade */}
         <div
           className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold border transition ${
             isOnline
@@ -157,7 +157,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           )}
         </div>
 
-        {/* Notification bell */}
+        {/* Botão de notificações */}
         <button
           type="button"
           className="relative p-2.5 rounded-2xl bg-white/80 hover:bg-white text-[#52456F] hover:text-[#176BFF] border border-white/90 shadow-2xs transition"
@@ -167,7 +167,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#176BFF]" />
         </button>
 
-        {/* Profile Avatar or Visitor Login */}
+        {/* Avatar de perfil ou botão de login */}
         <div className="flex items-center gap-2.5 pl-3 border-l border-white/80">
           {user ? (
             <div 

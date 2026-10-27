@@ -92,7 +92,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
   if (isVisitor || !user) {
     return (
       <div className="space-y-6 max-w-2xl mx-auto py-8 animate-in fade-in duration-300 text-center">
-        {/* Interactive Avatar for Visitor */}
+        {/* Avatar interativo no modo visitante */}
         <div className="relative inline-block mx-auto">
           <button
             type="button"
@@ -178,11 +178,11 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-4xl mx-auto animate-in fade-in duration-300">
-      {/* Profile Card Header */}
+      {/* Cabeçalho do card de perfil */}
       <div className="relative overflow-hidden rounded-3xl bg-white/85 backdrop-blur-xl p-6 sm:p-8 border border-white/90 shadow-soft-card">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 z-10 relative">
           <div className="flex items-center gap-4 sm:gap-5">
-            {/* User Avatar with interactive change trigger */}
+            {/* Avatar do usuário com ação de troca */}
             <div className="relative group shrink-0">
               <button
                 type="button"
@@ -197,7 +197,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
                     alt={currentAvatar.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                   />
-                  {/* Hover Overlay */}
+                  {/* Camada de sobreposição no hover */}
                   <div className="absolute inset-0 bg-[#160F2E]/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[10px] font-extrabold gap-0.5">
                     <Camera className="w-4 h-4" />
                     <span>Trocar</span>
@@ -212,7 +212,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
               </button>
             </div>
 
-            {/* User Details */}
+            {/* Informações detalhadas do usuário */}
             <div className="space-y-1.5 flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 {isEditingName ? (
@@ -295,7 +295,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
             </div>
           </div>
 
-          {/* Logout Button */}
+          {/* Botão de encerrar sessão */}
           <button
             type="button"
             onClick={handleLogout}
@@ -307,7 +307,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
         </div>
       </div>
 
-      {/* Skills Progress Overview */}
+      {/* Visão geral da evolução das 4 habilidades */}
       <div className="space-y-4">
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-2">
@@ -381,7 +381,7 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onNavigate }) 
         )}
       </div>
 
-      {/* Account Settings & Guided Onboarding trigger */}
+      {/* Ações da conta e atalho para o tutorial */}
       <div className="bg-white/85 backdrop-blur-xl rounded-3xl p-6 border border-white/90 shadow-soft-card space-y-4">
         <h2 className="text-sm font-extrabold text-[#160F2E]">
           Ações da Conta

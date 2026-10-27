@@ -31,7 +31,7 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
   return (
     <div className="bg-white/80 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-white/90 shadow-soft-card space-y-4">
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-        {/* Main Search Input */}
+        {/* Campo principal de busca */}
         <div className="relative flex-1">
           <SearchInput
             value={search}
@@ -42,7 +42,7 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
           />
         </div>
 
-        {/* Action button: Methodology info */}
+        {/* Botão de ação: informações metodológicas */}
         <div className="flex items-center shrink-0 self-end sm:self-auto">
           <button
             type="button"
@@ -59,7 +59,7 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
         </div>
       </div>
 
-      {/* Morphological Pattern Filter Chips */}
+      {/* Filtros de padrões morfológicos */}
       <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto sm:overflow-visible sm:flex-wrap pb-1.5 pt-0.5 text-xs scrollbar-thin">
         <span className="text-[#2446C8] flex items-center gap-1.5 pr-1 font-bold shrink-0">
           <Filter className="w-3.5 h-3.5 text-[#176BFF]" />
@@ -81,7 +81,7 @@ export const VerbFilterBar: React.FC<VerbFilterBarProps> = ({
         ))}
       </div>
 
-      {/* Alphabet Jump Bar */}
+      {/* Barra de atalhos do alfabeto */}
       <div className="flex items-center gap-1 overflow-x-auto pt-2 border-t border-[#BED7FA] pb-0.5 scrollbar-none">
         <button
           type="button"

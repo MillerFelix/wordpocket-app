@@ -1,6 +1,6 @@
 import React from 'react';
 import { Clock, ArrowRight, Sparkles } from 'lucide-react';
-import { LearningArticle } from '../../types/learning';
+import { LearningArticle, CEFR_LEVEL_BADGE_STYLES } from '../../types/learning';
 import { getCategoryById } from '../../data/learning';
 
 interface ArticleCardProps {
@@ -10,15 +10,6 @@ interface ArticleCardProps {
   hideEssential?: boolean;
 }
 
-const LEVEL_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  A1: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
-  A2: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
-  B1: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-  B2: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
-  C1: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-  C2: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200' }
-};
-
 export const ArticleCard: React.FC<ArticleCardProps> = ({
   article,
   onSelect,
@@ -26,7 +17,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   hideEssential = false
 }) => {
   const category = getCategoryById(article.categoryId);
-  const levelStyle = LEVEL_COLORS[article.level] || LEVEL_COLORS.A1;
+  const levelStyle = CEFR_LEVEL_BADGE_STYLES[article.level] || CEFR_LEVEL_BADGE_STYLES.A1;
 
   return (
     <article
@@ -43,7 +34,6 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       className="group relative bg-white/90 hover:bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200/80 hover:border-[#176BFF]/40 shadow-2xs hover:shadow-soft-card transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 text-left active:scale-[0.99] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#176BFF]/25"
     >
       <div className="space-y-1 min-w-0 flex-1">
-        {/* Badges: Level, Category (if not hidden), Essential, Reading Time */}
         <div className="flex items-center gap-2 flex-wrap">
           <span
             className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${levelStyle.bg} ${levelStyle.text} ${levelStyle.border}`}

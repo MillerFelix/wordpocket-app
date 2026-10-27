@@ -63,9 +63,9 @@ export const HomeRecentList: React.FC<HomeRecentListProps> = ({ onNavigate }) =>
       </div>
 
       <div className="space-y-2.5">
-        {RECENT_ITEMS.map((item, idx) => (
+        {RECENT_ITEMS.map((item) => (
           <div
-            key={idx}
+            key={item.term}
             onClick={() => onNavigate(item.targetTab, item.term)}
             className={`flex items-center justify-between p-3 sm:p-3.5 rounded-2xl border ${item.itemBg} transition cursor-pointer group shadow-2xs`}
             role="button"

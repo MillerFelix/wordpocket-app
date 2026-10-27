@@ -12,7 +12,7 @@ import {
   BookOpen,
   ArrowRight
 } from 'lucide-react';
-import { LearningArticle } from '../../types/learning';
+import { LearningArticle, CEFR_LEVEL_BADGE_STYLES } from '../../types/learning';
 import { getCategoryById, getRelatedArticles } from '../../data/learning';
 import { PronounceButton } from '../PronounceButton';
 
@@ -22,15 +22,6 @@ interface ArticleViewProps {
   onSelectArticle: (articleId: string) => void;
 }
 
-const LEVEL_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  A1: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200' },
-  A2: { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
-  B1: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
-  B2: { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
-  C1: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
-  C2: { bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200' }
-};
-
 export const ArticleView: React.FC<ArticleViewProps> = ({
   article,
   onBack,
@@ -38,9 +29,9 @@ export const ArticleView: React.FC<ArticleViewProps> = ({
 }) => {
   const category = getCategoryById(article.categoryId);
   const relatedArticles = getRelatedArticles(article.id);
-  const levelStyle = LEVEL_COLORS[article.level] || LEVEL_COLORS.A1;
+  const levelStyle = CEFR_LEVEL_BADGE_STYLES[article.level] || CEFR_LEVEL_BADGE_STYLES.A1;
 
-  // Scroll to top when opening an article
+  // Rola até o topo suavemente ao abrir um novo artigo
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [article.id]);

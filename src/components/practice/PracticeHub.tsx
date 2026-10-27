@@ -27,6 +27,8 @@ const SKILL_ICONS_SMALL: Record<PracticeSkillId, React.ElementType> = {
   writing: PenTool
 };
 
+const ALL_SKILLS = practiceService.getAllSkills();
+
 export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
   const { user } = useAuth();
   const [skillProgress, setSkillProgress] = React.useState<Record<PracticeSkillId, SkillProgress> | null>(null);
@@ -38,7 +40,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
   }, [user]);
   return (
     <div className="space-y-5 sm:space-y-6 animate-in fade-in duration-300">
-      {/* Page Header */}
+      {/* Cabeçalho da página */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-1">
         <div className="flex items-start gap-3.5">
           <div className="w-10 sm:w-11 h-10 sm:h-11 rounded-2xl bg-gradient-brand text-white flex items-center justify-center shadow-colored-blue shrink-0 ring-4 ring-white/80">
@@ -66,7 +68,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
         </div>
       </div>
 
-      {/* 4 Main Skill Cards Grid */}
+      {/* Grade com os 4 cards principais de habilidades */}
       <div className="space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 px-1">
           <h2 className="text-xs font-extrabold uppercase tracking-wider text-[#52456F] flex items-center gap-1.5">
@@ -79,7 +81,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-          {practiceService.getAllSkills().map((skill) => (
+          {ALL_SKILLS.map((skill) => (
             <PracticeSkillCard
               key={skill.id}
               skill={skill}
@@ -89,7 +91,7 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
         </div>
       </div>
 
-      {/* Discreet Overall Progress Area (Prepared for future real data, without fake stats) */}
+      {/* Área de progresso geral */}
       <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-5 sm:p-6 border border-white/90 shadow-soft-card space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
           <div className="flex items-center gap-2">
@@ -103,9 +105,9 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
           </span>
         </div>
 
-        {/* 4 Skill Status Chips */}
+        {/* Indicadores de status das 4 habilidades */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {practiceService.getAllSkills().map((skill) => {
+          {ALL_SKILLS.map((skill) => {
             const Icon = SKILL_ICONS_SMALL[skill.id];
             return (
               <div

@@ -11,6 +11,18 @@ interface PronounceButtonProps {
   lang?: 'en' | 'pt';
 }
 
+const SIZE_CLASSES_WITH_LABEL = {
+  xs: 'h-7 px-2.5 py-1 text-xs gap-1.5 min-w-[68px]',
+  sm: 'h-8 px-3 py-1.5 text-xs gap-1.5 min-w-[76px]',
+  md: 'h-9 px-3.5 py-2 text-xs sm:text-sm gap-2 min-w-[86px]'
+};
+
+const SIZE_CLASSES_ICON_ONLY = {
+  xs: 'w-7 h-7 min-w-[28px] min-h-[28px] p-1 text-xs',
+  sm: 'w-8 h-8 min-w-[32px] min-h-[32px] p-1.5 text-xs',
+  md: 'w-9 h-9 min-w-[36px] min-h-[36px] p-2 text-sm'
+};
+
 export const PronounceButton: React.FC<PronounceButtonProps> = ({
   text,
   className = '',
@@ -91,16 +103,8 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
 
   // Classes dimensionais com garantia de que botões com texto "Ouvir" nunca truncam nem quebram
   const sizeClasses = showLabel
-    ? {
-        xs: 'h-7 px-2.5 py-1 text-xs gap-1.5 min-w-[68px]',
-        sm: 'h-8 px-3 py-1.5 text-xs gap-1.5 min-w-[76px]',
-        md: 'h-9 px-3.5 py-2 text-xs sm:text-sm gap-2 min-w-[86px]'
-      }[size]
-    : {
-        xs: 'w-7 h-7 min-w-[28px] min-h-[28px] p-1 text-xs',
-        sm: 'w-8 h-8 min-w-[32px] min-h-[32px] p-1.5 text-xs',
-        md: 'w-9 h-9 min-w-[36px] min-h-[36px] p-2 text-sm'
-      }[size];
+    ? SIZE_CLASSES_WITH_LABEL[size]
+    : SIZE_CLASSES_ICON_ONLY[size];
 
   // Estado visual do botão
   let stateClasses = 'bg-white/85 text-[#2446C8] hover:text-[#176BFF] hover:bg-[#E1ECFC] border border-[#BED7FA]/70 hover:border-[#176BFF]/40 shadow-2xs';

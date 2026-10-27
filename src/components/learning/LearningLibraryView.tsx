@@ -104,19 +104,19 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Selected article object if one is open
+  // Artigo selecionado aberto para leitura
   const currentArticle = useMemo(() => {
     if (!selectedArticleId) return null;
     return learningService.getById(selectedArticleId) || null;
   }, [selectedArticleId]);
 
-  // Current category metadata
+  // Metadados da categoria atual
   const currentCategoryObj = useMemo(() => {
     if (!selectedCategory || selectedCategory === 'all') return null;
     return getCategoryById(selectedCategory);
   }, [selectedCategory]);
 
-  // Articles filtered by current category, search and level
+  // Artigos filtrados pela categoria selecionada, busca textual e nível CEFR
   const filteredArticles = useMemo(() => {
     return learningService.search(
       searchQuery,
@@ -125,7 +125,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
     );
   }, [searchQuery, selectedCategory, selectedLevel]);
 
-  // Available levels inside current selection
+  // Níveis disponíveis dentro da seleção atual
   const availableLevels = useMemo(() => {
     const rawArticles = selectedCategory && selectedCategory !== 'all'
       ? learningService.getByCategory(selectedCategory)
@@ -135,7 +135,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
     return ALL_LEVELS.filter((lvl) => set.has(lvl));
   }, [selectedCategory]);
 
-  // Reset to first page when search, category or level changes
+  // Redefine para a primeira página quando a busca, categoria ou nível são alterados
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedCategory, selectedLevel]);
@@ -143,7 +143,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
   const totalCount = learningService.getCount();
   const isSearching = searchQuery.trim().length > 0;
 
-  // Pagination calculation
+  // Cálculo da paginação
   const totalItems = filteredArticles.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
   const safeCurrentPage = Math.min(Math.max(1, currentPage), totalPages);
@@ -162,7 +162,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
     setCurrentPage(clamped);
   };
 
-  // State 1: Reading an article
+  // Estado 1: Leitura de um artigo
   if (currentArticle) {
     return (
       <ArticleView
@@ -215,7 +215,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
         />
       </div>
 
-      {/* State 2: Resultados de Busca */}
+      {/* Estado 2: Resultados de busca */}
       {isSearching ? (
         <section className="space-y-4">
           <div className="flex items-center justify-between px-1">
@@ -280,7 +280,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
           )}
         </section>
       ) : selectedCategory ? (
-        /* State 3: Área Dedicada da Categoria Selecionada ou Biblioteca Completa */
+        /* Estado 3: Área dedicada da categoria selecionada ou biblioteca completa */
         <section className="space-y-4">
           {/* Botão de retorno e seletor rápido */}
           <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -414,7 +414,7 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
           </div>
         </section>
       ) : (
-        /* State 4: Página Inicial Minimalista, Convidativa e Organizada por Categorias */
+        /* Estado 4: Página inicial com navegação limpa por categorias */
         <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 px-1">
             <div>

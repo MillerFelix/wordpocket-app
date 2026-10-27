@@ -23,41 +23,42 @@ interface SidebarProps {
   onCloseMobile?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  activeTab,
-  onTabChange,
-  verbCount,
-  practiceCount,
-  isMobileOpen = false,
-  onCloseMobile
-}) => {
-  // Lock body scroll and handle Escape key when mobile drawer is open
-  useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = 'hidden';
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          onCloseMobile?.();
-        }
-      };
-      window.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [isMobileOpen, onCloseMobile]);
+interface SecondaryNavItem {
+  id: TabType;
+  label: string;
+  icon: React.ElementType;
+  iconColor: string;
+}
 
-  const handleTabClick = (tab: TabType) => {
-    onTabChange(tab);
-    if (onCloseMobile) {
-      onCloseMobile();
-    }
-  };
+const SECONDARY_NAV_ITEMS: SecondaryNavItem[] = [
+  {
+    id: 'notes',
+    label: 'Anotações',
+    icon: BookMarked,
+    iconColor: 'text-[#176BFF]'
+  },
+  {
+    id: 'favorites',
+    label: 'Favoritos',
+    icon: Star,
+    iconColor: 'text-[#F52E91]'
+  },
+  {
+    id: 'settings',
+    label: 'Configurações',
+    icon: Settings,
+    iconColor: 'text-[#2446C8]'
+  },
+  {
+    id: 'profile',
+    label: 'Perfil',
+    icon: User,
+    iconColor: 'text-[#176BFF]'
+  }
+];
 
-  const mainNavItems = [
+function getMainNavItems(verbCount: number, practiceCount?: number) {
+  return [
     {
       id: 'home' as TabType,
       label: 'Início',
@@ -113,37 +114,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
       activeBar: 'bg-[#FF6534]'
     }
   ];
+}
 
-  const secondaryNavItems = [
-    {
-      id: 'notes' as TabType,
-      label: 'Anotações',
-      icon: BookMarked,
-      iconColor: 'text-[#176BFF]'
-    },
-    {
-      id: 'favorites' as TabType,
-      label: 'Favoritos',
-      icon: Star,
-      iconColor: 'text-[#F52E91]'
-    },
-    {
-      id: 'settings' as TabType,
-      label: 'Configurações',
-      icon: Settings,
-      iconColor: 'text-[#2446C8]'
-    },
-    {
-      id: 'profile' as TabType,
-      label: 'Perfil',
-      icon: User,
-      iconColor: 'text-[#176BFF]'
+export const Sidebar: React.FC<SidebarProps> = ({
+  activeTab,
+  onTabChange,
+  verbCount,
+  practiceCount,
+  isMobileOpen = false,
+  onCloseMobile
+}) => {
+  // Bloqueia a rolagem do corpo e gerencia tecla Escape quando a gaveta móvel está aberta
+  useEffect(() => {
+    if (isMobileOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onCloseMobile?.();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
     }
-  ];
+  }, [isMobileOpen, onCloseMobile]);
+
+  const handleTabClick = (tab: TabType) => {
+    onTabChange(tab);
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+  };
+
+  const mainNavItems = React.useMemo(
+    () => getMainNavItems(verbCount, practiceCount),
+    [verbCount, practiceCount]
+  );
 
   const renderNavContent = () => (
     <div className="space-y-6">
-      {/* Main Navigation Items */}
+      {/* Navegação principal */}
       <nav className="space-y-1.5" aria-label="Navegação Principal">
         {mainNavItems.map((item) => {
           const Icon = item.icon;
@@ -200,9 +214,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      {/* Secondary Navigation (Favorites, Notes, Settings, Profile) */}
+      {/* Navegação secundária (Anotações, Favoritos, Configurações e Perfil) */}
       <div className="pt-2 border-t border-white/80 space-y-1">
-        {secondaryNavItems.map((item) => {
+        {SECONDARY_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           return (

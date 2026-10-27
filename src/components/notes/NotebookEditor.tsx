@@ -41,7 +41,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
   const editorRef = useRef<HTMLDivElement>(null);
   const currentNoteIdRef = useRef<string | null>(null);
 
-  // Sync content with editor DOM when switching notes or initializing
+  // Sincroniza o conteúdo com o DOM do editor ao trocar de anotação ou inicializar
   useEffect(() => {
     if (!editorRef.current) return;
 
@@ -99,7 +99,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
       role="region"
       aria-label="Editor de Anotação"
     >
-      {/* Top Action Bar */}
+      {/* Barra superior de ações */}
       <div className="flex items-center justify-between gap-2 px-4 sm:px-6 py-3 border-b border-slate-100 bg-white/80">
         <div className="flex items-center gap-2">
           {onBackToList && (
@@ -114,7 +114,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
             </button>
           )}
 
-          {/* Auto-save Status Indicator */}
+          {/* Indicador de status de salvamento */}
           <div className="flex items-center gap-1.5 text-[11px] font-bold">
             {saveStatus === 'saving' ? (
               <span className="inline-flex items-center gap-1 text-[#176BFF] animate-pulse">
@@ -131,7 +131,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
           </div>
         </div>
 
-        {/* Right Tools: Pin & Delete */}
+        {/* Ferramentas: fixar e excluir */}
         <div className="flex items-center gap-1.5">
           <button
             type="button"
@@ -159,9 +159,9 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
         </div>
       </div>
 
-      {/* Editor Body */}
+      {/* Corpo do editor */}
       <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-y-auto">
-        {/* Title Input */}
+        {/* Campo de título */}
         <input
           type="text"
           value={note.title}
@@ -171,7 +171,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
           aria-label="Título da anotação"
         />
 
-        {/* Note Metadata */}
+        {/* Metadados da anotação */}
         <div className="flex items-center gap-3 text-[11px] text-[#7E749B] mb-4 pb-3 border-b border-slate-100 font-medium">
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3 text-slate-400" />
@@ -183,7 +183,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
           </div>
         </div>
 
-        {/* Text Formatting Toolbar */}
+        {/* Barra de formatação de texto */}
         <div 
           className="flex items-center flex-wrap gap-1 p-1 bg-slate-50/90 rounded-2xl border border-slate-200/60 mb-4 select-none shrink-0"
           role="toolbar"
@@ -272,7 +272,7 @@ export const NotebookEditor: React.FC<NotebookEditorProps> = ({
           </button>
         </div>
 
-        {/* Rich Content Area */}
+        {/* Área de conteúdo rico */}
         <div
           ref={editorRef}
           contentEditable
