@@ -11,21 +11,21 @@ export const HomeGreetingBanner: React.FC = () => {
   return (
     <>
       {/* Banner de boas-vindas para dispositivos móveis */}
-      <div className="md:hidden relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-5 border border-white/90 shadow-soft-card">
-        <div className="relative z-10 max-w-[75%] sm:max-w-[70%]">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/90 text-[#176BFF] text-[11px] font-bold mb-2 shadow-2xs border border-[#BED7FA]">
-            <Sparkles className="w-3.5 h-3.5 text-[#26D9FF]" />
+      <div className="md:hidden relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#D4E5FE] via-[#E1ECFC] to-[#CFE2FE] p-3.5 sm:p-5 border border-white/90 shadow-soft-card">
+        <div className="relative z-10 max-w-[72%]">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/90 text-[#176BFF] text-[10px] sm:text-[11px] font-bold mb-1 sm:mb-2 shadow-2xs border border-[#BED7FA]">
+            <Sparkles className="w-3 h-3 text-[#26D9FF]" />
             <span>Bem-vindo ao Word Pocket</span>
           </div>
-          <h1 className="text-lg sm:text-xl font-extrabold text-[#160F2E] tracking-tight">
+          <h1 className="text-base sm:text-xl font-extrabold text-[#160F2E] tracking-tight leading-tight">
             {greetingTitle}
           </h1>
-          <p className="text-xs font-semibold text-[#52456F] mt-1 leading-snug">
+          <p className="text-[11px] sm:text-xs font-semibold text-[#52456F] mt-0.5 sm:mt-1 leading-snug line-clamp-1 sm:line-clamp-none">
             Que bom te ver por aqui! Seu inglês te leva mais longe.
           </p>
         </div>
 
-        <div className="absolute right-2 -bottom-1 pointer-events-none w-24 h-24 sm:w-28 sm:h-28 opacity-95">
+        <div className="absolute right-1 -bottom-2 pointer-events-none w-20 h-20 sm:w-28 sm:h-28 opacity-90">
           <svg
             viewBox="0 0 120 120"
             fill="none"
