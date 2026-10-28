@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { MobileNav } from './components/MobileNav';
 import { TopHeader } from './components/TopHeader';
@@ -26,6 +26,10 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
   const [activeTab, setActiveTab] = useState<TabType>(initialTab);
   const [pendingSearch, setPendingSearch] = useState<string>('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.title = 'Word Pocket';
+  }, [activeTab]);
 
   const handleNavigate = (tab: TabType, term?: string) => {
     setActiveTab(tab);

@@ -214,9 +214,6 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
             <h1 className="text-xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
               Aprender Inglês
             </h1>
-            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-0.5 sm:mt-1">
-              Consulte regras explicadas sem complicação, entenda os fundamentos e tire dúvidas com exemplos práticos.
-            </p>
           </div>
         </div>
 

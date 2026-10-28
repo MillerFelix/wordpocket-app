@@ -8,9 +8,10 @@ describe('PracticeView & 4 English Skills Hub', () => {
 
     // Hub Header
     expect(screen.getByRole('heading', { level: 1, name: 'Praticar' })).toBeInTheDocument();
+    expect(screen.getByText('Centro de Aprendizagem')).toBeInTheDocument();
     expect(
-      screen.getByText(/Desenvolva as quatro habilidades essenciais do idioma no seu próprio ritmo/i)
-    ).toBeInTheDocument();
+      screen.queryByText(/Desenvolva as quatro habilidades essenciais do idioma no seu próprio ritmo/i)
+    ).not.toBeInTheDocument();
 
     // 4 Skill cards present
     expect(screen.getByRole('heading', { level: 3, name: /Listening/i })).toBeInTheDocument();

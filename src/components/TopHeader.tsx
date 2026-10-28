@@ -10,45 +10,37 @@ interface TopHeaderProps {
   onNavigate: (tab: TabType) => void;
 }
 
-const TAB_TITLES: Record<TabType, { title: string; subtitle: string; badge: string }> = {
+const TAB_TITLES: Record<TabType, { title: string; badge: string }> = {
   home: {
     title: 'Painel Geral',
-    subtitle: 'Word Pocket — Guia e Estudo Inteligente de Inglês',
     badge: 'Início'
   },
   learn: {
-    title: 'Biblioteca Aprender',
-    subtitle: 'Consultas, explicações claras, fundamentos e gramática essencial',
+    title: 'Aprender',
     badge: 'Aprender'
   },
   verbs: {
     title: 'Verbos Irregulares',
-    subtitle: 'Base completa com 200 verbos e três formas gramaticais',
     badge: '200 Verbos'
   },
   practice: {
     title: 'Praticar',
-    subtitle: 'Desenvolvimento das 4 habilidades: Escuta, Fala, Leitura e Escrita',
     badge: '4 Habilidades'
   },
   translator: {
     title: 'Tradutor Rápido',
-    subtitle: 'Consulta e tradução imediata com inteligência contextual',
     badge: 'Tradutor'
   },
   history: {
-    title: 'Histórico de Consultas',
-    subtitle: 'Registro das suas últimas pesquisas no aplicativo',
+    title: 'Histórico',
     badge: 'Histórico'
   },
   profile: {
-    title: 'Perfil Pessoal',
-    subtitle: 'Gerencie sua conta, progresso sincronizado e histórico',
+    title: 'Perfil',
     badge: 'Conta'
   },
   notes: {
-    title: 'Caderno de Anotações',
-    subtitle: 'Seu espaço pessoal de anotações, vocabulário e estudos em inglês',
+    title: 'Anotações',
     badge: 'Anotações'
   }
 };
@@ -110,9 +102,6 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         </div>
         <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${currentTabTheme.badge}`}>
           {currentTabInfo.badge}
-        </span>
-        <span className="text-xs text-[#52456F] font-medium hidden xl:inline">
-          • {currentTabInfo.subtitle}
         </span>
       </div>
 

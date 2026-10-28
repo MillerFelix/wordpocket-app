@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { HomeTipCard } from '../components/home/HomeMotivationSection';
+import { HomeTipCard, HomeNotesShortcut } from '../components/home/HomeMotivationSection';
 import { getDailyTip, ENGLISH_TIPS } from '../data/englishTips';
 
 describe('HomeTipCard & English Tips Tests', () => {
@@ -44,5 +44,18 @@ describe('HomeTipCard & English Tips Tests', () => {
 
     fireEvent.click(practiceBtn);
     expect(onNavigateMock).toHaveBeenCalledWith('practice');
+  });
+
+  it('renders HomeNotesShortcut with notebook icon, description and navigates to notes', () => {
+    const onNavigateMock = vi.fn();
+    render(<HomeNotesShortcut onNavigate={onNavigateMock} />);
+
+    expect(screen.getByText('Anotações')).toBeInTheDocument();
+    expect(screen.getByText('Seu caderno pessoal')).toBeInTheDocument();
+    expect(screen.getByText('Caderno de Estudos')).toBeInTheDocument();
+
+    const shortcutBtn = screen.getByRole('button', { name: /Anotações/i });
+    fireEvent.click(shortcutBtn);
+    expect(onNavigateMock).toHaveBeenCalledWith('notes');
   });
 });

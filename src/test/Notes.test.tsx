@@ -119,12 +119,12 @@ describe('Anotações (Notes) UI and Integration Tests', () => {
     expect(handleTabChange).toHaveBeenCalledWith('notes');
   });
 
-  it('renders TopHeader with Caderno de Anotações title and badge', () => {
+  it('renders TopHeader with Anotações title and badge', () => {
     const handleNavigate = vi.fn();
     render(<TopHeader activeTab="notes" onNavigate={handleNavigate} />);
 
-    expect(screen.getByRole('heading', { name: /Caderno de Anotações/i })).toBeInTheDocument();
-    expect(screen.getByText('Anotações')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Anotações/i })).toBeInTheDocument();
+    expect(screen.getAllByText('Anotações').length).toBeGreaterThan(0);
   });
 
   it('shows closed notebook cover when opened for the first time and opens upon click', async () => {

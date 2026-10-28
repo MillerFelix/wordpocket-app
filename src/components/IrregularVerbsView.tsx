@@ -113,9 +113,6 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
             <h1 className="text-xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
               Verbos Irregulares
             </h1>
-            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-0.5 sm:mt-1">
-              Catálogo completo com 200 verbos irregulares, paginação e visualização compacta.
-            </p>
           </div>
         </div>
 
@@ -160,8 +157,10 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
                 <strong className="text-[#160F2E]">
                   {startIndex + 1}–{endIndex}
                 </strong>{' '}
-                de <strong className="text-[#160F2E]">{totalItems}</strong>{' '}
-                {totalItems === 1 ? 'verbo irregular' : 'verbos irregulares'}
+                de{' '}
+                <strong className="text-[#160F2E]">
+                  {totalItems} {totalItems === 1 ? 'verbo irregular' : 'verbos irregulares'}
+                </strong>
               </>
             ) : (
               <strong className="text-[#160F2E]">0 verbos irregulares</strong>

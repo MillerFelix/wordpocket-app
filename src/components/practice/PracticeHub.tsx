@@ -56,9 +56,6 @@ export const PracticeHub: React.FC<PracticeHubProps> = ({ onSelectSkill }) => {
             <h1 className="text-xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
               Praticar
             </h1>
-            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-0.5 sm:mt-1 max-w-2xl leading-relaxed">
-              Desenvolva as quatro habilidades essenciais do idioma no seu próprio ritmo, com foco prático em escuta, pronúncia, leitura e construção de frases.
-            </p>
           </div>
         </div>
 

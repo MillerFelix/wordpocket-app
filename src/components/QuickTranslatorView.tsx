@@ -152,9 +152,6 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
             <h1 className="text-xl sm:text-3xl font-black tracking-tight text-[#160F2E] mt-0.5">
               Tradutor Rápido
             </h1>
-            <p className="text-xs sm:text-sm text-[#52456F] font-medium mt-1">
-              Tradução direta entre inglês e português com síntese de voz e dicionário integrado.
-            </p>
           </div>
         </div>
 
