@@ -32,12 +32,13 @@ describe('Word Pocket Refined Interface Tests', () => {
     expect(brokenMatches.length).toBeGreaterThan(0);
   });
 
-  it('toggles coverage methodology information modal in irregular verbs', () => {
+  it('filters irregular verbs by morphological pattern in irregular verbs tab', () => {
     render(<App initialTab="verbs" />);
-    const coverageBtn = screen.getByText(/Metodologia & Fontes/i);
-    fireEvent.click(coverageBtn);
+    expect(screen.getByText(/Padrão morfológico:/i)).toBeInTheDocument();
+    const patternBtn = screen.getByText(/3 Formas Iguais/i);
+    fireEvent.click(patternBtn);
 
-    expect(screen.getByText(/Critérios Linguísticos e Fontes da Base/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ver todos os verbos/i)).toBeInTheDocument();
   });
 
   it('navigates to Praticar hub and displays the 4 skills and discrete progress', () => {
@@ -116,5 +117,27 @@ describe('Word Pocket Refined Interface Tests', () => {
     render(<App />);
     // The PWA badge was removed from the header next to Word Pocket
     expect(screen.queryByText('PWA')).not.toBeInTheDocument();
+  });
+
+  it('renders "Como usar" in sidebar navigation and opens guided onboarding tutorial upon click', () => {
+    render(<App />);
+    const comoUsarBtn = screen.getByRole('button', { name: /Como usar/i });
+    expect(comoUsarBtn).toBeInTheDocument();
+
+    fireEvent.click(comoUsarBtn);
+
+    // Onboarding modal opens with Step 1
+    expect(screen.getByRole('heading', { level: 2, name: /Bem-vindo ao Word Pocket!/i })).toBeInTheDocument();
+  });
+
+  it('simplifies HomeView by not rendering duplicate Acessos rápidos and bottom banner', () => {
+    render(<App />);
+    // Duplicate quick access section removed
+    expect(screen.queryByText(/Acesso rápido/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Ver biblioteca/i)).not.toBeInTheDocument();
+
+    // Motivational bottom banner removed
+    expect(screen.queryByText(/Pequenos passos, grandes conquistas!/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Seu futuro bilíngue começa agora/i)).not.toBeInTheDocument();
   });
 });

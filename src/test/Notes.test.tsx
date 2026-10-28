@@ -14,6 +14,7 @@ import {
   saveLocalNotes
 } from '../services/notesService';
 import { Note } from '../types/notes';
+import { AuthProvider } from '../contexts/AuthContext';
 import App from '../App';
 
 describe('Anotações (Notes) Service Unit Tests', () => {
@@ -102,12 +103,14 @@ describe('Anotações (Notes) UI and Integration Tests', () => {
   it('renders Sidebar with Anotações in secondary navigation and triggers tab change', () => {
     const handleTabChange = vi.fn();
     render(
-      <Sidebar
-        activeTab="home"
-        onTabChange={handleTabChange}
-        verbCount={200}
-        practiceCount={4}
-      />
+      <AuthProvider>
+        <Sidebar
+          activeTab="home"
+          onTabChange={handleTabChange}
+          verbCount={200}
+          practiceCount={4}
+        />
+      </AuthProvider>
     );
 
     const notesBtn = screen.getByRole('button', { name: /Anotações/i });

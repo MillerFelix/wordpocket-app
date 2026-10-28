@@ -22,6 +22,7 @@ import { ArticleCard } from './ArticleCard';
 import { ArticleView } from './ArticleView';
 import { SearchInput } from '../shared/SearchInput';
 import { Pagination } from '../shared/Pagination';
+import { recordRecentAccess } from '../../services/recentAccessService';
 
 interface LearningLibraryViewProps {
   initialArticleId?: string;
@@ -139,6 +140,28 @@ export const LearningLibraryView: React.FC<LearningLibraryViewProps> = ({
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedCategory, selectedLevel]);
+
+  // Atualiza artigo selecionado se initialArticleId mudar externamente
+  useEffect(() => {
+    if (initialArticleId) {
+      setSelectedArticleId(initialArticleId);
+    }
+  }, [initialArticleId]);
+
+  // Registra acesso recente ao artigo em visualização
+  useEffect(() => {
+    if (currentArticle) {
+      const category = getCategoryById(currentArticle.categoryId);
+      recordRecentAccess({
+        id: `learn:${currentArticle.id}`,
+        title: currentArticle.title,
+        typeLabel: 'Aprender',
+        subtitle: `${category?.title || 'Artigo'} • ${currentArticle.level}`,
+        targetTab: 'learn',
+        targetParam: currentArticle.id
+      });
+    }
+  }, [currentArticle]);
 
   const totalCount = learningService.getCount();
   const isSearching = searchQuery.trim().length > 0;

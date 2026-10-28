@@ -91,7 +91,7 @@ export const TranslationResultCard: React.FC<TranslationResultCardProps> = ({
           onClick={onOpenGoogleTranslate}
           className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#52456F] hover:text-[#FF6534] transition hover:underline"
         >
-          <span>Google Tradutor oficial</span>
+          <span>Google Tradutor</span>
           <ExternalLink className="w-3 h-3" />
         </button>
       </div>

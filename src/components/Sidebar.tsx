@@ -7,10 +7,12 @@ import {
   User, 
   Compass, 
   BookMarked,
+  HelpCircle,
   X
 } from 'lucide-react';
 import { TabType } from '../types';
 import { WordPocketLogo } from './brand/WordPocketLogo';
+import { useAuth } from '../contexts/AuthContext';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -48,7 +50,6 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
     {
       id: 'home' as TabType,
       label: 'Início',
-      subtitle: 'Painel e visão geral',
       icon: Home,
       color: 'text-[#176BFF]',
       activeBg: 'bg-[#E1ECFC] border border-white/90',
@@ -58,7 +59,6 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
     {
       id: 'learn' as TabType,
       label: 'Aprender',
-      subtitle: 'Biblioteca & Fundamentos',
       icon: Compass,
       count: '37 Artigos',
       color: 'text-[#00BFA5]',
@@ -69,7 +69,6 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
     {
       id: 'practice' as TabType,
       label: 'Praticar',
-      subtitle: '4 Habilidades do idioma',
       icon: GraduationCap,
       count: practiceCount ? `${practiceCount} Lições` : '4 Áreas',
       color: 'text-[#176BFF]',
@@ -80,7 +79,6 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
     {
       id: 'verbs' as TabType,
       label: 'Verbos Irregulares',
-      subtitle: 'Tabela das 3 formas',
       icon: BookOpen,
       count: verbCount,
       color: 'text-[#6545F5]',
@@ -91,9 +89,7 @@ function getMainNavItems(verbCount: number, practiceCount?: number) {
     {
       id: 'translator' as TabType,
       label: 'Tradutor',
-      subtitle: 'Google Tradutor oficial',
       icon: Languages,
-      count: 'Google',
       color: 'text-[#E04D1B]',
       activeBg: 'bg-[#FFEAE1] border border-white/90',
       activeText: 'text-[#E04D1B]',
@@ -110,6 +106,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isMobileOpen = false,
   onCloseMobile
 }) => {
+  const { openOnboarding } = useAuth();
   // Bloqueia a rolagem do corpo e gerencia tecla Escape quando a gaveta móvel está aberta
   useEffect(() => {
     if (isMobileOpen) {
@@ -174,14 +171,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 >
                   <Icon className="w-4 h-4 stroke-[2.2]" />
                 </div>
-                <div className="truncate">
-                  <p className={`text-sm truncate leading-snug ${isActive ? 'font-bold text-[#160F2E]' : 'font-semibold'}`}>
-                    {item.label}
-                  </p>
-                  <p className="text-[11px] text-[#52456F] font-normal truncate">
-                    {item.subtitle}
-                  </p>
-                </div>
+                <span className={`text-sm truncate ${isActive ? 'font-bold text-[#160F2E]' : 'font-semibold'}`}>
+                  {item.label}
+                </span>
               </div>
 
               {item.count !== undefined && (
@@ -200,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         })}
       </nav>
 
-      {/* Navegação secundária (Anotações e Perfil) */}
+      {/* Navegação secundária (Anotações, Perfil e Como usar) */}
       <div className="pt-2 border-t border-white/80 space-y-1">
         {SECONDARY_NAV_ITEMS.map((item) => {
           const Icon = item.icon;
@@ -221,6 +213,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           );
         })}
+
+        <button
+          type="button"
+          onClick={() => {
+            openOnboarding();
+            if (onCloseMobile) {
+              onCloseMobile();
+            }
+          }}
+          className="w-full flex items-center gap-3 p-2.5 rounded-2xl text-left transition-colors text-xs font-semibold cursor-pointer text-[#52456F] hover:bg-white/80 hover:text-[#160F2E]"
+        >
+          <HelpCircle className="w-4 h-4 stroke-[2] text-[#176BFF]" />
+          <span>Como usar</span>
+        </button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lightbulb, Sparkles, ArrowRight } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 import { TabType } from '../../types';
 
 interface HomeNavigationProps {
@@ -41,37 +41,6 @@ export const HomeTipCard: React.FC<HomeNavigationProps> = ({ onNavigate }) => {
           <rect x="25" y="48" width="55" height="15" rx="3" fill="#19D9B4" />
           <rect x="18" y="66" width="65" height="16" rx="3" fill="#FF6534" />
         </svg>
-      </div>
-    </div>
-  );
-};
-
-export const HomeBottomBanner: React.FC<HomeNavigationProps> = ({ onNavigate }) => {
-  return (
-    <div className="relative overflow-hidden rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-[#FFEAE1] via-[#FDE4EE] to-[#E6D9FB] border border-white/90 shadow-soft-card">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 z-10 relative">
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-2xl bg-white/90 text-[#6938F5] flex items-center justify-center shadow-xs shrink-0 border border-white/90">
-            <Sparkles className="w-5 h-5 text-[#FFD447]" />
-          </div>
-          <div>
-            <h4 className="text-sm font-extrabold text-[#160F2E]">
-              Pequenos passos, grandes conquistas!
-            </h4>
-            <p className="text-xs text-[#52456F] font-medium">
-              Seu futuro bilíngue começa agora. O próximo nível está mais perto do que você imagina.
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => onNavigate('verbs')}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-white/90 hover:bg-white text-[#6938F5] hover:text-[#6938F5] border border-white/90 font-bold text-xs shadow-2xs transition self-start sm:self-auto shrink-0"
-        >
-          <span>Continuar praticando</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
       </div>
     </div>
   );

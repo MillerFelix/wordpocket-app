@@ -14,6 +14,7 @@ import { NotebookSidebar } from './NotebookSidebar';
 import { NotebookEditor } from './NotebookEditor';
 import { DeleteNoteModal } from './DeleteNoteModal';
 import { TabType } from '../../types';
+import { recordRecentAccess } from '../../services/recentAccessService';
 
 interface NotesViewProps {
   onNavigate?: (tab: TabType) => void;
@@ -157,6 +158,16 @@ export const NotesView: React.FC<NotesViewProps> = () => {
     flushPendingSave();
     setSelectedNoteId(noteId);
     setMobileView('editor');
+    const note = notes.find((n) => n.id === noteId);
+    if (note && note.title.trim()) {
+      recordRecentAccess({
+        id: `note:${note.id}`,
+        title: note.title,
+        typeLabel: 'Anotações',
+        subtitle: 'Caderno Pessoal',
+        targetTab: 'notes'
+      });
+    }
   };
 
   const handleCreateNote = async () => {

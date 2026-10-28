@@ -10,6 +10,7 @@ import { translateText, TranslationDirection, TranslationResult } from '../utils
 import { TranslationResultCard } from './translator/TranslationResultCard';
 import { TranslationErrorCard } from './translator/TranslationErrorCard';
 import { LoadingIndicator } from './shared/LoadingIndicator';
+import { recordRecentAccess } from '../services/recentAccessService';
 
 interface QuickTranslatorViewProps {
   initialText?: string;
@@ -43,6 +44,14 @@ export const QuickTranslatorView: React.FC<QuickTranslatorViewProps> = ({ initia
     try {
       const res = await translateText(query, direction);
       setResult(res);
+      recordRecentAccess({
+        id: `translator:${query.toLowerCase()}`,
+        title: query,
+        typeLabel: 'Tradutor',
+        subtitle: direction === 'en_pt' ? 'Inglês ➔ Português' : 'Português ➔ Inglês',
+        targetTab: 'translator',
+        targetParam: query
+      });
     } catch (err: unknown) {
       setResult(null);
       if (err instanceof Error) {

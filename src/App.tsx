@@ -13,9 +13,10 @@ import { AuthModal } from './components/auth/AuthModal';
 import { VisitorPromptModal } from './components/auth/VisitorPromptModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { AuthProvider } from './contexts/AuthContext';
-import { TabType } from './types';
+import { TabType, PracticeSkillId } from './types';
 import { verbsService } from './services/verbsService';
 import { practiceService } from './services/practiceService';
+import { learningService } from './data/learning';
 
 interface AppProps {
   initialTab?: TabType;
@@ -86,7 +87,10 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
           )}
 
           {activeTab === 'learn' && (
-            <LearningLibraryView initialSearch={pendingSearch} />
+            <LearningLibraryView
+              initialArticleId={learningService.getById(pendingSearch) ? pendingSearch : undefined}
+              initialSearch={!learningService.getById(pendingSearch) ? pendingSearch : ''}
+            />
           )}
 
           {activeTab === 'verbs' && (
@@ -94,7 +98,13 @@ const AppContent: React.FC<AppProps> = ({ initialTab = 'home' }) => {
           )}
 
           {activeTab === 'practice' && (
-            <PracticeView />
+            <PracticeView
+              initialSkill={
+                ['listening', 'speaking', 'reading', 'writing'].includes(pendingSearch)
+                  ? (pendingSearch as PracticeSkillId)
+                  : null
+              }
+            />
           )}
 
           {activeTab === 'translator' && (

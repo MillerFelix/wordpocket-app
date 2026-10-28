@@ -3,9 +3,9 @@ import { Search, BookOpen, HelpCircle } from 'lucide-react';
 import { verbsService } from '../services/verbsService';
 import { VerbGroup } from '../types';
 import { VerbFilterBar } from './verbs/VerbFilterBar';
-import { VerbCoverageModal } from './verbs/VerbCoverageModal';
 import { VerbTable } from './verbs/VerbTable';
 import { VerbPagination } from './verbs/VerbPagination';
+import { recordRecentAccess } from '../services/recentAccessService';
 
 interface IrregularVerbsViewProps {
   initialSearch?: string;
@@ -26,12 +26,15 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   const [selectedGroup, setSelectedGroup] = useState<VerbGroup | 'all'>('all');
   const [selectedLetter, setSelectedLetter] = useState<string>('all');
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-  const [showCoverageInfo, setShowCoverageInfo] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     if (initialSearch) {
       setSearch(initialSearch);
+      const matched = verbsService.findByAnyForm(initialSearch);
+      if (matched) {
+        setExpandedRowId(matched.verb.id);
+      }
     }
   }, [initialSearch]);
 
@@ -61,7 +64,23 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
   const paginatedVerbs = filteredVerbs.slice(startIndex, endIndex);
 
   const toggleExpand = (id: string) => {
-    setExpandedRowId((prev) => (prev === id ? null : id));
+    setExpandedRowId((prev) => {
+      const next = prev === id ? null : id;
+      if (next) {
+        const found = verbsService.getAll().find((v) => v.id === id);
+        if (found) {
+          recordRecentAccess({
+            id: `verb:${found.infinitive}`,
+            title: found.infinitive,
+            typeLabel: 'Verbos Irregulares',
+            subtitle: `${found.pastSimple} • ${found.pastParticiple} • ${found.translation}`,
+            targetTab: 'verbs',
+            targetParam: found.infinitive
+          });
+        }
+      }
+      return next;
+    });
   };
 
   const handleClearFilters = () => {
@@ -123,20 +142,12 @@ export const IrregularVerbsView: React.FC<IrregularVerbsViewProps> = ({ initialS
       <VerbFilterBar
         search={search}
         onSearchChange={setSearch}
-        showCoverageInfo={showCoverageInfo}
-        onToggleCoverageInfo={() => setShowCoverageInfo((prev) => !prev)}
         selectedGroup={selectedGroup}
         onSelectGroup={setSelectedGroup}
         filterOptions={FILTER_OPTIONS}
         selectedLetter={selectedLetter}
         onSelectLetter={setSelectedLetter}
         alphabetLetters={alphabetLetters}
-      />
-
-      {/* Modal de cobertura e metodologia */}
-      <VerbCoverageModal
-        isOpen={showCoverageInfo}
-        onClose={() => setShowCoverageInfo(false)}
       />
 
       {/* Contador de resultados */}
