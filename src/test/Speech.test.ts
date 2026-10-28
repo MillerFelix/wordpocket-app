@@ -9,7 +9,9 @@ import {
   playDialogueSequence, 
   speakDialogueLine,
   stopSpeech,
-  getDialogueVoicesCapability
+  getDialogueVoicesCapability,
+  getEnglishVoice,
+  getPortugueseVoice
 } from '../utils/speech';
 
 describe('Speech synthesis text normalization and pronunciation tests', () => {
@@ -297,6 +299,73 @@ describe('Multi-voice Dialogue Engine & Natural Speech Tests', () => {
       const cap = getDialogueVoicesCapability();
       expect(cap).toHaveProperty('totalEnglishVoices');
       expect(cap).toHaveProperty('strategyDescription');
+    });
+  });
+
+  describe('5. Female Voice Preference & Fallback in Speech Synthesis', () => {
+    it('prioritizes female voice for English pronunciation when available in the catalog', () => {
+      const voices = [
+        { name: 'Microsoft David Desktop', lang: 'en-US' },
+        { name: 'Microsoft Zira Desktop', lang: 'en-US' }
+      ] as SpeechSynthesisVoice[];
+
+      const originalSpeech = window.speechSynthesis;
+      (window as any).speechSynthesis = {
+        getVoices: () => voices,
+        onvoiceschanged: null
+      };
+
+      const selected = getEnglishVoice('female');
+      expect(selected).not.toBeNull();
+      expect(selected?.name).toBe('Microsoft Zira Desktop');
+
+      (window as any).speechSynthesis = originalSpeech;
+    });
+
+    it('prioritizes female voice for Portuguese pronunciation when available in the catalog', () => {
+      const voices = [
+        { name: 'Microsoft Ricardo Desktop', lang: 'pt-BR' },
+        { name: 'Microsoft Maria Desktop', lang: 'pt-BR' }
+      ] as SpeechSynthesisVoice[];
+
+      const originalSpeech = window.speechSynthesis;
+      (window as any).speechSynthesis = {
+        getVoices: () => voices,
+        onvoiceschanged: null
+      };
+
+      const selected = getPortugueseVoice('female');
+      expect(selected).not.toBeNull();
+      expect(selected?.name).toBe('Microsoft Maria Desktop');
+
+      (window as any).speechSynthesis = originalSpeech;
+    });
+
+    it('falls back to the best available voice without interrupting pronunciation if no female voice exists', () => {
+      const maleOnlyVoices = [
+        { name: 'David Only', lang: 'en-US' }
+      ] as SpeechSynthesisVoice[];
+
+      const originalSpeech = window.speechSynthesis;
+      const speakMock = vi.fn();
+      const cancelMock = vi.fn();
+
+      (window as any).speechSynthesis = {
+        getVoices: () => maleOnlyVoices,
+        speak: speakMock,
+        cancel: cancelMock,
+        onvoiceschanged: null
+      };
+
+      // Uses fallback voice and applies subtle acoustic pitch modulation
+      const result = speakEnglish('achievement', { preferredGender: 'female' });
+      expect(result.success).toBe(true);
+      expect(speakMock).toHaveBeenCalled();
+      const utterance = speakMock.mock.calls[0][0];
+      expect(utterance.voice?.name).toBe('David Only');
+      expect(utterance.pitch).toBeGreaterThan(1.0);
+
+      (window as any).speechSynthesis = originalSpeech;
     });
   });
 });

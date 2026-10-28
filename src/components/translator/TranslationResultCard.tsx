@@ -40,6 +40,7 @@ export const TranslationResultCard: React.FC<TranslationResultCardProps> = ({
           <PronounceButton
             text={result.translatedText}
             lang={isEnToPt ? 'pt' : 'en'}
+            preferredGender="female"
             size="sm"
             showLabel
             className="bg-[#FFEAE1] text-[#E04D1B] hover:bg-[#FFD2C2] border border-[#FFD2C2]"

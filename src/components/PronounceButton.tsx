@@ -9,6 +9,7 @@ interface PronounceButtonProps {
   size?: 'xs' | 'sm' | 'md';
   showLabel?: boolean;
   lang?: 'en' | 'pt';
+  preferredGender?: 'female' | 'male';
 }
 
 const SIZE_CLASSES_WITH_LABEL = {
@@ -28,7 +29,8 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
   className = '',
   size = 'sm',
   showLabel = false,
-  lang = 'en'
+  lang = 'en',
+  preferredGender
 }) => {
   const [isPreparing, setIsPreparing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -69,6 +71,7 @@ export const PronounceButton: React.FC<PronounceButtonProps> = ({
     }, 6000);
 
     const result = speakText(text, lang, {
+      preferredGender,
       onStart: () => {
         setIsPreparing(false);
         setIsPlaying(true);

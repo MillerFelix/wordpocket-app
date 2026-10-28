@@ -8,18 +8,11 @@ export function isSpeechSupported(): boolean {
 }
 
 let cachedVoices: SpeechSynthesisVoice[] = [];
-let cachedEnglishVoice: SpeechSynthesisVoice | null = null;
-let cachedPortugueseVoice: SpeechSynthesisVoice | null = null;
 let currentUtterance: SpeechSynthesisUtterance | null = null;
 
 function resolveVoices(): void {
   try {
     cachedVoices = window.speechSynthesis.getVoices() || [];
-    if (cachedVoices.length > 0) {
-      const enVoices = cachedVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
-      cachedEnglishVoice = enVoices.find(v => v.lang === 'en-US') || enVoices.find(v => v.lang === 'en-GB') || enVoices[0] || null;
-      cachedPortugueseVoice = cachedVoices.find(v => v.lang === 'pt-BR') || cachedVoices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt')) || null;
-    }
   } catch {
     cachedVoices = [];
   }
@@ -61,30 +54,46 @@ export function getEnglishVoices(): SpeechSynthesisVoice[] {
   return voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
 }
 
-export function getEnglishVoice(): SpeechSynthesisVoice | null {
-  if (cachedEnglishVoice) return cachedEnglishVoice;
+const FEMALE_VOICE_NAMES = /\b(zira|susan|hazel|samantha|victoria|karen|catherine|linda|heather|jenny|aria|zoe|helena|fiona|moira|veena|tessa|female|woman|maria|francisca|luciana|joana|vitoria|vitória|thalita|raquel|yara|leticia|letícia|camila|ana|clara|laura|alice|sophia|eva|serena|ava|allison|kate|siri|mulher|feminina)\b|#female|\bfemale\b/i;
+const MALE_VOICE_NAMES = /\b(david|mark|george|alex|daniel|fred|guy|christopher|brian|oliver|arthur|male|man|ricardo|felipe|homem|masculino)\b|#male|\bmale\b/i;
+
+export function classifyVoiceGender(voice: SpeechSynthesisVoice): 'male' | 'female' | 'unknown' {
+  const name = voice.name || '';
+  const uri = voice.voiceURI || '';
+  const combined = `${name} ${uri}`;
+  if ((voice as any).gender === 'female' || (voice as any).gender === 'FEMALE') return 'female';
+  if ((voice as any).gender === 'male' || (voice as any).gender === 'MALE') return 'male';
+  if (FEMALE_VOICE_NAMES.test(combined)) return 'female';
+  if (MALE_VOICE_NAMES.test(combined)) return 'male';
+  return 'unknown';
+}
+
+export function getEnglishVoice(preferredGender?: 'female' | 'male'): SpeechSynthesisVoice | null {
   const englishVoices = getEnglishVoices();
   if (englishVoices.length === 0) return null;
-  
-  const usVoice = englishVoices.find(v => v.lang === 'en-US');
-  if (usVoice) {
-    cachedEnglishVoice = usVoice;
-    return usVoice;
+
+  if (preferredGender) {
+    const matching = englishVoices.filter(v => classifyVoiceGender(v) === preferredGender);
+    if (matching.length > 0) {
+      const usVoice = matching.find(v => v.lang === 'en-US');
+      if (usVoice) return usVoice;
+      const gbVoice = matching.find(v => v.lang === 'en-GB');
+      if (gbVoice) return gbVoice;
+      return matching[0];
+    }
   }
+
+  const usVoice = englishVoices.find(v => v.lang === 'en-US');
+  if (usVoice) return usVoice;
 
   const gbVoice = englishVoices.find(v => v.lang === 'en-GB');
-  if (gbVoice) {
-    cachedEnglishVoice = gbVoice;
-    return gbVoice;
-  }
+  if (gbVoice) return gbVoice;
 
-  cachedEnglishVoice = englishVoices[0];
   return englishVoices[0];
 }
 
-export function getPortugueseVoice(): SpeechSynthesisVoice | null {
-  if (cachedPortugueseVoice) return cachedPortugueseVoice;
-  if (!isSpeechSupported()) return null;
+export function getPortugueseVoices(): SpeechSynthesisVoice[] {
+  if (!isSpeechSupported()) return [];
   let voices: SpeechSynthesisVoice[] = [];
   try {
     voices = window.speechSynthesis.getVoices();
@@ -92,30 +101,26 @@ export function getPortugueseVoice(): SpeechSynthesisVoice | null {
   if (!voices || voices.length === 0) {
     voices = cachedVoices;
   }
-  
-  const ptBr = voices.find(v => v.lang === 'pt-BR');
-  if (ptBr) {
-    cachedPortugueseVoice = ptBr;
-    return ptBr;
-  }
-
-  const anyPt = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
-  if (anyPt) {
-    cachedPortugueseVoice = anyPt;
-    return anyPt;
-  }
-
-  return null;
+  return voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('pt'));
 }
 
-const FEMALE_VOICE_NAMES = /\b(zira|susan|hazel|samantha|victoria|karen|catherine|linda|heather|jenny|aria|zoe|helena|fiona|moira|veena|tessa|female|woman)\b/i;
-const MALE_VOICE_NAMES = /\b(david|mark|george|alex|daniel|fred|guy|christopher|brian|oliver|arthur|male|man)\b/i;
+export function getPortugueseVoice(preferredGender?: 'female' | 'male'): SpeechSynthesisVoice | null {
+  const ptVoices = getPortugueseVoices();
+  if (ptVoices.length === 0) return null;
 
-export function classifyVoiceGender(voice: SpeechSynthesisVoice): 'male' | 'female' | 'unknown' {
-  const name = voice.name || '';
-  if (FEMALE_VOICE_NAMES.test(name)) return 'female';
-  if (MALE_VOICE_NAMES.test(name)) return 'male';
-  return 'unknown';
+  if (preferredGender) {
+    const matching = ptVoices.filter(v => classifyVoiceGender(v) === preferredGender);
+    if (matching.length > 0) {
+      const ptBr = matching.find(v => v.lang === 'pt-BR' || v.lang === 'pt_BR');
+      if (ptBr) return ptBr;
+      return matching[0];
+    }
+  }
+
+  const ptBr = ptVoices.find(v => v.lang === 'pt-BR' || v.lang === 'pt_BR');
+  if (ptBr) return ptBr;
+
+  return ptVoices[0];
 }
 
 export interface VoiceProfile {
@@ -340,6 +345,7 @@ export function formatTextForSpeech(text: string): string {
 export interface SpeakOptions {
   rate?: number;
   pitch?: number;
+  preferredGender?: 'female' | 'male';
   onStart?: () => void;
   onEnd?: () => void;
   onError?: (err: any) => void;
@@ -423,14 +429,24 @@ export function speakEnglish(text: string, options?: SpeakOptions): SpeechResult
     const utterance = new SpeechSynthesisUtterance(cleanText);
     currentUtterance = utterance;
     
-    const voice = getEnglishVoice();
+    const voice = getEnglishVoice(options?.preferredGender);
     if (voice) {
       utterance.voice = voice;
     }
     
     utterance.lang = 'en-US';
-    utterance.rate = options?.rate ?? 0.9; // Articulação clara para estudantes
-    utterance.pitch = options?.pitch ?? 1.0;
+
+    const isVoiceFemale = voice ? classifyVoiceGender(voice) === 'female' : false;
+    let defaultPitch = 1.0;
+    let defaultRate = 0.9; // Articulação clara para estudantes
+
+    if (options?.preferredGender === 'female') {
+      defaultPitch = isVoiceFemale ? 1.04 : 1.14;
+      defaultRate = 0.92;
+    }
+
+    utterance.rate = options?.rate ?? defaultRate;
+    utterance.pitch = options?.pitch ?? defaultPitch;
 
     utterance.onstart = () => {
       options?.onStart?.();
@@ -480,13 +496,23 @@ export function speakPortuguese(text: string, options?: SpeakOptions): SpeechRes
     const utterance = new SpeechSynthesisUtterance(cleanText);
     currentUtterance = utterance;
 
-    const voice = getPortugueseVoice();
+    const voice = getPortugueseVoice(options?.preferredGender);
     if (voice) {
       utterance.voice = voice;
     }
     utterance.lang = 'pt-BR';
-    utterance.rate = options?.rate ?? 0.95;
-    utterance.pitch = options?.pitch ?? 1.0;
+
+    const isVoiceFemale = voice ? classifyVoiceGender(voice) === 'female' : false;
+    let defaultPitch = 1.0;
+    let defaultRate = 0.95;
+
+    if (options?.preferredGender === 'female') {
+      defaultPitch = isVoiceFemale ? 1.04 : 1.12;
+      defaultRate = 0.95;
+    }
+
+    utterance.rate = options?.rate ?? defaultRate;
+    utterance.pitch = options?.pitch ?? defaultPitch;
 
     utterance.onstart = () => {
       options?.onStart?.();
