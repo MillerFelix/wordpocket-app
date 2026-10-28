@@ -162,9 +162,38 @@ export async function updateUserProfile(
   });
 }
 
+const ONBOARDING_STORAGE_KEY = 'wordpocket_onboarding_completed';
+
+/**
+ * Verifica se o usuário já concluiu o tutorial inicial no armazenamento local
+ */
+export function hasCompletedOnboarding(): boolean {
+  try {
+    return localStorage.getItem(ONBOARDING_STORAGE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Registra a conclusão do tutorial no armazenamento local
+ */
+export function setLocalOnboardingCompleted(completed: boolean = true): void {
+  try {
+    if (completed) {
+      localStorage.setItem(ONBOARDING_STORAGE_KEY, 'true');
+    } else {
+      localStorage.removeItem(ONBOARDING_STORAGE_KEY);
+    }
+  } catch {
+    // Fallback silencioso para erro de storage
+  }
+}
+
 /**
  * Marca o onboarding como concluído para o usuário
  */
 export async function completeUserOnboarding(uid: string): Promise<void> {
+  setLocalOnboardingCompleted(true);
   await updateUserProfile(uid, { onboardingCompleted: true });
 }

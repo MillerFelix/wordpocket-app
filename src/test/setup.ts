@@ -1,8 +1,19 @@
 import '@testing-library/jest-dom';
+import { beforeEach } from 'vitest';
 
 // Mock window.speechSynthesis & SpeechSynthesisUtterance
 if (typeof window !== 'undefined') {
   window.scrollTo = () => {};
+  window.matchMedia = window.matchMedia || ((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => true
+  }) as unknown as MediaQueryList);
   window.speechSynthesis = {
     speak: () => {},
     cancel: () => {},
@@ -33,3 +44,7 @@ if (typeof window !== 'undefined') {
     }
   } as unknown as typeof SpeechSynthesisUtterance;
 }
+
+beforeEach(() => {
+  localStorage.setItem('wordpocket_onboarding_completed', 'true');
+});

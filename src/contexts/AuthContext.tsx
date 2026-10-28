@@ -13,7 +13,9 @@ import {
   createOrUpdateProfile, 
   getUserProfile, 
   updateUserProfile, 
-  completeUserOnboarding 
+  completeUserOnboarding,
+  hasCompletedOnboarding,
+  setLocalOnboardingCompleted
 } from '../services/userService';
 
 import { AuthMode, UserProfile } from '../types/auth';
@@ -69,7 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [authModalMode, setAuthModalMode] = useState<AuthMode>('login');
   const [isVisitorPromptOpen, setIsVisitorPromptOpen] = useState(false);
   const [visitorPromptExplanation, setVisitorPromptExplanation] = useState('');
-  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(() => !hasCompletedOnboarding());
 
   const clearAuthError = useCallback(() => setAuthError(null), []);
 
@@ -246,6 +248,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const completeOnboarding = async () => {
+    setLocalOnboardingCompleted(true);
     if (user) {
       await completeUserOnboarding(user.uid);
       setProfile((prev) => (prev ? { ...prev, onboardingCompleted: true } : null));

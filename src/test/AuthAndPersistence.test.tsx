@@ -16,6 +16,7 @@ vi.mock('../services/authService', async (importOriginal) => {
 describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
   beforeEach(() => {
     localStorage.clear();
+    localStorage.setItem('wordpocket_onboarding_completed', 'true');
     vi.clearAllMocks();
   });
 
@@ -76,35 +77,28 @@ describe('Word Pocket Authentication, Visitor Mode & Persistence Tests', () => {
     expect(screen.getByRole('button', { name: /Criar Conta ou Fazer Login/i })).toBeInTheDocument();
   });
 
-  it('walks through the 5 steps of the Guided Onboarding tutorial from profile', async () => {
+  it('walks through the 3 steps of the Guided Onboarding tutorial from profile', async () => {
     render(<App initialTab="profile" />);
 
     // Click Tutorial button in profile
     const tutorialBtn = screen.getByRole('button', { name: /Tutorial de Boas-Vindas/i });
     fireEvent.click(tutorialBtn);
 
-    // Step 1: Boas-vindas
+    // Step 1: Conheça o app
     expect(screen.getByRole('heading', { level: 2, name: /Bem-vindo ao Word Pocket!/i })).toBeInTheDocument();
+    expect(screen.getByText(/Artigos práticos com vocabulário contextualizado/i)).toBeInTheDocument();
 
-    // Advance to Step 2
-    fireEvent.click(screen.getByRole('button', { name: /Próximo/i }));
-    expect(screen.getByRole('heading', { level: 2, name: /Verbos Irregulares Completos/i })).toBeInTheDocument();
+    // Advance to Step 2: Instalação
+    fireEvent.click(screen.getByRole('button', { name: /Próxima/i }));
+    expect(screen.getByRole('heading', { level: 2, name: /Instale o Word Pocket/i })).toBeInTheDocument();
 
-    // Advance to Step 3
-    fireEvent.click(screen.getByRole('button', { name: /Próximo/i }));
-    expect(screen.getByRole('heading', { level: 2, name: 'Praticar' })).toBeInTheDocument();
-
-    // Advance to Step 4
-    fireEvent.click(screen.getByRole('button', { name: /Próximo/i }));
-    expect(screen.getByRole('heading', { level: 2, name: /Tradutor Rápido/i })).toBeInTheDocument();
-
-    // Advance to Step 5: Apresentação do Desenvolvedor
-    fireEvent.click(screen.getByRole('button', { name: /Próximo/i }));
+    // Advance to Step 3: Apresentação do Desenvolvedor
+    fireEvent.click(screen.getByRole('button', { name: /Próxima/i }));
     expect(screen.getByRole('heading', { level: 2, name: /Apresentação do Desenvolvedor/i })).toBeInTheDocument();
-    expect(screen.getByText(/Eu sou o desenvolvedor do Word Pocket/i)).toBeInTheDocument();
+    expect(screen.getByText(/desenvolvedor de software e criador do Word Pocket/i)).toBeInTheDocument();
 
     // Complete Onboarding
-    const finishBtn = screen.getByRole('button', { name: /Concluir e Começar/i });
+    const finishBtn = screen.getByRole('button', { name: /Concluir/i });
     fireEvent.click(finishBtn);
 
     await waitFor(() => {

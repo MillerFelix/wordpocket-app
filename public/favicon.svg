@@ -1,15 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="wpPulseFavicon" x1="12%" y1="8%" x2="88%" y2="92%">
-      <stop offset="0%" stop-color="#26D9FF" />
-      <stop offset="46%" stop-color="#176BFF" />
-      <stop offset="100%" stop-color="#6545F5" />
+    <linearGradient id="wpMetallicBaseFav" x1="15%" y1="5%" x2="85%" y2="95%">
+      <stop offset="0%" stop-color="#1750B2" />
+      <stop offset="18%" stop-color="#1B60D4" />
+      <stop offset="38%" stop-color="#2E7EFF" />
+      <stop offset="52%" stop-color="#1D6DEC" />
+      <stop offset="72%" stop-color="#114EB5" />
+      <stop offset="90%" stop-color="#0A3686" />
+      <stop offset="100%" stop-color="#06225C" />
+    </linearGradient>
+    <linearGradient id="wpMetallicGleamFav" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#03163E" stop-opacity="0.3" />
+      <stop offset="28%" stop-color="#0D3B8E" stop-opacity="0.05" />
+      <stop offset="46%" stop-color="#5EACFF" stop-opacity="0.32" />
+      <stop offset="51%" stop-color="#A8D7FF" stop-opacity="0.48" />
+      <stop offset="56%" stop-color="#54A5FF" stop-opacity="0.25" />
+      <stop offset="75%" stop-color="#1148A6" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#041842" stop-opacity="0.35" />
+    </linearGradient>
+    <radialGradient id="wpLightFlareFav" cx="24%" cy="18%" r="68%">
+      <stop offset="0%" stop-color="#73BEFF" stop-opacity="0.45" />
+      <stop offset="35%" stop-color="#1F73FF" stop-opacity="0.18" />
+      <stop offset="70%" stop-color="#0F47B2" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="wpVignetteFav" cx="50%" cy="50%" r="72%">
+      <stop offset="55%" stop-color="#000000" stop-opacity="0" />
+      <stop offset="100%" stop-color="#020E28" stop-opacity="0.52" />
+    </radialGradient>
+    <filter id="wpSymbolShadowFav" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="15" flood-color="#020C24" flood-opacity="0.58" />
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#061B48" flood-opacity="0.35" />
+    </filter>
+    <linearGradient id="wpBubblePlateFav" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="65%" stop-color="#F5F9FF" />
+      <stop offset="100%" stop-color="#E2EEFF" />
+    </linearGradient>
+    <linearGradient id="wpWingsGradFav" x1="8%" y1="6%" x2="92%" y2="94%">
+      <stop offset="0%" stop-color="#24C6FF" />
+      <stop offset="35%" stop-color="#176BFF" />
+      <stop offset="75%" stop-color="#0E4EBF" />
+      <stop offset="100%" stop-color="#083792" />
     </linearGradient>
   </defs>
-  <!-- Outer Speech Bubble Silhouette -->
-  <path d="M144 72 H368 C424 72 456 104 456 160 V288 C456 344 424 376 368 376 H224 L144 440 C132 448 116 440 116 424 V376 C76 372 56 348 56 304 V160 C56 104 88 72 144 72 Z" fill="url(#wpPulseFavicon)" />
-  <!-- Open Book Page Details in crisp negative space -->
-  <path d="M168 188 C206 172 242 184 251 202 C253 206 253 306 253 306 C242 290 206 278 168 294 C158 298 148 290 148 280 V202 C148 192 158 184 168 188 Z" fill="#FFFFFF" />
-  <path d="M344 188 C306 172 270 184 261 202 C259 206 259 306 259 306 C270 290 306 278 344 294 C354 298 364 290 364 280 V202 C364 192 354 184 344 188 Z" fill="#FFFFFF" fill-opacity="0.95" />
-  <circle cx="256" cy="164" r="16" fill="#FFFFFF" />
+
+  <rect width="512" height="512" rx="108" fill="url(#wpMetallicBaseFav)" />
+  <rect width="512" height="512" rx="108" fill="url(#wpMetallicGleamFav)" />
+  <rect width="512" height="512" rx="108" fill="url(#wpLightFlareFav)" />
+  <rect width="512" height="512" rx="108" fill="url(#wpVignetteFav)" />
+
+  <g filter="url(#wpSymbolShadowFav)" transform="translate(86, 80) scale(0.664)">
+    <path d="M144 72 H368 C424 72 456 104 456 160 V288 C456 344 424 376 368 376 H224 L144 440 C132 448 116 440 116 424 V376 C76 372 56 348 56 304 V160 C56 104 88 72 144 72 Z" fill="url(#wpBubblePlateFav)" />
+    <path d="M168 188 C206 172 242 184 251 202 C253 206 253 306 253 306 C242 290 206 278 168 294 C158 298 148 290 148 280 V202 C148 192 158 184 168 188 Z" fill="url(#wpWingsGradFav)" />
+    <path d="M344 188 C306 172 270 184 261 202 C259 206 259 306 259 306 C270 290 306 278 344 294 C354 298 364 290 364 280 V202 C364 192 354 184 344 188 Z" fill="url(#wpWingsGradFav)" />
+    <circle cx="256" cy="164" r="16" fill="url(#wpWingsGradFav)" />
+  </g>
 </svg>
